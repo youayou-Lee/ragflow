@@ -1,17 +1,11 @@
 <div align="center">
 <a href="https://demo.ragflow.io/">
-<img src="web/src/assets/logo-with-text.svg" width="520" alt="ragflow logo">
+<img src="web/src/assets/logo-with-text.svg" width="350" alt="ragflow logo">
 </a>
 </div>
 
 <p align="center">
-  <a href="./README.md"><img alt="README in English" src="https://img.shields.io/badge/English-DBEDFA"></a>
-  <a href="./README_zh.md"><img alt="简体中文版自述文件" src="https://img.shields.io/badge/简体中文-DFE0E5"></a>
-  <a href="./README_tzh.md"><img alt="繁體版中文自述文件" src="https://img.shields.io/badge/繁體中文-DFE0E5"></a>
-  <a href="./README_ja.md"><img alt="日本語のREADME" src="https://img.shields.io/badge/日本語-DFE0E5"></a>
-  <a href="./README_ko.md"><img alt="한국어" src="https://img.shields.io/badge/한국어-DFE0E5"></a>
-  <a href="./README_id.md"><img alt="Bahasa Indonesia" src="https://img.shields.io/badge/Bahasa Indonesia-DFE0E5"></a>
-  <a href="./README_pt_br.md"><img alt="Português(Brasil)" src="https://img.shields.io/badge/Português(Brasil)-DFE0E5"></a>
+  <a href="./README.md"><img alt="简体中文版自述文件" src="https://img.shields.io/badge/简体中文-DBEDFA"></a>
 </p>
 
 <p align="center">
@@ -52,150 +46,150 @@
 </div>
 
 <details open>
-<summary><b>📕 Table of Contents</b></summary>
+<summary><b>📕 目录</b></summary>
 
-- 💡 [What is RAGFlow?](#-what-is-ragflow)
+- 💡 [RAGFlow 是什么？](#-RAGFlow-是什么)
 - 🎮 [Demo](#-demo)
-- 📌 [Latest Updates](#-latest-updates)
-- 🌟 [Key Features](#-key-features)
-- 🔎 [System Architecture](#-system-architecture)
-- 🎬 [Get Started](#-get-started)
-- 🔧 [Configurations](#-configurations)
-- 🔧 [Build a Docker image](#-build-a-docker-image)
-- 🔨 [Launch service from source for development](#-launch-service-from-source-for-development)
-- 📚 [Documentation](#-documentation)
-- 📜 [Roadmap](#-roadmap)
-- 🏄 [Community](#-community)
-- 🙌 [Contributing](#-contributing)
+- 📌 [近期更新](#-近期更新)
+- 🌟 [主要功能](#-主要功能)
+- 🔎 [系统架构](#-系统架构)
+- 🎬 [快速开始](#-快速开始)
+- 🔧 [系统配置](#-系统配置)
+- 🔨 [以源代码启动服务](#-以源代码启动服务)
+- 📚 [技术文档](#-技术文档)
+- 📜 [路线图](#-路线图)
+- 🏄 [贡献指南](#-贡献指南)
+- 🙌 [加入社区](#-加入社区)
+- 🤝 [商务合作](#-商务合作)
 
 </details>
 
-## 💡 What is RAGFlow?
+## 💡 RAGFlow 是什么？
 
-[RAGFlow](https://ragflow.io/) is a leading open-source Retrieval-Augmented Generation ([RAG](https://ragflow.io/basics/what-is-rag)) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs. It offers a streamlined RAG workflow adaptable to enterprises of any scale. Powered by a converged [context engine](https://ragflow.io/basics/what-is-agent-context-engine) and pre-built agent templates, RAGFlow enables developers to transform complex data into high-fidelity, production-ready AI systems with exceptional efficiency and precision.
+[RAGFlow](https://ragflow.io/) 是一款领先的开源检索增强生成（[RAG](https://ragflow.io/basics/what-is-rag)）引擎，通过融合前沿的 RAG 技术与 Agent 能力，为大型语言模型提供卓越的上下文层。它提供可适配任意规模企业的端到端 RAG 工作流，凭借融合式[上下文引擎](https://ragflow.io/basics/what-is-agent-context-engine)与预置的 Agent 模板，助力开发者以极致效率与精度将复杂数据转化为高可信、生产级的人工智能系统。
 
-## 🎮 Demo
+## 🎮 Demo 试用
 
-Try our demo at [https://demo.ragflow.io](https://demo.ragflow.io).
+请登录网址 [https://demo.ragflow.io](https://demo.ragflow.io) 试用 demo。
 
 <div align="center" style="margin-top:20px;margin-bottom:20px;">
 <img src="https://raw.githubusercontent.com/infiniflow/ragflow-docs/refs/heads/image/image/chunking.gif" width="1200"/>
 <img src="https://raw.githubusercontent.com/infiniflow/ragflow-docs/refs/heads/image/image/agentic-dark.gif" width="1200"/>
 </div>
 
-## 🔥 Latest Updates
+## 🔥 近期更新
 
-- 2025-12-26 Supports 'Memory' for AI agent.
-- 2025-11-19 Supports Gemini 3 Pro.
-- 2025-11-12 Supports data synchronization from Confluence, S3, Notion, Discord, Google Drive.
-- 2025-10-23 Supports MinerU & Docling as document parsing methods.
-- 2025-10-15 Supports orchestrable ingestion pipeline.
-- 2025-08-08 Supports OpenAI's latest GPT-5 series models.
-- 2025-08-01 Supports agentic workflow and MCP.
-- 2025-05-23 Adds a Python/JavaScript code executor component to Agent.
-- 2025-05-05 Supports cross-language query.
-- 2025-03-19 Supports using a multi-modal model to make sense of images within PDF or DOCX files.
+- 2025-12-26 支持AI代理的"记忆"功能。
+- 2025-11-19 支持 Gemini 3 Pro。
+- 2025-11-12 支持从 Confluence、S3、Notion、Discord、Google Drive 进行数据同步。
+- 2025-10-23 支持 MinerU 和 Docling 作为文档解析方法。
+- 2025-10-15 支持可编排的数据管道。
+- 2025-08-08 支持 OpenAI 最新的 GPT-5 系列模型。
+- 2025-08-01 支持 agentic workflow 和 MCP。
+- 2025-05-23 Agent 新增 Python/JS 代码执行器组件。
+- 2025-05-05 支持跨语言查询。
+- 2025-03-19 PDF 和 DOCX 中的图支持用多模态大模型去解析得到描述。
+- 2024-12-18 升级了 DeepDoc 的文档布局分析模型。
+- 2024-08-22 支持用 RAG 技术实现从自然语言到 SQL 语句的转换。
 
-## 🎉 Stay Tuned
+## 🎉 关注项目
 
-⭐️ Star our repository to stay up-to-date with exciting new features and improvements! Get instant notifications for new
-releases! 🌟
+⭐️ 点击右上角的 Star 关注 RAGFlow，可以获取最新发布的实时通知 !🌟
 
 <div align="center" style="margin-top:20px;margin-bottom:20px;">
 <img src="https://github.com/user-attachments/assets/18c9707e-b8aa-4caf-a154-037089c105ba" width="1200"/>
 </div>
 
-## 🌟 Key Features
+## 🌟 主要功能
 
 ### 🍭 **"Quality in, quality out"**
 
-- [Deep document understanding](./deepdoc/README.md)-based knowledge extraction from unstructured data with complicated
-  formats.
-- Finds "needle in a data haystack" of literally unlimited tokens.
+- 基于[深度文档理解](./deepdoc/README.md)，能够从各类复杂格式的非结构化数据中提取真知灼见。
+- 真正在无限上下文（token）的场景下快速完成大海捞针测试。
 
-### 🍱 **Template-based chunking**
+### 🍱 **基于模板的文本切片**
 
-- Intelligent and explainable.
-- Plenty of template options to choose from.
+- 不仅仅是智能，更重要的是可控可解释。
+- 多种文本模板可供选择
 
-### 🌱 **Grounded citations with reduced hallucinations**
+### 🌱 **有理有据、最大程度降低幻觉（hallucination）**
 
-- Visualization of text chunking to allow human intervention.
-- Quick view of the key references and traceable citations to support grounded answers.
+- 文本切片过程可视化，支持手动调整。
+- 有理有据：答案提供关键引用的快照并支持追根溯源。
 
-### 🍔 **Compatibility with heterogeneous data sources**
+### 🍔 **兼容各类异构数据源**
 
-- Supports Word, slides, excel, txt, images, scanned copies, structured data, web pages, and more.
+- 支持丰富的文件类型，包括 Word 文档、PPT、excel 表格、txt 文件、图片、PDF、影印件、复印件、结构化数据、网页等。
 
-### 🛀 **Automated and effortless RAG workflow**
+### 🛀 **全程无忧、自动化的 RAG 工作流**
 
-- Streamlined RAG orchestration catered to both personal and large businesses.
-- Configurable LLMs as well as embedding models.
-- Multiple recall paired with fused re-ranking.
-- Intuitive APIs for seamless integration with business.
+- 全面优化的 RAG 工作流可以支持从个人应用乃至超大型企业的各类生态系统。
+- 大语言模型 LLM 以及向量模型均支持配置。
+- 基于多路召回、融合重排序。
+- 提供易用的 API，可以轻松集成到各类企业系统。
 
-## 🔎 System Architecture
+## 🔎 系统架构
 
 <div align="center" style="margin-top:20px;margin-bottom:20px;">
 <img src="https://github.com/user-attachments/assets/31b0dd6f-ca4f-445a-9457-70cb44a381b2" width="1000"/>
 </div>
 
-## 🎬 Get Started
+## 🎬 快速开始
 
-### 📝 Prerequisites
+### 📝 前提条件
 
-- CPU >= 4 cores
+- CPU >= 4 核
 - RAM >= 16 GB
 - Disk >= 50 GB
 - Docker >= 24.0.0 & Docker Compose >= v2.26.1
-- [gVisor](https://gvisor.dev/docs/user_guide/install/): Required only if you intend to use the code executor (sandbox) feature of RAGFlow.
+- [gVisor](https://gvisor.dev/docs/user_guide/install/): 仅在你打算使用 RAGFlow 的代码执行器（沙箱）功能时才需要安装。
 
 > [!TIP]
-> If you have not installed Docker on your local machine (Windows, Mac, or Linux), see [Install Docker Engine](https://docs.docker.com/engine/install/).
+> 如果你并没有在本机安装 Docker（Windows、Mac，或者 Linux）, 可以参考文档 [Install Docker Engine](https://docs.docker.com/engine/install/) 自行安装。
 
-### 🚀 Start up the server
+### 🚀 启动服务器
 
-1. Ensure `vm.max_map_count` >= 262144:
+1. 确保 `vm.max_map_count` 不小于 262144：
 
-   > To check the value of `vm.max_map_count`:
+   > 如需确认 `vm.max_map_count` 的大小：
    >
    > ```bash
    > $ sysctl vm.max_map_count
    > ```
    >
-   > Reset `vm.max_map_count` to a value at least 262144 if it is not.
+   > 如果 `vm.max_map_count` 的值小于 262144，可以进行重置：
    >
    > ```bash
-   > # In this case, we set it to 262144:
+   > # 这里我们设为 262144:
    > $ sudo sysctl -w vm.max_map_count=262144
    > ```
    >
-   > This change will be reset after a system reboot. To ensure your change remains permanent, add or update the
-   > `vm.max_map_count` value in **/etc/sysctl.conf** accordingly:
+   > 你的改动会在下次系统重启时被重置。如果希望做永久改动，还需要在 **/etc/sysctl.conf** 文件里把 `vm.max_map_count` 的值再相应更新一遍：
    >
    > ```bash
    > vm.max_map_count=262144
    > ```
-   >
-2. Clone the repo:
+
+2. 克隆仓库：
 
    ```bash
    $ git clone https://github.com/infiniflow/ragflow.git
    ```
-3. Start up the server using the pre-built Docker images:
+
+3. 进入 **docker** 文件夹，利用提前编译好的 Docker 镜像启动服务器：
 
 > [!CAUTION]
-> All Docker images are built for x86 platforms. We don't currently offer Docker images for ARM64.
-> If you are on an ARM64 platform, follow [this guide](https://ragflow.io/docs/dev/build_docker_image) to build a Docker image compatible with your system.
+> 请注意，目前官方提供的所有 Docker 镜像均基于 x86 架构构建，并不提供基于 ARM64 的 Docker 镜像。
+> 如果你的操作系统是 ARM64 架构，请参考[这篇文档](https://ragflow.io/docs/dev/build_docker_image)自行构建 Docker 镜像。
 
-> The command below downloads the `v0.23.1` edition of the RAGFlow Docker image. See the following table for descriptions of different RAGFlow editions. To download a RAGFlow edition different from `v0.23.1`, update the `RAGFLOW_IMAGE` variable accordingly in **docker/.env** before using `docker compose` to start the server.
+   > 运行以下命令会自动下载 RAGFlow Docker 镜像 `v0.23.1`。请参考下表查看不同 Docker 发行版的描述。如需下载不同于 `v0.23.1` 的 Docker 镜像，请在运行 `docker compose` 启动服务之前先更新 **docker/.env** 文件内的 `RAGFLOW_IMAGE` 变量。
 
-```bash
+   ```bash
    $ cd ragflow/docker
 
    # git checkout v0.23.1
-   # Optional: use a stable tag (see releases: https://github.com/infiniflow/ragflow/releases)
-   # This step ensures the **entrypoint.sh** file in the code matches the Docker image version.
+   # 可选：使用稳定版本标签（查看发布：https://github.com/infiniflow/ragflow/releases）
+   # 这一步确保代码中的 entrypoint.sh 文件与 Docker 镜像的版本保持一致。
 
    # Use CPU for DeepDoc tasks:
    $ docker compose -f docker-compose.yml up -d
@@ -203,99 +197,98 @@ releases! 🌟
    # To use GPU to accelerate DeepDoc tasks:
    # sed -i '1i DEVICE=gpu' .env
    # docker compose -f docker-compose.yml up -d
-```
+   ```
 
-> Note: Prior to `v0.22.0`, we provided both images with embedding models and slim images without embedding models. Details as follows:
+   > 注意：在 `v0.22.0` 之前的版本，我们会同时提供包含 embedding 模型的镜像和不含 embedding 模型的 slim 镜像。具体如下：
 
-| RAGFlow image tag | Image size (GB) | Has embedding models? | Stable?        |
-|-------------------|-----------------|-----------------------|----------------|
-| v0.21.1           | &approx;9       | ✔️                    | Stable release |
-| v0.21.1-slim      | &approx;2       | ❌                     | Stable release |
+   | RAGFlow image tag | Image size (GB) | Has embedding models? | Stable?        |
+   |-------------------|-----------------|-----------------------|----------------|
+   | v0.21.1           | &approx;9       | ✔️                    | Stable release |
+   | v0.21.1-slim      | &approx;2       | ❌                     | Stable release |
 
-> Starting with `v0.22.0`, we ship only the slim edition and no longer append the **-slim** suffix to the image tag.
+   > 从 `v0.22.0` 开始，我们只发布 slim 版本，并且不再在镜像标签后附加 **-slim** 后缀。
 
-4. Check the server status after having the server up and running:
+   > [!TIP]
+   > 如果你遇到 Docker 镜像拉不下来的问题，可以在 **docker/.env** 文件内根据变量 `RAGFLOW_IMAGE` 的注释提示选择华为云或者阿里云的相应镜像。
+   >
+   > - 华为云镜像名：`swr.cn-north-4.myhuaweicloud.com/infiniflow/ragflow`
+   > - 阿里云镜像名：`registry.cn-hangzhou.aliyuncs.com/infiniflow/ragflow`
+
+4. 服务器启动成功后再次确认服务器状态：
 
    ```bash
    $ docker logs -f docker-ragflow-cpu-1
    ```
 
-   _The following output confirms a successful launch of the system:_
+   _出现以下界面提示说明服务器启动成功：_
 
    ```bash
-
-         ____   ___    ______ ______ __
-        / __ \ /   |  / ____// ____// /____  _      __
-       / /_/ // /| | / / __ / /_   / // __ \| | /| / /
-      / _, _// ___ |/ /_/ // __/  / // /_/ /| |/ |/ /
-     /_/ |_|/_/  |_|\____//_/    /_/ \____/ |__/|__/
+        ____   ___    ______ ______ __
+       / __ \ /   |  / ____// ____// /____  _      __
+      / /_/ // /| | / / __ / /_   / // __ \| | /| / /
+     / _, _// ___ |/ /_/ // __/  / // /_/ /| |/ |/ /
+    /_/ |_|/_/  |_|\____//_/    /_/ \____/ |__/|__/
 
     * Running on all addresses (0.0.0.0)
    ```
 
-   > If you skip this confirmation step and directly log in to RAGFlow, your browser may prompt a `network abnormal`
-   > error because, at that moment, your RAGFlow may not be fully initialized.
-   >
-5. In your web browser, enter the IP address of your server and log in to RAGFlow.
+   > 如果您在没有看到上面的提示信息出来之前，就尝试登录 RAGFlow，你的浏览器有可能会提示 `network abnormal` 或 `网络异常`。
 
-   > With the default settings, you only need to enter `http://IP_OF_YOUR_MACHINE` (**sans** port number) as the default
-   > HTTP serving port `80` can be omitted when using the default configurations.
-   >
-6. In [service_conf.yaml.template](./docker/service_conf.yaml.template), select the desired LLM factory in `user_default_llm` and update
-   the `API_KEY` field with the corresponding API key.
+5. 在你的浏览器中输入你的服务器对应的 IP 地址并登录 RAGFlow。
+   > 上面这个例子中，您只需输入 http://IP_OF_YOUR_MACHINE 即可：未改动过配置则无需输入端口（默认的 HTTP 服务端口 80）。
+6. 在 [service_conf.yaml.template](./docker/service_conf.yaml.template) 文件的 `user_default_llm` 栏配置 LLM factory，并在 `API_KEY` 栏填写和你选择的大模型相对应的 API key。
 
-   > See [llm_api_key_setup](https://ragflow.io/docs/dev/llm_api_key_setup) for more information.
-   >
+   > 详见 [llm_api_key_setup](https://ragflow.io/docs/dev/llm_api_key_setup)。
 
-   _The show is on!_
+   _好戏开始，接着奏乐接着舞！_
 
-## 🔧 Configurations
+## 🔧 系统配置
 
-When it comes to system configurations, you will need to manage the following files:
+系统配置涉及以下三份文件：
 
-- [.env](./docker/.env): Keeps the fundamental setups for the system, such as `SVR_HTTP_PORT`, `MYSQL_PASSWORD`, and
-  `MINIO_PASSWORD`.
-- [service_conf.yaml.template](./docker/service_conf.yaml.template): Configures the back-end services. The environment variables in this file will be automatically populated when the Docker container starts. Any environment variables set within the Docker container will be available for use, allowing you to customize service behavior based on the deployment environment.
-- [docker-compose.yml](./docker/docker-compose.yml): The system relies on [docker-compose.yml](./docker/docker-compose.yml) to start up.
+- [.env](./docker/.env)：存放一些基本的系统环境变量，比如 `SVR_HTTP_PORT`、`MYSQL_PASSWORD`、`MINIO_PASSWORD` 等。
+- [service_conf.yaml.template](./docker/service_conf.yaml.template)：配置各类后台服务。
+- [docker-compose.yml](./docker/docker-compose.yml): 系统依赖该文件完成启动。
 
-> The [./docker/README](./docker/README.md) file provides a detailed description of the environment settings and service
-> configurations which can be used as `${ENV_VARS}` in the [service_conf.yaml.template](./docker/service_conf.yaml.template) file.
+请务必确保 [.env](./docker/.env) 文件中的变量设置与 [service_conf.yaml.template](./docker/service_conf.yaml.template) 文件中的配置保持一致！
 
-To update the default HTTP serving port (80), go to [docker-compose.yml](./docker/docker-compose.yml) and change `80:80`
-to `<YOUR_SERVING_PORT>:80`.
+如果不能访问镜像站点 hub.docker.com 或者模型站点 huggingface.co，请按照 [.env](./docker/.env) 注释修改 `RAGFLOW_IMAGE` 和 `HF_ENDPOINT`。
 
-Updates to the above configurations require a reboot of all containers to take effect:
+> [./docker/README](./docker/README.md) 解释了 [service_conf.yaml.template](./docker/service_conf.yaml.template) 用到的环境变量设置和服务配置。
 
+如需更新默认的 HTTP 服务端口(80), 可以在 [docker-compose.yml](./docker/docker-compose.yml) 文件中将配置 `80:80` 改为 `<YOUR_SERVING_PORT>:80`。
+
+> 所有系统配置都需要通过系统重启生效：
+>
 > ```bash
 > $ docker compose -f docker-compose.yml up -d
 > ```
 
-### Switch doc engine from Elasticsearch to Infinity
+### 把文档引擎从 Elasticsearch 切换成为 Infinity
 
-RAGFlow uses Elasticsearch by default for storing full text and vectors. To switch to [Infinity](https://github.com/infiniflow/infinity/), follow these steps:
+RAGFlow 默认使用 Elasticsearch 存储文本和向量数据. 如果要切换为 [Infinity](https://github.com/infiniflow/infinity/), 可以按照下面步骤进行:
 
-1. Stop all running containers:
+1. 停止所有容器运行:
 
    ```bash
    $ docker compose -f docker/docker-compose.yml down -v
    ```
+   Note: `-v` 将会删除 docker 容器的 volumes，已有的数据会被清空。
 
-> [!WARNING]
-> `-v` will delete the docker container volumes, and the existing data will be cleared.
+2. 设置 **docker/.env** 目录中的 `DOC_ENGINE` 为 `infinity`.
 
-2. Set `DOC_ENGINE` in **docker/.env** to `infinity`.
-3. Start the containers:
+3. 启动容器:
 
    ```bash
    $ docker compose -f docker-compose.yml up -d
    ```
 
 > [!WARNING]
-> Switching to Infinity on a Linux/arm64 machine is not yet officially supported.
+> Infinity 目前官方并未正式支持在 Linux/arm64 架构下的机器上运行.
 
-## 🔧 Build a Docker image
+## 🔧 源码编译 Docker 镜像
 
-This image is approximately 2 GB in size and relies on external LLM and embedding services.
+本 Docker 镜像大小约 2 GB 左右并且依赖外部的大模型和 embedding 服务。
 
 ```bash
 git clone https://github.com/infiniflow/ragflow.git
@@ -303,7 +296,7 @@ cd ragflow/
 docker build --platform linux/amd64 -f Dockerfile -t infiniflow/ragflow:nightly .
 ```
 
-Or if you are behind a proxy, you can pass proxy arguments:
+如果您处在代理环境下，可以传递代理参数：
 
 ```bash
 docker build --platform linux/amd64 \
@@ -312,14 +305,16 @@ docker build --platform linux/amd64 \
   -f Dockerfile -t infiniflow/ragflow:nightly .
 ```
 
-## 🔨 Launch service from source for development
+## 🔨 以源代码启动服务
 
-1. Install `uv` and `pre-commit`, or skip this step if they are already installed:
+1. 安装 `uv` 和 `pre-commit`。如已经安装，可跳过本步骤：
 
    ```bash
    pipx install uv pre-commit
+   export UV_INDEX=https://mirrors.aliyun.com/pypi/simple
    ```
-2. Clone the source code and install Python dependencies:
+
+2. 下载源代码并安装 Python 依赖：
 
    ```bash
    git clone https://github.com/infiniflow/ragflow.git
@@ -328,63 +323,68 @@ docker build --platform linux/amd64 \
    uv run download_deps.py
    pre-commit install
    ```
-3. Launch the dependent services (MinIO, Elasticsearch, Redis, and MySQL) using Docker Compose:
+
+3. 通过 Docker Compose 启动依赖的服务（MinIO, Elasticsearch, Redis, and MySQL）：
 
    ```bash
    docker compose -f docker/docker-compose-base.yml up -d
    ```
 
-   Add the following line to `/etc/hosts` to resolve all hosts specified in **docker/.env** to `127.0.0.1`:
+   在 `/etc/hosts` 中添加以下代码，目的是将 **conf/service_conf.yaml** 文件中的所有 host 地址都解析为 `127.0.0.1`：
 
    ```
    127.0.0.1       es01 infinity mysql minio redis sandbox-executor-manager
    ```
-4. If you cannot access HuggingFace, set the `HF_ENDPOINT` environment variable to use a mirror site:
+4. 如果无法访问 HuggingFace，可以把环境变量 `HF_ENDPOINT` 设成相应的镜像站点：
 
    ```bash
    export HF_ENDPOINT=https://hf-mirror.com
    ```
-5. If your operating system does not have jemalloc, please install it as follows:
+
+5. 如果你的操作系统没有 jemalloc，请按照如下方式安装：
 
    ```bash
-   # Ubuntu
+   # ubuntu
    sudo apt-get install libjemalloc-dev
-   # CentOS
+   # centos
    sudo yum install jemalloc
-   # OpenSUSE
-   sudo zypper install jemalloc
-   # macOS
+   # mac
    sudo brew install jemalloc
    ```
-6. Launch backend service:
+
+6. 启动后端服务：
 
    ```bash
    source .venv/bin/activate
    export PYTHONPATH=$(pwd)
    bash docker/launch_backend_service.sh
    ```
-7. Install frontend dependencies:
+
+7. 安装前端依赖：
 
    ```bash
    cd web
    npm install
    ```
-8. Launch frontend service:
+
+8. 启动前端服务：
 
    ```bash
    npm run dev
    ```
 
-   _The following output confirms a successful launch of the system:_
+   _以下界面说明系统已经成功启动：_
 
    ![](https://github.com/user-attachments/assets/0daf462c-a24d-4496-a66f-92533534e187)
-9. Stop RAGFlow front-end and back-end service after development is complete:
+
+9. 开发完成后停止 RAGFlow 前端和后端服务：
 
    ```bash
    pkill -f "ragflow_server.py|task_executor.py"
    ```
 
-## 📚 Documentation
+
+## 📚 技术文档
 
 - [Quickstart](https://ragflow.io/docs/dev/)
 - [Configuration](https://ragflow.io/docs/dev/configurations)
@@ -394,17 +394,28 @@ docker build --platform linux/amd64 \
 - [References](https://ragflow.io/docs/dev/category/references)
 - [FAQs](https://ragflow.io/docs/dev/faq)
 
-## 📜 Roadmap
+## 📜 路线图
 
-See the [RAGFlow Roadmap 2026](https://github.com/infiniflow/ragflow/issues/12241)
+详见 [RAGFlow Roadmap 2026](https://github.com/infiniflow/ragflow/issues/12241) 。
 
-## 🏄 Community
+## 🏄 开源社区
 
-- [Discord](https://discord.gg/NjYzJD3GM3)
+- [Discord](https://discord.gg/zd4qPW6t)
 - [Twitter](https://twitter.com/infiniflowai)
 - [GitHub Discussions](https://github.com/orgs/infiniflow/discussions)
 
-## 🙌 Contributing
+## 🙌 贡献指南
 
-RAGFlow flourishes via open-source collaboration. In this spirit, we embrace diverse contributions from the community.
-If you would like to be a part, review our [Contribution Guidelines](https://ragflow.io/docs/dev/contributing) first.
+RAGFlow 只有通过开源协作才能蓬勃发展。秉持这一精神,我们欢迎来自社区的各种贡献。如果您有意参与其中,请查阅我们的 [贡献者指南](https://ragflow.io/docs/dev/contributing) 。
+
+## 🤝 商务合作
+
+- [预约咨询](https://aao615odquw.feishu.cn/share/base/form/shrcnjw7QleretCLqh1nuPo1xxh)
+
+## 👥 加入社区
+
+扫二维码添加 RAGFlow 小助手，进 RAGFlow 交流群。
+
+<p align="center">
+  <img src="https://github.com/infiniflow/ragflow/assets/7248/bccf284f-46f2-4445-9809-8f1030fb7585" width=50% height=50%>
+</p>
