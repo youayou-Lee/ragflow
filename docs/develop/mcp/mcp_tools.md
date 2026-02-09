@@ -5,10 +5,10 @@ sidebar_custom_props: {
   categoryIcon: LucideToolCase
 }
 ---
-# RAGFlow MCP tools
+# RAGFlow MCP工具
 
-The MCP server currently offers a specialized tool to assist users in searching for relevant information powered by RAGFlow DeepDoc technology:
+MCP服务器目前提供一个专用工具，用于帮助用户搜索由RAGFlow DeepDoc技术支持的相关信息：
 
-- **retrieve**: Fetches relevant chunks from specified `dataset_ids` and optional `document_ids` using the RAGFlow retrieve interface, based on a given question. Details of all available datasets, namely, `id` and `description`, are provided within the tool description for each individual dataset.
+- **检索**：使用RAGFlow检索接口从指定的`dataset_ids`和可选的`document_ids`中获取相关块，基于给定的问题。所有可用数据集的详细信息，即`id`和`description`，在工具描述中为每个单独的数据集提供。
 
-For more information, see our Python implementation of the [MCP server](https://github.com/infiniflow/ragflow/blob/main/mcp/server/server.py).
+有关更多信息，请参阅我们的[MCP服务器](https://github.com/infiniflow/ragflow/blob/main/mcp/server/server.py)的Python实现。

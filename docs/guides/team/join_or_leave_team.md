@@ -5,35 +5,35 @@ sidebar_custom_props: {
   categoryIcon: LucideLogOut
 }
 ---
-# Join or leave a team
+# 加入或离开团队
 
-Accept an invitation to join a team, decline an invitation, or leave a team.
+接受邀请加入团队、拒绝邀请或离开团队。
 
 ---
 
-Once you join a team, you can do the following:
+加入团队后，您可以执行以下操作：
 
-- Upload documents to the team owner's shared datasets.
-- Parse documents in the team owner's shared datasets.
-- Use the team owner's shared Agents.
+- 向团队所有者的共享数据集上传文档。
+- 解析团队所有者共享数据集中的文档。
+- 使用团队所有者的共享智能体。
 
-:::tip NOTE
-You cannot invite users to a team unless you are its owner.
+:::tip 注意
+除非您是团队所有者，否则您不能邀请用户加入团队。
 :::
 
-## Prerequisites
+## 前提条件
 
-1. Ensure that your Email address that received the team invitation is associated with a RAGFlow user account.
-2. The team owner should share his datasets by setting their **Permission** to **Team**.
+1. 确保收到团队邀请的电子邮件地址与 RAGFlow 用户账户关联。
+2. 团队所有者应通过将其**权限**设置为**团队**来共享其数据集。
 
-## Accept or decline team invite
+## 接受或拒绝团队邀请
 
-1. You will be notified on the top right corner of your system page when you receive an invitation to join a team.
+1. 当您收到加入团队的邀请时，您将在系统页面的右上角收到通知。
 
-2. Click on your avatar in the top right corner of the page, then select **Team** in the left-hand panel to access the **Team** page.
+2. 点击页面右上角的头像，然后在左侧面板中选择**团队**以访问**团队**页面。
 
-_On the **Team** page, you can view the information about members of your team and the teams you have joined._
+_在**团队**页面上，您可以查看团队成员以及您加入的团队的信息。_
 
-_After accepting the team invite, you should be able to view and update the team owner's datasets whose **Permissions** is set to **Team**._
+_接受团队邀请后，您应该能够查看和更新团队所有者的数据集，其**权限**设置为**团队**。_
 
-## Leave a joined team
+## 离开已加入的团队

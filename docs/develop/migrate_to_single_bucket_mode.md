@@ -3,23 +3,23 @@ sidebar_position: 20
 slug: /migrate_to_single_bucket_mode
 ---
 
-# Migrate from multi-Bucket to single-bucket mode
+# 从多存储桶迁移到单存储桶模式
 
-By default, RAGFlow creates one bucket per Knowledge Base (dataset) and one bucket per user folder. This can be problematic when:
+默认情况下，RAGFlow为每个知识库（数据集）创建一个存储桶，为每个用户文件夹创建一个存储桶。这在以下情况下可能会有问题：
 
-- Your cloud provider charges per bucket
-- Your IAM policy restricts bucket creation
-- You want all data organized in a single bucket with directory structure
+- 您的云提供商按存储桶收费
+- 您的IAM策略限制存储桶创建
+- 您希望将所有数据组织在具有目录结构的单个存储桶中
 
-The **Single Bucket Mode** allows you to configure RAGFlow to use a single bucket with a directory structure instead of multiple buckets.
+**单存储桶模式**允许您配置RAGFlow使用具有目录结构的单个存储桶，而不是多个存储桶。
 
-:::info KUDOS
-This document is contributed by our community contributor [arogan178](https://github.com/arogan178). We may not actively maintain this document.
+:::info 荣誉
+本文档由我们的社区贡献者[arogan178](https://github.com/arogan178)贡献。我们可能不会积极维护本文档。
 :::
 
-## How It Works
+## 工作原理
 
-### Default Mode (Multiple Buckets)
+### 默认模式（多存储桶）
 
 ```
 bucket: kb_12345/
@@ -30,7 +30,7 @@ bucket: folder_abc/
   └── file_3.txt
 ```
 
-### Single Bucket Mode (with prefix_path)
+### 单存储桶模式（带有prefix_path）
 
 ```
 bucket: ragflow-bucket/
@@ -43,22 +43,22 @@ bucket: ragflow-bucket/
           └── file_3.txt
 ```
 
-## Configuration
+## 配置
 
-### MinIO Configuration
+### MinIO配置
 
-Edit your `service_conf.yaml` or set environment variables:
+编辑您的`service_conf.yaml`或设置环境变量：
 
 ```yaml
 minio:
   user: "your-access-key"
   password: "your-secret-key"
   host: "minio.example.com:443"
-  bucket: "ragflow-bucket" # Default bucket name
-  prefix_path: "ragflow" # Optional prefix path
+  bucket: "ragflow-bucket" # 默认存储桶名称
+  prefix_path: "ragflow" # 可选的前缀路径
 ```
 
-Or using environment variables:
+或使用环境变量：
 
 ```bash
 export MINIO_USER=your-access-key
@@ -68,7 +68,7 @@ export MINIO_BUCKET=ragflow-bucket
 export MINIO_PREFIX_PATH=ragflow
 ```
 
-### S3 Configuration (already supported)
+### S3配置（已支持）
 
 ```yaml
 s3:
@@ -80,9 +80,9 @@ s3:
   region: "us-east-1"
 ```
 
-## IAM Policy Example
+## IAM策略示例
 
-When using single bucket mode, you only need permissions for one bucket:
+使用单存储桶模式时，您只需要一个存储桶的权限：
 
 ```json
 {
@@ -100,30 +100,30 @@ When using single bucket mode, you only need permissions for one bucket:
 }
 ```
 
-## Migration from Multi-Bucket to Single Bucket
+## 从多存储桶迁移到单存储桶
 
-If you're migrating from multi-bucket mode to single-bucket mode:
+如果您正在从多存储桶模式迁移到单存储桶模式：
 
-1. **Set environment variables** for the new configuration
-2. **Restart RAGFlow** services
-3. **Migrate existing data** (optional):
+1. 为新配置**设置环境变量**
+2. **重启RAGFlow**服务
+3. **迁移现有数据**（可选）：
 
 ```bash
-# Example using mc (MinIO Client)
+# 使用mc（MinIO客户端）的示例
 mc alias set old-minio http://old-minio:9000 ACCESS_KEY SECRET_KEY
 mc alias set new-minio https://new-minio:443 ACCESS_KEY SECRET_KEY
 
-# List all knowledge base buckets
+# 列出所有知识库存储桶
 mc ls old-minio/ | grep kb_ | while read -r line; do
     bucket=$(echo $line | awk '{print $5}')
-    # Copy each bucket to the new structure
+    # 将每个存储桶复制到新结构
     mc cp --recursive old-minio/$bucket/ new-minio/ragflow-bucket/ragflow/$bucket/
 done
 ```
 
-## Toggle Between Modes
+## 在模式之间切换
 
-### Enable Single Bucket Mode
+### 启用单存储桶模式
 
 ```yaml
 minio:
@@ -131,39 +131,39 @@ minio:
   prefix_path: "ragflow"
 ```
 
-### Disable (Use Multi-Bucket Mode)
+### 禁用（使用多存储桶模式）
 
 ```yaml
 minio:
-  # Leave bucket and prefix_path empty or commented out
+  # 将bucket和prefix_path留空或注释掉
   # bucket: ''
   # prefix_path: ''
 ```
 
-## Troubleshooting
+## 故障排除
 
-### Issue: Access Denied errors
+### 问题：访问被拒绝错误
 
-**Solution**: Ensure your IAM policy grants access to the bucket specified in the configuration.
+**解决方案**：确保您的IAM策略授予对配置中指定的存储桶的访问权限。
 
-### Issue: Files not found after switching modes
+### 问题：切换模式后找不到文件
 
-**Solution**: The path structure changes between modes. You'll need to migrate existing data.
+**解决方案**：模式之间的路径结构会发生变化。您需要迁移现有数据。
 
-### Issue: Connection fails with HTTPS
+### 问题：HTTPS连接失败
 
-**Solution**: Ensure `secure: True` is set in the MinIO connection (automatically handled for port 443).
+**解决方案**：确保在MinIO连接中设置了`secure: True`（端口443自动处理）。
 
-## Storage Backends Supported
+## 支持的存储后端
 
-- ✅ **MinIO** - Full support with single bucket mode
-- ✅ **AWS S3** - Full support with single bucket mode
-- ✅ **Alibaba OSS** - Full support with single bucket mode
-- ✅ **Azure Blob** - Uses container-based structure (different paradigm)
-- ⚠️ **OpenDAL** - Depends on underlying storage backend
+- ✅ **MinIO** - 完全支持单存储桶模式
+- ✅ **AWS S3** - 完全支持单存储桶模式
+- ✅ **阿里云OSS** - 完全支持单存储桶模式
+- ✅ **Azure Blob** - 使用基于容器的结构（不同的范式）
+- ⚠️ **OpenDAL** - 取决于底层存储后端
 
-## Performance Considerations
+## 性能考虑
 
-- **Single bucket mode** may have slightly better performance for bucket listing operations
-- **Multi-bucket mode** provides better isolation and organization for large deployments
-- Choose based on your specific requirements and infrastructure constraints
+- **单存储桶模式**对于存储桶列出操作可能具有稍好的性能
+- **多存储桶模式**为大型部署提供更好的隔离和组织
+- 根据您的特定要求和基础设施约束进行选择

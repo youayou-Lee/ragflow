@@ -5,49 +5,49 @@ sidebar_custom_props: {
   categoryIcon: LucideBookOpenText
 }
 ---
-# Introduction
+# 简介
 
-Key concepts, basic operations, a quick view of the agent editor.
+关键概念、基本操作、智能体编辑器快速浏览。
 
 ---
 
-:::danger DEPRECATED!
-A new version is coming soon.
+:::danger 已弃用！
+新版本即将推出。
 :::
 
-## Key concepts
+## 关键概念
 
-Agents and RAG are complementary techniques, each enhancing the other’s capabilities in business applications. RAGFlow v0.8.0 introduces an agent mechanism, featuring a no-code workflow editor on the front end and a comprehensive graph-based task orchestration framework on the back end. This mechanism is built on top of RAGFlow's existing RAG solutions and aims to orchestrate search technologies such as query intent classification, conversation leading, and query rewriting to:
+智能体和 RAG 是互补的技术，在业务应用中相互增强各自的能力。RAGFlow v0.8.0 引入了智能体机制，在前端提供无代码工作流编辑器，在后端提供全面的基于图的任务编排框架。该机制建立在 RAGFlow 现有的 RAG 解决方案之上，旨在编排查询意图分类、对话引导和查询重写等搜索技术，以：
 
-- Provide higher retrievals and,
-- Accommodate more complex scenarios.
+- 提供更高的检索能力，并
+- 适应更复杂的场景。
 
-## Create an agent
+## 创建智能体
 
-:::tip NOTE
+:::tip 注意
 
-Before proceeding, ensure that:  
+在继续之前，请确保：
 
-1. You have properly set the LLM to use. See the guides on [Configure your API key](../models/llm_api_key_setup.md) or [Deploy a local LLM](../models/deploy_local_llm.mdx) for more information.
-2. You have a dataset configured and the corresponding files properly parsed. See the guide on [Configure a dataset](../dataset/configure_knowledge_base.md) for more information.
+1. 您已正确设置了要使用的 LLM。有关更多信息，请参阅[配置您的 API 密钥](../models/llm_api_key_setup.md)或[部署本地 LLM](../models/deploy_local_llm.mdx)指南。
+2. 您已配置数据集并正确解析了相应的文件。有关更多信息，请参阅[配置数据集](../dataset/configure_knowledge_base.md)指南。
 
 :::
 
-Click the **Agent** tab in the middle top of the page to show the **Agent** page. As shown in the screenshot below, the cards on this page represent the created agents, which you can continue to edit.
+点击页面中顶部的**智能体**选项卡以显示**智能体**页面。如以下屏幕截图所示，此页面上的卡片代表已创建的智能体，您可以继续编辑它们。
 
 ![Agent_list](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/agent_list.jpg)
 
-We also provide templates catered to different business scenarios. You can either generate your agent from one of our agent templates or create one from scratch:
+我们还提供了针对不同业务场景的模板。您可以从我们的智能体模板之一生成智能体，或从头开始创建：
 
-1. Click **+ Create agent** to show the **agent template** page:
+1. 点击 **+ 创建智能体**以显示**智能体模板**页面：
 
    ![agent_template](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/agent_template_list.jpg)
 
-2. To create an agent from scratch, click **Create Agent**. Alternatively, to create an agent from one of our templates, click the desired card, such as **Deep Research**, name your agent in the pop-up dialogue, and click **OK** to confirm.  
+2. 要从头开始创建智能体，请点击**创建智能体**。或者，要从我们的模板之一创建智能体，请点击所需的卡片，例如**深度研究**，在弹出对话框中命名您的智能体，然后点击**确定**确认。
 
-   *You are now taken to the **no-code workflow editor** page.*
+   *您现在将被带到**无代码工作流编辑器**页面。*
 
    ![add_component](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/add_component.jpg)
 
-3. Click the **+** button on the **Begin** component to select the desired components in your workflow.
-4. Click **Save** to apply changes to your agent.
+3. 点击**开始**组件上的**+**按钮以在工作流中选择所需的组件。
+4. 点击**保存**以应用对智能体的更改。

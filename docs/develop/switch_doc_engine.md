@@ -5,31 +5,31 @@ sidebar_custom_props: {
   categoryIcon: LucideShuffle
 }
 ---
-# Switch document engine
+# 切换文档引擎
 
-Switch your doc engine from Elasticsearch to Infinity.
+将您的文档引擎从Elasticsearch切换到Infinity。
 
 ---
 
-RAGFlow uses Elasticsearch by default for storing full text and vectors. To switch to [Infinity](https://github.com/infiniflow/infinity/), follow these steps:
+RAGFlow默认使用Elasticsearch来存储全文和向量。要切换到[Infinity](https://github.com/infiniflow/infinity/)，请按照以下步骤操作：
 
-:::caution WARNING
-Switching to Infinity on a Linux/arm64 machine is not yet officially supported.
+:::caution 警告
+在Linux/arm64机器上切换到Infinity尚未得到官方支持。
 :::
 
-1. Stop all running containers:
+1. 停止所有正在运行的容器：
 
    ```bash
    $ docker compose -f docker/docker-compose.yml down -v
    ```
 
-:::caution WARNING
-`-v` will delete the docker container volumes, and the existing data will be cleared.
+:::caution 警告
+`-v`将删除docker容器卷，现有数据将被清除。
 :::
 
-2. Set `DOC_ENGINE` in **docker/.env** to `infinity`.
+2. 将**docker/.env**中的`DOC_ENGINE`设置为`infinity`。
 
-3. Start the containers:
+3. 启动容器：
 
    ```bash
    $ docker compose -f docker-compose.yml up -d

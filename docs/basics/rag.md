@@ -3,105 +3,110 @@ sidebar_position: 1
 slug: /what-is-rag
 ---
 
-# What is Retrieval-Augmented-Generation (RAG)?
+# 什么是检索增强生成（RAG）？
 
-Since large language models (LLMs) became the focus of technology, their ability to handle general knowledge has been astonishing. However, when questions shift to internal corporate documents, proprietary knowledge bases, or real-time data, the limitations of LLMs become glaringly apparent: they cannot access private information outside their training data. Retrieval-Augmented Generation (RAG) was born precisely to address this core need. Before an LLM generates an answer, it first retrieves the most relevant context from an external knowledge base and inputs it as "reference material" to the LLM, thereby guiding it to produce accurate answers. In short, RAG elevates LLMs from "relying on memory" to "having evidence to rely on," significantly improving their accuracy and trustworthiness in specialized fields and real-time information queries.
+自从大语言模型（LLM）成为技术焦点以来，它们处理通用知识的能力令人惊叹。然而，当问题转向企业内部文档、专有知识库或实时数据时，LLM的局限性变得显而易见：它们无法访问训练数据之外的私有信息。检索增强生成（RAG）正是为解决这一核心需求而诞生。在LLM生成答案之前，它首先从外部知识库中检索最相关的上下文，并将其作为"参考资料"输入给LLM，从而引导它产生准确的答案。简而言之，RAG将LLM从"依赖记忆"提升到"有证据可依"，显著提高了它们在专业领域和实时信息查询中的准确性和可信度。
 
-## Why RAG is important?
+## 为什么RAG很重要？
 
-Although LLMs excel in language understanding and generation, they have inherent limitations:
+尽管LLM在语言理解和生成方面表现出色，但它们存在固有的局限性：
 
-- Static Knowledge: The model's knowledge is based on a data snapshot from its training time and cannot be automatically updated, making it difficult to perceive the latest information.
-- Blind Spot to External Data: They cannot directly access corporate private documents, real-time information streams, or domain-specific content.
-- Hallucination Risk: When lacking accurate evidence, they may still fabricate plausible-sounding but false answers to maintain conversational fluency.
+- **静态知识**：模型的知识基于训练时的数据快照，无法自动更新，难以感知最新信息。
+- **外部数据盲点**：它们无法直接访问企业私有文档、实时信息流或特定领域的内容。
+- **幻觉风险**：当缺乏准确证据时，它们可能仍然会编造听起来合理但错误的答案以维持对话流畅性。
 
-The introduction of RAG provides LLMs with real-time, credible "factual grounding." Its core mechanism is divided into two stages:
+RAG的引入为LLM提供了实时、可信的"事实基础"。其核心机制分为两个阶段：
 
-- Retrieval Stage: Based on the user's question, quickly retrieve the most relevant documents or data fragments from an external knowledge base.
-- Generation Stage: The LLM organizes and generates the final answer by incorporating the retrieved information as context, combined with its own linguistic capabilities.
+- **检索阶段**：基于用户的问题，从外部知识库中快速检索最相关的文档或数据片段。
+- **生成阶段**：LLM通过将检索到的信息作为上下文结合，利用自身的语言能力组织和生成最终答案。
 
-This upgrades LLMs from "speaking from memory" to "speaking with documentation," significantly enhancing reliability in professional and enterprise-level applications.
+这将LLM从"凭记忆说话"升级为"有文档支持地说话"，大大增强了在专业和企业级应用中的可靠性。
 
-## How RAG works?
+## RAG如何工作？
 
-Retrieval-Augmented Generation enables LLMs to generate higher-quality responses by leveraging real-time, external, or private data sources through the introduction of an information retrieval mechanism. Its workflow can be divided into following key steps:
+检索增强生成通过引入信息检索机制，使LLM能够利用实时、外部或私有数据源生成更高质量的响应。其工作流程可分为以下关键步骤：
 
-### Data processing and vectorization
+### 数据处理和向量化
 
-The knowledge required by RAG comes from unstructured data in various formats, such as documents, database records, or API return content. This data typically needs to be chunked, then transformed into vectors via an embedding model, and stored in a vector database.
+RAG所需的知识来自各种格式的非结构化数据，如文档、数据库记录或API返回内容。这些数据通常需要被分块，然后通过嵌入模型转换为向量，并存储在向量数据库中。
 
-Why is Chunking Needed? Indexing entire documents directly faces the following problems:
+**为什么需要分块？** 直接索引整个文档面临以下问题：
 
-- Decreased Retrieval Precision: Vectorizing long documents leads to semantic "averaging," losing details.
-- Context Length Limitation: LLMs have a finite context window, requiring filtering of the most relevant parts for input.
-- Cost and Efficiency: Embedding computation and retrieval costs are higher for long texts.
+- **检索精度降低**：向量化长文档会导致语义"平均化"，丢失细节。
+- **上下文长度限制**：LLM的上下文窗口有限，需要筛选最相关的部分输入。
+- **成本和效率**：长文本的嵌入计算和检索成本更高。
 
-Therefore, an intelligent chunking strategy is key to balancing information integrity, retrieval granularity, and computational efficiency.
+因此，智能的分块策略是平衡信息完整性、检索粒度和计算效率的关键。
 
-### Retrieve relevant information
+### 检索相关信息
 
-The user's query is also converted into a vector to perform semantic relevance searches (e.g., calculating cosine similarity) in the vector database, matching and recalling the most relevant text fragments.
+用户的查询也被转换为向量，以在向量数据库中执行语义相关性搜索（例如计算余弦相似度），匹配和召回最相关的文本片段。
 
-### Context construction and answer generation
+### 上下文构建和答案生成
 
-The retrieved relevant content is added to the LLM's context as factual grounding, and the LLM finally generates the answer. Therefore, RAG can be seen as Context Engineering 1.0 for automated context construction.
+检索到的相关内容被添加到LLM的上下文中作为事实基础，LLM最终生成答案。因此，RAG可以被视为自动化上下文构建的上下文工程1.0。
 
-## Deep dive into existing RAG architecture: beyond vector retrieval
+## 深入现有RAG架构：超越向量检索
 
-An industrial-grade RAG system is far from being as simple as "vector search + LLM"; its complexity and challenges are primarily embedded in the retrieval process.
+工业级RAG系统远非"向量搜索+LLM"那么简单；其复杂性和挑战主要体现在检索过程中。
 
-### Data complexity: multimodal document processing
+### 数据复杂性：多模态文档处理
 
-Core Challenge: Corporate knowledge mostly exists in the form of multimodal documents containing text, charts, tables, and formulas. Simple OCR extraction loses a large amount of semantic information.
+**核心挑战**：企业知识主要以包含文本、图表、表格和公式的多模态文档形式存在。简单的OCR提取会丢失大量语义信息。
 
-Advanced Practice: Leading solutions, such as RAGFlow, tend to use Visual Language Models (VLM) or specialized parsing models like DeepDoc to "translate" multimodal documents into unimodal text rich in structural and semantic information. Converting multimodal information into high-quality unimodal text has become standard practice for advanced RAG.
+**高级实践**：领先的解决方案（如RAGFlow）倾向于使用视觉语言模型（VLM）或专门的解析模型（如DeepDoc）将多模态文档"翻译"为富含结构和语义信息的单模态文本。将多模态信息转换为高质量的单模态文本已成为高级RAG的标准实践。
 
-### The complexity of chunking: the trade-off between precision and context
+### 分块的复杂性：精度与上下文之间的权衡
 
-A simple "chunk-embed-retrieve" pipeline has an inherent contradiction:
-- Semantic Matching requires small text chunks to ensure clear semantic focus.
-- Context Understanding requires large text chunks to ensure complete and coherent information.
+简单的"分块-嵌入-检索"流水线存在内在矛盾：
+- **语义匹配**需要小的文本块以确保清晰的语义焦点。
+- **上下文理解**需要大的文本块以确保完整连贯的信息。
 
-This forces system design into a difficult trade-off between "precise but fragmented" and "complete but vague."
+这迫使系统设计在"精确但碎片化"和"完整但模糊"之间做出艰难权衡。
 
-Advanced Practice: Leading solutions, such as RAGFlow, employ semantic enhancement techniques like constructing semantic tables of contents and knowledge graphs. These not only address semantic fragmentation caused by physical chunking but also enable the discovery of relevant content across documents based on entity-relationship networks.
+**高级实践**：领先的解决方案（如RAGFlow）采用语义增强技术，如构建语义目录和知识图谱。这些不仅解决了物理分块导致的语义碎片化问题，还使基于实体关系网络发现跨文档的相关内容成为可能。
 
-### Why is a vector database insufficient for serving RAG?
+### 为什么向量数据库不足以服务RAG？
 
-Vector databases excel at semantic similarity search, but RAG requires precise and reliable answers, demanding more capabilities from the retrieval system:
-- Hybrid Search: Relying solely on vector retrieval may miss exact keyword matches (e.g., product codes, regulation numbers). Hybrid search, combining vector retrieval with keyword retrieval (BM25), ensures both semantic breadth and keyword precision.
-- Tensor or Multi-Vector Representation: To support cross-modal data, employing tensor or multi-vector representation has become an important trend.
-- Metadata Filtering: Filtering based on attributes like date, department, and type is a rigid requirement in business scenarios.
+向量数据库擅长语义相似度搜索，但RAG需要精确可靠的答案，对检索系统提出更多能力要求：
+- **混合搜索**：仅依赖向量检索可能错过精确的关键词匹配（如产品代码、法规编号）。混合搜索将向量检索与关键词检索（BM25）结合，确保语义广度和关键词精度。
+- **张量或多向量表示**：为了支持跨模态数据，采用张量或多向量表示已成为重要趋势。
+- **元数据过滤**：基于日期、部门、类型等属性的过滤是业务场景中的刚性需求。
 
-Therefore, the retrieval layer of RAG is a composite system based on vector search but must integrate capabilities like full-text search, re-ranking, and metadata filtering.
+因此，RAG的检索层是基于向量搜索的复合系统，但必须集成全文搜索、重排序和元数据过滤等能力。
 
-## RAG and memory: Retrieval from the same source but different streams
+## RAG与记忆：同源不同流的检索
 
-Within the agent framework, the essence of the memory mechanism is the same as RAG: both retrieve relevant information from storage based on current needs. The key difference lies in the data source:
-- RAG: Targets pre-existing static or dynamic private data provided by the user in advance (e.g., documents, databases).
-- Memory: Targets dynamic data generated or perceived by the agent in real-time during interaction (e.g., conversation history, environmental state, tool execution results).
-They are highly consistent at the technical base (e.g., vector retrieval, keyword matching) and can be seen as the same retrieval capability applied in different scenarios ("existing knowledge" vs. "interaction memory"). A complete agent system often includes both an RAG module for inherent knowledge and a Memory module for interaction history.
+在智能体框架内，记忆机制的本质与RAG相同：都是根据当前需求从存储中检索相关信息。关键区别在于数据源：
+- **RAG**：针对用户预先提供的现有静态或动态私有数据（如文档、数据库）。
+- **记忆**：针对智能体在交互中实时生成或感知的动态数据（如对话历史、环境状态、工具执行结果）。
 
-## RAG applications
+它们在技术基础上高度一致（例如向量检索、关键词匹配），可以视为应用于不同场景（"现有知识"与"交互记忆"）的相同检索能力。完整的智能体系统通常包括用于固有知识的RAG模块和用于交互历史的记忆模块。
 
-RAG has demonstrated clear value in several typical scenarios:
+## RAG应用
 
-1. Enterprise Knowledge Q&A and Internal Search  
-   By vectorizing corporate private data and combining it with an LLM, RAG can directly return natural language answers based on authoritative sources, rather than document lists. While meeting intelligent Q&A needs, it inherently aligns with corporate requirements for data security, access control, and compliance.
-2. Complex Document Understanding and Professional Q&A  
-   For structurally complex documents like contracts and regulations, the value of RAG lies in its ability to generate accurate, verifiable answers while maintaining context integrity. Its system accuracy largely depends on text chunking and semantic understanding strategies.
-3. Dynamic Knowledge Fusion and Decision Support  
-   In business scenarios requiring the synthesis of information from multiple sources, RAG evolves into a knowledge orchestration and reasoning support system for business decisions. Through a multi-path recall mechanism, it fuses knowledge from different systems and formats, maintaining factual consistency and logical controllability during the generation phase.
+RAG在几个典型场景中展现了明确的价值：
 
-## The future of RAG
+1. **企业知识问答和内部搜索**
+   通过将企业私有数据向量化并与LLM结合，RAG可以直接基于权威来源返回自然语言答案，而不是文档列表。在满足智能问答需求的同时，它本质上符合企业对数据安全、访问控制和合规性的要求。
 
-The evolution of RAG is unfolding along several clear paths:
+2. **复杂文档理解和专业问答**
+   对于合同和法规等结构复杂的文档，RAG的价值在于它能够在保持上下文完整性的同时生成准确、可验证的答案。其系统准确性很大程度上取决于文本分块和语义理解策略。
 
-1. RAG as the data foundation for Agents  
-   RAG and agents have an architecture vs. scenario relationship. For agents to achieve autonomous and reliable decision-making and execution, they must rely on accurate and timely knowledge. RAG provides them with a standardized capability to access private domain knowledge and is an inevitable choice for building knowledge-aware agents.
-2. Advanced RAG: Using LLMs to optimize retrieval itself  
-   The core feature of next-generation RAG is fully utilizing the reasoning capabilities of LLMs to optimize the retrieval process, such as rewriting queries, summarizing or fusing results, or implementing intelligent routing. Empowering every aspect of retrieval with LLMs is key to breaking through current performance bottlenecks.
-3. Towards context engineering 2.0  
-   Current RAG can be viewed as Context Engineering 1.0, whose core is assembling static knowledge context for single Q&A tasks. The forthcoming Context Engineering 2.0 will extend with RAG technology at its core, becoming a system that automatically and dynamically assembles comprehensive context for agents. The context fused by this system will come not only from documents but also include interaction memory, available tools/skills, and real-time environmental information. This marks the transition of agent development from a "handicraft workshop" model to the industrial starting point of automated context engineering.
+3. **动态知识融合和决策支持**
+   在需要综合多个来源信息的业务场景中，RAG演变为业务决策的知识编排和推理支持系统。通过多路径召回机制，它融合来自不同系统和格式的知识，在生成阶段保持事实一致性和逻辑可控性。
 
-The essence of RAG is to build a dedicated, efficient, and trustworthy external data interface for large language models; its core is Retrieval, not Generation. Starting from the practical need to solve private data access, its technical depth is reflected in the optimization of retrieval for complex unstructured data. With its deep integration into agent architectures and its development towards automated context engineering, RAG is evolving from a technology that improves Q&A quality into the core infrastructure for building the next generation of trustworthy, controllable, and scalable intelligent applications.
+## RAG的未来
+
+RAG的演进正沿着几个清晰的路径展开：
+
+1. **RAG作为智能体的数据基础**
+   RAG与智能体之间存在架构与场景的关系。智能体要实现自主可靠的决策和执行，必须依赖准确及时的知识。RAG为它们提供了访问私有领域知识的标准化能力，是构建知识感知智能体的必然选择。
+
+2. **高级RAG：使用LLM优化检索本身**
+   下一代RAG的核心特征是充分利用LLM的推理能力来优化检索过程，例如重写查询、总结或融合结果，或实现智能路由。用LLM赋能检索的每个方面是突破当前性能瓶颈的关键。
+
+3. **迈向上下文工程2.0**
+   当前的RAG可以被视为上下文工程1.0，其核心是为单个问答任务组装静态知识上下文。即将到来的上下文工程2.0将以RAG技术为核心扩展，成为自动为智能体动态组装全面上下文的系统。该系统融合的上下文不仅来自文档，还包括交互记忆、可用工具/技能和实时环境信息。这标志着智能体开发从"手工作坊"模式转向自动化上下文工程的工业起点。
+
+RAG的本质是为大语言模型构建专用、高效、可信的外部数据接口；其核心是检索而非生成。从解决私有数据访问的实际需求出发，其技术深度体现在针对复杂非结构化数据的检索优化上。随着其与智能体架构的深度集成和向自动化上下文工程的发展，RAG正在从提高问答质量的技术演变为构建下一代可信、可控、可扩展智能应用的核心基础设施。

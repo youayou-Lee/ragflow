@@ -5,36 +5,35 @@ sidebar_custom_props: {
   categoryIcon: LucideActivity
 }
 ---
-# Admin Service
+# 管理员服务
 
-The Admin Service is the core backend management service of the RAGFlow system, providing comprehensive system administration capabilities through centralized API interfaces for managing and controlling the entire platform. Adopting a client-server architecture, it supports access and operations via both a Web UI and an Admin CLI, ensuring flexible and efficient execution of administrative tasks.
+管理员服务是RAGFlow系统的核心后端管理服务，通过集中的API接口提供全面的系统管理功能，用于管理和控制整个平台。采用客户端-服务器架构，它支持通过Web UI和管理员CLI进行访问和操作，确保管理任务的灵活高效执行。
 
-The core functions of the Admin Service include real-time monitoring of the operational status of the RAGFlow server and its critical dependent components—such as MySQL, Elasticsearch, Redis, and MinIO—along with full-featured user management. In administrator mode, it enables key operations such as viewing user information, creating users, updating passwords, modifying activation status, and performing complete user data deletion. These functions remain accessible via the Admin CLI even when the web management interface is disabled, ensuring the system stays under control at all times.
+管理员服务的核心功能包括实时监控RAGFlow服务器及其关键依赖组件（如MySQL、Elasticsearch、Redis和MinIO）的运行状态，以及全功能的用户管理。在管理员模式下，它支持查看用户信息、创建用户、更新密码、修改激活状态和执行完整的用户数据删除等关键操作。即使禁用Web管理界面，这些功能仍可通过管理员CLI访问，确保系统始终受到控制。
 
-With its unified interface design, the Admin Service combines the convenience of visual administration with the efficiency and stability of command-line operations, serving as a crucial foundation for the reliable operation and secure management of the RAGFlow system.
+凭借其统一的接口设计，管理员服务将可视化管理与管理员操作的效率和稳定性结合在一起，是RAGFlow系统可靠运行和安全管理的坚实基础。
 
-## Starting the Admin Service
+## 启动管理员服务
 
-### Launching from source code
+### 从源代码启动
 
-1. Before start Admin Service, please make sure RAGFlow system is already started.
+1. 在启动管理员服务之前，请确保RAGFlow系统已经启动。
 
-2. Launch from source code:
+2. 从源代码启动：
 
    ```bash
    python admin/server/admin_server.py
    ```
 
-   The service will start and listen for incoming connections from the CLI on the configured port. 
+   服务将启动并监听来自CLI的传入连接。
 
-### Using docker image
+### 使用Docker镜像
 
-1. Before startup, please configure the `docker_compose.yml`  file to enable admin server:
+1. 启动前，请配置`docker_compose.yml`文件以启用管理员服务器：
 
    ```bash
    command:
      - --enable-adminserver
    ```
 
-2. Start the containers, the service will start and listen for incoming connections from the CLI on the configured port.
-
+2. 启动容器，服务将启动并监听来自CLI的传入连接。

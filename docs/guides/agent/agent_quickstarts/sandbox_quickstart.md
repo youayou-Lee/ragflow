@@ -5,92 +5,92 @@ sidebar_custom_props: {
   categoryIcon: LucideCodesandbox
 }
 ---
-# Sandbox quickstart
+# 沙箱快速入门
 
-A secure, pluggable code execution backend designed for RAGFlow and other applications requiring isolated code execution environments.
+一个安全的、可插拔的代码执行后端,专为 RAGFlow 和其他需要隔离代码执行环境的应用程序而设计。
 
-## Features: 
+## 功能:
 
-- Seamless RAGFlow Integration — Works out-of-the-box with the code component of RAGFlow.
-- High Security — Uses gVisor for syscall-level sandboxing to isolate execution.
-- Customisable Sandboxing — Modify seccomp profiles easily to tailor syscall restrictions.
-- Pluggable Runtime Support — Extendable to support any programming language runtime.
-- Developer Friendly — Quick setup with a convenient Makefile.
+- 无缝 RAGFlow 集成 — 开箱即用,与 RAGFlow 的代码组件配合使用。
+- 高安全性 — 使用 gVisor 进行系统调用级别的沙箱隔离以隔离执行。
+- 可定制的沙箱 — 轻松修改 seccomp 配置文件以定制系统调用限制。
+- 可插拔运行时支持 — 可扩展以支持任何编程语言运行时。
+- 开发者友好 — 使用方便的 Makefile 快速设置。
 
-## Architecture
+## 架构
 
-The architecture consists of isolated Docker base images for each supported language runtime, managed by the executor manager service. The executor manager orchestrates sandboxed code execution using gVisor for syscall interception and optional seccomp profiles for enhanced syscall filtering.
+架构由每个支持的语言运行时的隔离 Docker 基础镜像组成,由执行器管理器服务管理。执行器管理器使用 gVisor 进行系统调用拦截和可选的 seccomp 配置文件进行增强的系统调用过滤来编排沙箱代码执行。
 
-## Prerequisites
+## 前提条件
 
-- Linux distribution compatible with gVisor.
-- gVisor installed and configured.
-- Docker version 25.0 or higher (API 1.44+). Ensure your executor manager image ships with Docker CLI `29.1.0` or higher to stay compatible with the latest Docker daemons.
-- Docker Compose version 2.26.1 or higher (similar to RAGFlow requirements).
-- uv package and project manager installed.
-- (Optional) GNU Make for simplified command-line management.
+- 与 gVisor 兼容的 Linux 发行版。
+- gVisor 已安装并配置。
+- Docker 版本 25.0 或更高(API 1.44+)。确保您的执行器管理器镜像附带 Docker CLI `29.1.0` 或更高版本,以保持与最新 Docker 守护程序的兼容性。
+- Docker Compose 版本 2.26.1 或更高版本(类似于 RAGFlow 要求)。
+- uv 包和项目管理器已安装。
+- (可选) GNU Make 用于简化的命令行管理。
 
-:::tip NOTE
-The error message `client version 1.43 is too old. Minimum supported API version is 1.44` indicates that your executor manager image's built-in Docker CLI version is lower than `29.1.0` required by the Docker daemon in use. To solve this issue, pull the latest `infiniflow/sandbox-executor-manager:latest` from Docker Hub or rebuild it in `./sandbox/executor_manager`.
+:::tip 注意
+错误消息 `client version 1.43 is too old. Minimum supported API version is 1.44` 表示您的执行器管理器镜像的内置 Docker CLI 版本低于所使用的 Docker 守护程序要求的 `29.1.0`。要解决此问题,请从 Docker Hub 拉取最新的 `infiniflow/sandbox-executor-manager:latest` 或在 `./sandbox/executor_manager` 中重新构建它。
 :::
 
-## Build Docker base images
+## 构建 Docker 基础镜像
 
-The sandbox uses isolated base images for secure containerised execution environments.
+沙箱使用隔离的基础镜像来实现安全的容器化执行环境。
 
-Build the base images manually:
+手动构建基础镜像:
 
 ```bash
 docker build -t sandbox-base-python:latest ./sandbox_base_image/python
 docker build -t sandbox-base-nodejs:latest ./sandbox_base_image/nodejs
 ```
 
-Alternatively, build all base images at once using the Makefile:
+或者,使用 Makefile 一次构建所有基础镜像:
 
 ```bash
 make build
 ```
 
-Next, build the executor manager image:
+接下来,构建执行器管理器镜像:
 
 ```bash
 docker build -t sandbox-executor-manager:latest ./executor_manager
 ```
 
-## Running with RAGFlow 
+## 与 RAGFlow 一起运行
 
-1. Verify that gVisor is properly installed and operational.
+1. 验证 gVisor 已正确安装并运行。
 
-2. Configure the .env file located at docker/.env:
+2. 配置位于 docker/.env 的 .env 文件:
 
-- Uncomment sandbox-related environment variables.
-- Enable the sandbox profile at the bottom of the file.
+- 取消注释沙箱相关的环境变量。
+- 在文件底部启用沙箱配置文件。
 
-3. Add the following entry to your /etc/hosts file to resolve the executor manager service:
+3. 将以下条目添加到您的 /etc/hosts 文件以解析执行器管理器服务:
 
     ```bash
     127.0.0.1 es01 infinity mysql minio redis sandbox-executor-manager
     ```
 
-4. Start the RAGFlow service as usual.
+4. 像往常一样启动 RAGFlow 服务。
 
-## Running standalone
+## 独立运行
 
-### Manual setup
+### 手动设置
 
-1. Initialize the environment variables:
+1. 初始化环境变量:
 
     ```bash
     cp .env.example .env
     ```
 
-2. Launch the sandbox services with Docker Compose:
+2. 使用 Docker Compose 启动沙箱服务:
 
     ```bash
     docker compose -f docker-compose.yml up
     ```
 
-3. Test the sandbox setup:
+3. 测试沙箱设置:
 
     ```bash
     source .venv/bin/activate
@@ -99,23 +99,23 @@ docker build -t sandbox-executor-manager:latest ./executor_manager
     uv run tests/sandbox_security_tests_full.py
     ```
 
-### Using Makefile
+### 使用 Makefile
 
-Run all setup, build, launch, and tests with a single command:
+使用单个命令运行所有设置、构建、启动和测试:
 
 ```bash
 make
 ```
 
-### Monitoring
+### 监控
 
-To follow logs of the executor manager container:
+要跟踪执行器管理器容器的日志:
 
 ```bash
 docker logs -f sandbox-executor-manager
 ```
 
-Or use the Makefile shortcut:
+或使用 Makefile 快捷方式:
 
 ```bash
 make logs

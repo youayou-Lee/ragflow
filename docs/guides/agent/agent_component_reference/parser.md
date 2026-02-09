@@ -5,111 +5,111 @@ sidebar_custom_props: {
   categoryIcon: LucideFilePlay
 }
 ---
-# Parser component
+# 解析器组件
 
-A component that sets the parsing rules for your dataset.
+一个为数据集设置解析规则的组件。
 
 ---
 
-A **Parser** component is autopopulated on the ingestion pipeline canvas and required in all ingestion pipeline workflows. Just like the **Extract** stage in the traditional ETL process, a **Parser** component in an ingestion pipeline defines how various file types are parsed into structured data. Click the component to display its configuration panel. In this configuration panel, you set the parsing rules for various file types.
+**解析器**组件在摄入流水线画布上自动填充,并且是所有摄入流水线工作流中必需的。就像传统 ETL 过程中的 **提取** 阶段一样,摄入流水线中的 **解析器** 组件定义了各种文件类型如何解析为结构化数据。点击该组件以显示其配置面板。在此配置面板中,您可以为各种文件类型设置解析规则。
 
-## Configurations
+## 配置
 
-Within the configuration panel, you can add multiple parsers and set the corresponding parsing rules or remove unwanted parsers. Please ensure your set of parsers covers all required file types; otherwise, an error would occur when you select this ingestion pipeline on your dataset's **Files** page.
+在配置面板中,您可以添加多个解析器并设置相应的解析规则或删除不需要的解析器。请确保您的解析器集涵盖所有必需的文件类型;否则,当您在数据集的 **文件** 页面上选择此摄入流水线时将发生错误。
 
-The **Parser** component supports parsing the following file types:
+**解析器** 组件支持解析以下文件类型:
 
-| File type     | File format              |
+| 文件类型     | 文件格式              |
 |---------------|--------------------------|
 | PDF           | PDF                      |
-| Spreadsheet   | XLSX, XLS, CSV           |
-| Image         | PNG, JPG, JPEG, GIF, TIF |
-| Email         | EML                      |
-| Text & Markup | TXT, MD, MDX, HTML, JSON |
+| 电子表格   | XLSX, XLS, CSV           |
+| 图片         | PNG, JPG, JPEG, GIF, TIF |
+| 邮件         | EML                      |
+| 文本和标记 | TXT, MD, MDX, HTML, JSON |
 | Word          | DOCX                     |
 | PowerPoint    | PPTX, PPT                |
-| Audio         | MP3, WAV                 |
-| Video         | MP4, AVI, MKV            |
+| 音频         | MP3, WAV                 |
+| 视频         | MP4, AVI, MKV            |
 
-### PDF parser
+### PDF 解析器
 
-The output of a PDF parser is `json`. In the PDF parser, you select the parsing method that works best with your PDFs.
+PDF 解析器的输出是 `json`。在 PDF 解析器中,选择最适合您的 PDF 的解析方法。
 
-- DeepDoc: (Default) The default visual model performing OCR, TSR, and DLR tasks on complex PDFs, but can be time-consuming.
-- Naive: Skip OCR, TSR, and DLR tasks if *all* your PDFs are plain text.
-- [MinerU](https://github.com/opendatalab/MinerU): (Experimental) An open-source tool that converts PDF into machine-readable formats.
-- [Docling](https://github.com/docling-project/docling): (Experimental) An open-source document processing tool for gen AI.
-- A third-party visual model from a specific model provider.
+- DeepDoc:(默认)默认的视觉模型,对复杂的 PDF 执行 OCR、TSR 和 DLR 任务,但可能耗时。
+- Naive: 如果您的所有 PDF 都是纯文本,则跳过 OCR、TSR 和 DLR 任务。
+- [MinerU](https://github.com/opendatalab/MinerU):(实验性)一种将 PDF 转换为机器可读格式的开源工具。
+- [Docling](https://github.com/docling-project/docling):(实验性)一种面向生成式 AI 的开源文档处理工具。
+- 来自特定模型提供商的第三方视觉模型。
 
-:::danger IMPORTANT
-Starting from v0.22.0, RAGFlow includes MinerU (&ge; 2.6.3) as an optional PDF parser of multiple backends. Please note that RAGFlow acts only as a *remote client* for MinerU, calling the MinerU API to parse documents and reading the returned files. To use this feature:
+:::danger 重要
+从 v0.22.0 开始,RAGFlow 包括 MinerU(&ge; 2.6.3)作为多后端的可选 PDF 解析器。请注意,RAGFlow 仅充当 MinerU 的*远程客户端*,调用 MinerU API 来解析文档并读取返回的文件。要使用此功能:
 :::
 
-1. Prepare a reachable MinerU API service (FastAPI server).
-2. In the **.env** file or from the **Model providers** page in the UI, configure RAGFlow as a remote client to MinerU:
-   - `MINERU_APISERVER`: The MinerU API endpoint (e.g., `http://mineru-host:8886`).
-   - `MINERU_BACKEND`: The MinerU backend:
-      - `"pipeline"` (default)
+1. 准备一个可访问的 MinerU API 服务(FastAPI 服务器)。
+2. 在 **.env** 文件中或从 UI 中的 **模型提供商** 页面,将 RAGFlow 配置为 MinerU 的远程客户端:
+   - `MINERU_APISERVER`: MinerU API 端点(例如,`http://mineru-host:8886`)。
+   - `MINERU_BACKEND`: MinerU 后端:
+      - `"pipeline"`(默认)
       - `"vlm-http-client"`
       - `"vlm-transformers"`
       - `"vlm-vllm-engine"`
       - `"vlm-mlx-engine"`
       - `"vlm-vllm-async-engine"`
-      - `"vlm-lmdeploy-engine"`.
-   - `MINERU_SERVER_URL`: (optional) The downstream vLLM HTTP server (e.g., `http://vllm-host:30000`). Applicable when `MINERU_BACKEND` is set to `"vlm-http-client"`. 
-   - `MINERU_OUTPUT_DIR`: (optional) The local directory for holding the outputs of the MinerU API service (zip/JSON) before ingestion.
-   - `MINERU_DELETE_OUTPUT`: Whether to delete temporary output when a temporary directory is used:
-     - `1`: Delete.
-     - `0`: Retain.
-3. In the web UI, navigate to your dataset's **Configuration** page and find the **Ingestion pipeline** section:  
-   - If you decide to use a chunking method from the **Built-in** dropdown, ensure it supports PDF parsing, then select **MinerU** from the **PDF parser** dropdown.
-   - If you use a custom ingestion pipeline instead, select **MinerU** in the **PDF parser** section of the **Parser** component.
+      - `"vlm-lmdeploy-engine"`。
+   - `MINERU_SERVER_URL`:(可选)下游 vLLM HTTP 服务器(例如,`http://vllm-host:30000`)。当 `MINERU_BACKEND` 设置为 `"vlm-http-client"` 时适用。
+   - `MINERU_OUTPUT_DIR`:(可选)用于在摄入之前保存 MinerU API 服务输出(zip/JSON)的本地目录。
+   - `MINERU_DELETE_OUTPUT`: 使用临时目录时是否删除临时输出:
+     - `1`: 删除。
+     - `0`: 保留。
+3. 在 Web UI 中,导航到数据集的 **配置** 页面并找到 **摄入流水线** 部分:
+   - 如果您决定使用 **内置** 下拉菜单中的分块方法,请确保它支持 PDF 解析,然后从 **PDF 解析器** 下拉菜单中选择 **MinerU**。
+   - 如果您改用自定义摄入流水线,请在 **解析器** 组件的 **PDF 解析器** 部分中选择 **MinerU**。
 
 :::note
-All MinerU environment variables are optional. When set, these values are used to auto-provision a MinerU OCR model for the tenant on first use. To avoid auto-provisioning, skip the environment variable settings and only configure MinerU from the **Model providers** page in the UI.
+所有 MinerU 环境变量都是可选的。设置后,这些值将用于在首次使用时为租户自动配置 MinerU OCR 模型。要避免自动配置,请跳过环境变量设置,仅从 UI 的 **模型提供商** 页面配置 MinerU。
 :::
 
-:::caution WARNING
-Third-party visual models are marked **Experimental**, because we have not fully tested these models for the aforementioned data extraction tasks.
+:::caution 警告
+第三方视觉模型标记为 **实验性**,因为我们尚未针对上述数据提取任务对这些模型进行充分测试。
 :::
 
-### Spreadsheet parser
+### 电子表格解析器
 
-A spreadsheet parser outputs `html`, preserving the original layout and table structure. You may remove this parser if your dataset contains no spreadsheets.
+电子表格解析器输出 `html`,保留原始布局和表格结构。如果您的数据集不包含电子表格,则可以删除此解析器。
 
-### Image parser
+### 图片解析器
 
-An Image parser uses a native OCR model for text extraction by default. You may select an alternative VLM model, provided that you have properly configured it on the **Model provider** page.
+图片解析器默认使用原生 OCR 模型进行文本提取。您可以选择替代的 VLM 模型,前提是您在 **模型提供商** 页面上对其进行了正确配置。
 
-### Email parser
+### 邮件解析器
 
-With the Email parser, you select the fields to parse from Emails, such as **subject** and **body**. The parser will then extract text from these specified fields.
+使用邮件解析器,您可以选择要从邮件中解析的字段,例如 **主题** 和 **正文**。然后,解析器将从这些指定字段中提取文本。
 
-### Text&Markup parser
+### 文本和标记解析器
 
-A Text&Markup parser automatically removes all formatting tags (e.g., those from HTML and Markdown files) to output clean, plain text only.
+文本和标记解析器自动删除所有格式标签(例如,来自 HTML 和 Markdown 文件的标签),仅输出干净的纯文本。
 
-### Word parser
+### Word 解析器
 
-A Word parser outputs `json`, preserving the original document structure information, including titles, paragraphs, tables, headers, and footers.
+Word 解析器输出 `json`,保留原始文档结构信息,包括标题、段落、表格、页眉和页脚。
 
-### PowerPoint (PPT) parser
+### PowerPoint (PPT) 解析器
 
-A PowerPoint parser extracts content from PowerPoint files into `json`, processing each slide individually and distinguishing between its title, body text, and notes.
+PowerPoint 解析器将 PowerPoint 文件中的内容提取到 `json` 中,单独处理每张幻灯片并区分其标题、正文和备注。
 
-### Audio parser
+### 音频解析器
 
-An Audio parser transcribes audio files to text. To use this parser, you must first configure an ASR model on the **Model provider** page.
+音频解析器将音频文件转录为文本。要使用此解析器,您必须首先在 **模型提供商** 页面上配置 ASR 模型。
 
-### Video parser
+### 视频解析器
 
-A Video parser transcribes video files to text. To use this parser, you must first configure a VLM model on the **Model provider** page.
+视频解析器将视频文件转录为文本。要使用此解析器,您必须首先在 **模型提供商** 页面上配置 VLM 模型。
 
-## Output
+## 输出
 
-The global variable names for the output of the **Parser** component, which can be referenced by subsequent components in the ingestion pipeline.
+**解析器**组件输出的全局变量名称,可由摄入流水线中的后续组件引用。
 
-| Variable name | Type            |
+| 变量名称 | 类型            |
 |---------------|-----------------|
 | `markdown`    | `string`        |
 | `text`        | `string`        |

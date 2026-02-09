@@ -5,41 +5,41 @@ sidebar_custom_props: {
   categoryIcon: LucideBlocks
 }
 ---
-# Token chunker component
+# Token 分块组件
 
-A component that splits texts into chunks, respecting a maximum token limit and using delimiters to find optimal breakpoints.
+一个将文本分割成块的组件,遵守最大 token 限制并使用分隔符找到最佳断点。
 
 ---
 
-A **Token chunker** component is a text splitter that creates chunks by respecting a recommended maximum token length, using delimiters to ensure logical chunk breakpoints. It splits long texts into appropriately-sized, semantically related chunks.
+**Token 分块**组件是一个文本分割器,通过遵守推荐的最大 token 长度并使用分隔符确保逻辑分块断点来创建块。它将长文本分割成适当大小的、语义相关的块。
 
 
-## Scenario
+## 场景
 
-A **Token chunker** component is optional, usually placed immediately after **Parser** or **Title chunker**.
+**Token 分块**组件是可选的,通常直接放在 **解析器**或 **标题分块器**之后。
 
-## Configurations
+## 配置
 
-### Recommended chunk size
+### 推荐块大小
 
-The recommended maximum token limit for each created chunk. The **Token chunker** component creates chunks at specified delimiters. If this token limit is reached before a delimiter, a chunk is created at that point.
+每个创建的块的推荐最大 token 限制。**Token 分块**组件在指定的分隔符处创建块。如果在分隔符之前达到此 token 限制,则在该点创建一个块。
 
-### Overlapped percent (%)
+### 重叠百分比(%)
 
-This defines the overlap percentage between chunks. An appropriate degree of overlap ensures semantic coherence without creating excessive, redundant tokens for the LLM.
+这定义了块之间的重叠百分比。适当的重叠程度确保语义连贯性,而不会为 LLM 创建过多的冗余 token。
 
-- Default: 0
-- Maximum: 30%
-
-
-### Delimiters
-
-Defaults to `\n`. Click the right-hand **Recycle bin** button to remove it, or click **+ Add** to add a delimiter.
+- 默认值: 0
+- 最大值: 30%
 
 
-### Output
+### 分隔符
 
-The global variable name for the output of the **Token chunker** component, which can be referenced by subsequent components in the ingestion pipeline.
+默认为 `\n`。点击右侧的 **回收站** 按钮删除它,或点击 **+ 添加** 添加分隔符。
 
-- Default: `chunks`
-- Type: `Array<Object>`
+
+### 输出
+
+**Token 分块**组件输出的全局变量名称,可由摄入流水线中的后续组件引用。
+
+- 默认值: `chunks`
+- 类型: `Array<Object>`

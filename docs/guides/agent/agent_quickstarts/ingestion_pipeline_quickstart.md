@@ -6,128 +6,128 @@ sidebar_custom_props: {
 }
 ---
 
-# Ingestion pipeline quickstart
+# 摄入流水线快速入门
 
-RAGFlow's ingestion pipeline is a customizable, step-by-step workflow that prepares your documents for high-quality AI retrieval and answering. You can think of it as building blocks: you connect different processing "components" to create a pipeline tailored to your specific documents and needs.
+RAGFlow 的摄入流水线是一个可定制的、分步工作流,用于准备文档以进行高质量的 AI 检索和回答。您可以将其视为构建块:连接不同的处理"组件"以创建适合您的特定文档和需求的流水线。
 
 ---
 
-RAGFlow is an open-source RAG platform with strong document processing capabilities. Its built-in module, DeepDoc, uses intelligent parsing to split documents for accurate retrieval. To handle diverse real-world needs—like varied file sources, complex layouts, and richer semantics—RAGFlow now introduces the *ingestion pipeline*.
+RAGFlow 是一个具有强大文档处理能力的开源 RAG 平台。其内置模块 DeepDoc 使用智能解析来分割文档以进行准确检索。为了处理多样化的现实世界需求—如不同的文件来源、复杂的布局和更丰富的语义—RAGFlow 现在引入了*摄入流水线*。
 
-The ingestion pipeline lets you customize every step of document processing:
+摄入流水线让您可以自定义文档处理的每一步:
 
-- Apply different parsing and splitting rules per scenario
-- Add preprocessing like summarization or keyword extraction
-- Connect to cloud drives and online data sources
-- Use advanced layout-aware models for tables and mixed content
+- 针对不同场景应用不同的解析和分割规则
+- 添加预处理,如摘要或关键字提取
+- 连接到云驱动器和在线数据源
+- 使用高级布局感知模型处理表格和混合内容
 
-This flexible pipeline adapts to your data, improving answer quality in RAG.
+这种灵活的流水线适应您的数据,提高 RAG 中的答案质量。
 
-## 1. Understand the core pipeline components
+## 1. 了解核心流水线组件
 
-- **Parser** component: Reads and understands your files (PDFs, images, emails, etc.), extracting text and structure.
-- **Transformer** component: Enhances text by using AI to add summaries, keywords, or questions to improve search.
-- **Chunker** component: Splits long text into optimal-sized segments ("chunks") for better AI retrieval.
-- **Indexer** component: The final step. Sends the processed data to the document engine (supports hybrid full-text and vector search).
+- **解析器** 组件:读取和理解您的文件(PDF、图片、电子邮件等),提取文本和结构。
+- **转换器** 组件:通过使用 AI 添加摘要、关键字或问题来增强文本,以提高搜索质量。
+- **分块器** 组件:将长文本分割成最佳大小的段("块"),以便更好地进行 AI 检索。
+- **索引器** 组件:最后一步。将处理后的数据发送到文档引擎(支持混合全文和向量搜索)。
 
-## 2. Create an ingestion pipeline
+## 2. 创建摄入流水线
 
-1. Go to the **Agent** page.
-2. Click **Create agent** and start from a blank canvas or a pre-built template (recommended for beginners).
-3. On the canvas, drag and connect components from the right-side panel to design your flow (e.g., Parser → Chunker → Transformer → Indexer).
+1. 转到 **智能体** 页面。
+2. 点击 **创建智能体** 并从空白画布或预构建模板开始(推荐给初学者)。
+3. 在画布上,从右侧面板拖放并连接组件以设计您的流程(例如,解析器 → 分块器 → 转换器 → 索引器)。
 
-*Now let's build a typical ingestion pipeline!*
+*现在让我们构建一个典型的摄入流水线!*
 
-## 3. Configure Parser component
+## 3. 配置解析器组件
 
-A **Parser** component converts your files into structured text while preserving layout, tables, headers, and other formatting. Its supported files 8 categories, 23+ formats including PDF, Image, Audio, Video, Email, Spreadsheet (Excel), Word, PPT, HTML, and Markdown. The following are some key configurations:
+**解析器** 组件将您的文件转换为结构化文本,同时保留布局、表格、标题和其他格式。它支持的文件 8 大类、23+ 种格式,包括 PDF、图片、音频、视频、电子邮件、电子表格 (Excel)、Word、PPT、HTML 和 Markdown。以下是一些关键配置:
 
-- For PDF files, choose one of the following: 
-  - **DeepDoc** (Default): RAGFlow's built-in model. Best for scanned documents or complex layouts with tables.
-  - **MinerU**: Industry-leading for complex elements like mathematical formulas and intricate layouts.
-  - **Naive**: Simple text extraction. Use for clean, text-based PDFs without complex elements.
-- For image files: Default uses OCR. Can also configure Vision Language Models (VLMs) for advanced visual understanding.
-- For Email Files: Select specific fields to parse (e.g., "subject", "body") for precise extraction.
-- For Spreadsheets: Outputs in HTML format, preserving row/column structure.
-- For Word/PPT: Outputs in JSON format, retaining document hierarchy (titles, paragraphs, slides).
-- For Text & Markup (HTML/MD): Automatically strips formatting tags, outputting clean text.
+- 对于 PDF 文件,选择以下选项之一:
+  - **DeepDoc**(默认): RAGFlow 的内置模型。最适合扫描文档或具有表格的复杂布局。
+  - **MinerU**: 在数学公式和复杂布局等复杂元素方面处于行业领先地位。
+  - **Naive**: 简单的文本提取。用于没有复杂元素的干净、基于文本的 PDF。
+- 对于图片文件:默认使用 OCR。还可以配置视觉语言模型 (VLM) 以进行高级视觉理解。
+- 对于电子邮件文件:选择要解析的特定字段(例如,"主题"、"正文")以进行精确提取。
+- 对于电子表格:以 HTML 格式输出,保留行/列结构。
+- 对于 Word/PPT:以 JSON 格式输出,保留文档层次结构(标题、段落、幻灯片)。
+- 对于文本和标记 (HTML/MD):自动删除格式标签,输出干净的文本。
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/parser1.png)
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/parser2.png)
 
-## 4. Configure Chunker component
+## 4. 配置分块器组件
 
-The chunker component splits text intelligently. It's goal is to prevent AI context window overflow and improve semantic accuracy in hybrid search. There are two core methods (Can be used sequentially):
+分块器组件智能地分割文本。它的目标是防止 AI 上下文窗口溢出并提高混合搜索中的语义准确性。有两种核心方法(可以按顺序使用):
 
-- By Tokens (Default):
-  - Chunk Size: Default is 512 tokens. Balance between retrieval quality and model compatibility.
-  - Overlap: Set **Overlapped percent** to duplicate end of one chunk into start of next. Improves semantic continuity.
-  - Separators: Default uses `\n` (newlines) to split at natural paragraph boundaries first, avoiding mid-sentence cuts.
-- By Title (Hierarchical):
-  - Best for structured documents like manuals, papers, legal contracts.
-  - System splits document by chapter/section structure. Each chunk represents a complete structural unit.
+- 按 Token(默认):
+  - 块大小:默认为 512 个 token。在检索质量和模型兼容性之间取得平衡。
+  - 重叠:设置 **重叠百分比** 以将一个块的末尾复制到下一个块的开头。提高语义连续性。
+  - 分隔符:默认使用 `\n`(换行符)首先在自然段落边界处分割,避免句子中间切割。
+- 按标题(分层):
+  - 最适合结构化文档,如手册、论文、法律合同。
+  - 系统按章节/部分结构分割文档。每个块代表一个完整的结构单元。
 
-:::caution IMPORTANT
-In the current design, if using both Token and Title methods, connect the **Token chunker** component first, then **Title chunker** component. Connecting **Title chunker** directly to **Parser** may cause format errors for Email, Image, Spreadsheet, and Text files.
+:::caution 重要
+在当前设计中,如果同时使用 Token 和标题方法,请先连接 **Token 分块器** 组件,然后连接 **标题分块器** 组件。将 **标题分块器** 直接连接到 **解析器** 可能会导致电子邮件、图片、电子表格和文本文件的格式错误。
 :::
 
-## 5. Configure Transformer component 
+## 5. 配置转换器组件
 
-A **Transformer** component is designed to bridge the "Semantic Gap". Generally speaking, it uses AI models to add semantic metadata, making your content more discoverable during retrieval. It has four generation types:
+**转换器** 组件旨在弥合"语义差距"。一般来说,它使用 AI 模型添加语义元数据,使您的内容在检索期间更容易被发现。它有四种生成类型:
 
-- Summary: Create concise overviews.
-- Keywords: Extract key terms.
-- Questions: Generate questions each text chunk can answer.
-- Metadata: Custom metadata extraction.
+- 摘要:创建简洁的概述。
+- 关键字:提取关键术语。
+- 问题:生成每个文本块可以回答的问题。
+- 元数据:自定义元数据提取。
 
-If you have multiple **Transformers**, ensure that you separate **Transformer** components for each function (e.g., one for Summary, another for Keywords).
+如果您有多个 **转换器**,请确保为每个功能分离 **转换器** 组件(例如,一个用于摘要,另一个用于关键字)。
 
-The following are some key configurations:
+以下是一些关键配置:
 
-- Model modes: (choose one)
-  - Improvise: More creative, good for question generation.
-  - Precise: Strictly faithful to text, good for Summary/Keyword extraction.
-  - Balance: Middle ground for most scenarios.
-- Prompt engineering: System prompts for each generation type are open and customizable.
-- Connection: **Transformer** can connect after **Parser** (processes whole document) OR after **Chunker** (processes each chunk).
-- Variable referencing: The node doesn't auto-acquire content. In the User prompt, manually reference upstream variables by typing `/` and selecting the specific output (e.g., `/{Parser.output}` or `/{Chunker.output}`).
-- Series connection: When chaining **Transformers**, the second **Transformer** component will process the output of the first (e.g., generate Keywords from a Summary) if variables are correctly referenced.
+- 模型模式:(选择一个)
+  - 即兴:更有创意,适合问题生成。
+  - 精确:严格忠实于文本,适合摘要/关键字提取。
+  - 平衡:大多数场景的中间地带。
+- 提示工程:每种生成类型的系统提示都是开放和可定制的。
+- 连接:**转换器** 可以在 **解析器** 之后连接(处理整个文档)或在 **分块器** 之后连接(处理每个块)。
+- 变量引用:节点不会自动获取内容。在用户提示中,通过输入 `/` 并选择特定输出(例如,`/{解析器.输出}` 或 `/{分块器.输出}`)来手动引用上游变量。
+- 串联连接:链接 **转换器** 时,如果正确引用变量,第二个 **转换器** 组件将处理第一个的输出(例如,从摘要生成关键字)。
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/transformer1.png)
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/transformer2.png)
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/transformer3.png)
 
-## 6. Configure Indexer component
+## 6. 配置索引器组件
 
-The **Indexer** component indexes for optimal retrieval. It is the final step writes processed data to the search engine (such as Infinity, Elasticsearch, OpenSearch). The following are some key configurations:
+**索引器** 组件为最佳检索进行索引。这是最后一步,将处理后的数据写入搜索引擎(例如 Infinity、Elasticsearch、OpenSearch)。以下是一些关键配置:
 
-- Search methods:
-  - Full-text: Keyword search for exact matches (codes, names).
-  - Embedding: Semantic search using vector similarity.
-  - Hybrid (Recommended): Both methods combined for best recall.
-- Retrieval Strategy:
-  - Processed text (Default): Indexes the chunked text.
-  - Questions: Indexes generated questions. Often yields higher similarity matching than text-to-text.
-  - Augmented context: Indexes summaries instead of raw text. Good for broad topic matching.
-- Filename weight: Slider to include document filename as semantic information in retrieval.
-- Embedding model: Automatically uses the model set when creating the dataset.
+- 搜索方法:
+  - 全文:关键字搜索,用于精确匹配(代码、名称)。
+  - 嵌入:使用向量相似性的语义搜索。
+  - 混合(推荐):两种方法结合以获得最佳召回率。
+- 检索策略:
+  - 处理后的文本(默认):索引分块的文本。
+  - 问题:索引生成的问题。通常产生比文本到文本更高的相似性匹配。
+  - 增强上下文:索引摘要而不是原始文本。适合广泛的主题匹配。
+- 文件名权重:滑块,将文档文件名包含为检索中的语义信息。
+- 嵌入模型:自动使用创建数据集时设置的模型。
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/indexer.png)
 
-:::caution IMPORTANT
-To search across multiple datasets simultaneously, all selected datasets must use the same embedding model.
+:::caution 重要
+要同时搜索多个数据集,所有选定的数据集必须使用相同的嵌入模型。
 :::
 
-## 7. Test run
+## 7. 测试运行
 
-Click **Run** on your pipeline canvas to upload a sample file and see the step-by-step results.
+在流水线画布上点击 **运行** 上传示例文件并查看分步结果。
 
-## 8. Connect pipeline to a dataset
+## 8. 将流水线连接到数据集
 
-1. When creating or editing a dataset, find the **Ingestion pipeline** section.
-2. Click **Choose pipeline** and select your saved pipeline.
+1. 创建或编辑数据集时,找到 **摄入流水线** 部分。
+2. 点击 **选择流水线** 并选择您保存的流水线。
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/dataset_ingestion_settings.png)
 
-*Now, any files uploaded to this dataset will be processed by your custom pipeline.*
+*现在,上传到此数据集的任何文件都将由您的自定义流水线处理。*
 

@@ -5,46 +5,46 @@ sidebar_custom_props: {
   categoryIcon: LucideKey
 }
 ---
-# Configure model API key
+# 配置模型 API 密钥
 
-An API key is required for RAGFlow to interact with an online AI model. This guide provides information about setting your model API key in RAGFlow.
+RAGFlow 需要 API 密钥才能与在线 AI 模型交互。本指南提供有关在 RAGFlow 中设置模型 API 密钥的信息。
 
-## Get model API key
+## 获取模型 API 密钥
 
-RAGFlow supports most mainstream LLMs. Please refer to [Supported Models](../../references/supported_models.mdx) for a complete list of supported models. You will need to apply for your model API key online. Note that most LLM providers grant newly-created accounts trial credit, which will expire in a couple of months, or a promotional amount of free quota.
+RAGFlow 支持大多数主流 LLM。请参阅[支持的模型](../../references/supported_models.mdx)以获取完整列表。您需要在线申请模型 API 密钥。请注意，大多数 LLM 提供商会为新创建的账户提供试用额度，这将在几个月后到期，或提供一定数量的免费配额。
 
 :::note
-If you find your online LLM is not on the list, don't feel disheartened. The list is expanding, and you can [file a feature request](https://github.com/infiniflow/ragflow/issues/new?assignees=&labels=feature+request&projects=&template=feature_request.yml&title=%5BFeature+Request%5D%3A+) with us! Alternatively, if you have customized or locally-deployed models, you can [bind them to RAGFlow using Ollama, Xinference, or LocalAI](./deploy_local_llm.mdx).
+如果您发现您的在线 LLM 不在列表中，请不要感到失望。列表正在不断扩充，您可以向我们[提交功能请求](https://github.com/infiniflow/ragflow/issues/new?assignees=&labels=feature+request&projects=&template=feature_request.yml&title=%5BFeature+Request%5D%3A+)！或者，如果您有定制或本地部署的模型，可以[使用 Ollama、Xinference 或 LocalAI 将它们绑定到 RAGFlow](./deploy_local_llm.mdx)。
 :::
 
-## Configure model API key
+## 配置模型 API 密钥
 
-You have two options for configuring your model API key:
+您有两种选择来配置模型 API 密钥：
 
-- Configure it in **service_conf.yaml.template** before starting RAGFlow.
-- Configure it on the **Model providers** page after logging into RAGFlow.
+- 在启动 RAGFlow 之前在 **service_conf.yaml.template** 中配置。
+- 在登录 RAGFlow 后在**模型提供商**页面上配置。
 
-### Configure model API key before starting up RAGFlow
+### 在启动 RAGFlow 之前配置模型 API 密钥
 
-1. Navigate to **./docker/ragflow**.
-2. Find entry **user_default_llm**:
-   - Update `factory` with your chosen LLM.
-   - Update `api_key` with yours.
-   - Update `base_url` if you use a proxy to connect to the remote service.
-3. Reboot your system for your changes to take effect.
-4. Log into RAGFlow.  
-   _After logging into RAGFlow, you will find your chosen model appears under **Added models** on the **Model providers** page._
+1. 导航到 **./docker/ragflow**。
+2. 找到条目 **user_default_llm**：
+   - 使用您选择的 LLM 更新 `factory`。
+   - 使用您的密钥更新 `api_key`。
+   - 如果您使用代理连接到远程服务，请更新 `base_url`。
+3. 重启系统以使更改生效。
+4. 登录 RAGFlow。
+   _登录 RAGFlow 后，您将在**模型提供商**页面上的**已添加模型**下看到您选择的模型。_
 
-### Configure model API key after logging into RAGFlow
+### 在登录 RAGFlow 后配置模型 API 密钥
 
-:::caution WARNING
-After logging into RAGFlow, configuring your model API key through the **service_conf.yaml.template** file will no longer take effect.
+:::caution 警告
+登录 RAGFlow 后，通过 **service_conf.yaml.template** 文件配置模型 API 密钥将不再生效。
 :::
 
-After logging into RAGFlow, you can *only* configure API Key on the **Model providers** page:
+登录 RAGFlow 后，您*只能*在**模型提供商**页面上配置 API 密钥：
 
-1. Click on your logo on the top right of the page **>** **Model providers**.
-2. Find your model card under **Models to be added** and click **Add the model**.
-3. Paste your model API key.
-4. Fill in your base URL if you use a proxy to connect to the remote service.
-5. Click **OK** to confirm your changes.
+1. 点击页面右上角的您的徽标 **>** **模型提供商**。
+2. 在**待添加模型**下找到您的模型卡并点击**添加模型**。
+3. 粘贴您的模型 API 密钥。
+4. 如果您使用代理连接到远程服务，请填写您的基础 URL。
+5. 点击**确定**确认您的更改。

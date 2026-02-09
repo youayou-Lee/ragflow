@@ -3,239 +3,239 @@ sidebar_position: 35
 slug: /docs_generator
 ---
 
-# Docs Generator component
+# 文档生成器组件
 
-A component that generates downloadable PDF, DOCX, or TXT documents from markdown-style content with full Unicode support.
+一个从 markdown 样式内容生成可下载的 PDF、DOCX 或 TXT 文档的组件,完全支持 Unicode。
 
 ---
 
-The **Docs Generator** component enables you to create professional documents directly within your agent workflow. It accepts markdown-formatted text and converts it into downloadable files, making it ideal for generating reports, summaries, or any structured document output.
+**文档生成器**组件使您能够直接在智能体工作流中创建专业文档。它接受 markdown 格式的文本并将其转换为可下载的文件,使其成为生成报告、摘要或任何结构化文档输出的理想选择。
 
-## Key features
+## 主要功能
 
-- **Multiple output formats**: PDF, DOCX, and TXT
-- **Full Unicode support**: Automatic font switching for CJK (Chinese, Japanese, Korean), Arabic, Hebrew, and other non-Latin scripts
-- **Rich formatting**: Headers, lists, tables, code blocks, and more
-- **Customizable styling**: Fonts, margins, page size, and orientation
-- **Document extras**: Logo, watermark, page numbers, and timestamps
-- **Direct download**: Generates a download button for the chat interface
+- **多种输出格式**: PDF、DOCX 和 TXT
+- **完整的 Unicode 支持**: CJK(中文、日文、韩文)、阿拉伯语、希伯来语和其他非拉丁语系的自动字体切换
+- **丰富的格式**: 标题、列表、表格、代码块等
+- **可定制的样式**: 字体、边距、页面大小和方向
+- **文档附加功能**: Logo、水印、页码和时间戳
+- **直接下载**: 为聊天界面生成下载按钮
 
-## Prerequisites
+## 前提条件
 
-- Content to be converted into a document (typically from an **Agent** or other text-generating component).
+- 要转换为文档的内容(通常来自 **智能体**或其他文本生成组件)。
 
-## Examples
+## 示例
 
-You can pair an **Agent** component with the **Docs Generator** to create dynamic documents based on user queries. The **Agent** generates the content, and the **Docs Generator** converts it into a downloadable file. Connect the output to a **Message** component to display the download button in the chat.
+您可以将 **智能体**组件与 **文档生成器**配对,根据用户查询创建动态文档。**智能体**生成内容,**文档生成器**将其转换为可下载文件。将输出连接到 **消息**组件以在聊天中显示下载按钮。
 
-A typical workflow looks like:
+典型的工作流如下:
 
 ```
 Begin → Agent → Docs Generator → Message
 ```
 
-In the **Message** component, reference the `download` output variable from the **Docs Generator** to display a download button in the chat interface.
+在 **消息**组件中,引用 **文档生成器**的 `download` 输出变量以在聊天界面中显示下载按钮。
 
-## Configurations
+## 配置
 
-### Content
+### 内容
 
-The main text content to include in the document. Supports Markdown formatting:
+文档中包含的主要文本内容。支持 Markdown 格式:
 
-- **Bold**: `**text**` or `__text__`
-- **Italic**: `*text*` or `_text_`
-- **Inline code**: `` `code` ``
-- **Headings**: `# Heading 1`, `## Heading 2`, `### Heading 3`
-- **Bullet lists**: `- item` or `* item`
-- **Numbered lists**: `1. item`
-- **Tables**: `| Column 1 | Column 2 |`
-- **Horizontal lines**: `---`
-- **Code blocks**: ` ``` code ``` `
+- **粗体**: `**text**` 或 `__text__`
+- **斜体**: `*text*` 或 `_text_`
+- **行内代码**: `` `code` ``
+- **标题**: `# Heading 1`, `## Heading 2`, `### Heading 3`
+- **项目列表**: `- item` 或 `* item`
+- **编号列表**: `1. item`
+- **表格**: `| Column 1 | Column 2 |`
+- **水平线**: `---`
+- **代码块**: ` ``` code ``` `
 
-:::tip NOTE
-Click **(x)** or type `/` to insert variables from upstream components.
+:::tip 注意
+点击 **(x)** 或输入 `/` 插入来自上游组件的变量。
 :::
 
-### Title
+### 标题
 
-Optional. The document title displayed at the top of the generated file.
+可选。显示在生成文件顶部的文档标题。
 
-### Subtitle
+### 副标题
 
-Optional. A subtitle displayed below the title.
+可选。显示在标题下方的副标题。
 
-### Output format
+### 输出格式
 
-The file format for the generated document:
+生成文档的文件格式:
 
-- **PDF** (default): Portable Document Format with full styling support.
-- **DOCX**: Microsoft Word format.
-- **TXT**: Plain text format.
+- **PDF**(默认): 具有完整样式支持的便携式文档格式。
+- **DOCX**: Microsoft Word 格式。
+- **TXT**: 纯文本格式。
 
-### Logo image
+### Logo 图片
 
-Optional. A logo image to display at the top of the document. You can either:
+可选。显示在文档顶部的 logo 图片。您可以:
 
-- Upload an image file using the file picker
-- Paste an image path, URL, or base64-encoded data
+- 使用文件选择器上传图片文件
+- 粘贴图片路径、URL 或 base64 编码的数据
 
-### Logo position
+### Logo 位置
 
-The horizontal position of the logo:
+Logo 的水平位置:
 
-- **left** (default)
+- **left**(默认)
 - **center**
 - **right**
 
-### Logo dimensions
+### Logo 尺寸
 
-- **Logo width**: Width in inches (default: `2.0`)
-- **Logo height**: Height in inches (default: `1.0`)
+- **Logo 宽度**: 英寸为单位的宽度(默认: `2.0`)
+- **Logo 高度**: 英寸为单位的高度(默认: `1.0`)
 
-### Font family
+### 字体系列
 
-The font used throughout the document:
+整个文档使用的字体:
 
-- **Helvetica** (default)
+- **Helvetica**(默认)
 - **Times-Roman**
 - **Courier**
 - **Helvetica-Bold**
 - **Times-Bold**
 
-### Font size
+### 字体大小
 
-The base font size in points. Defaults to `12`.
+基本字体大小(以磅为单位)。默认为 `12`。
 
-### Title font size
+### 标题字体大小
 
-The font size for the document title. Defaults to `24`.
+文档标题的字体大小。默认为 `24`。
 
-### Page size
+### 页面大小
 
-The paper size for the document:
+文档的纸张大小:
 
-- **A4** (default)
+- **A4**(默认)
 - **Letter**
 
-### Orientation
+### 方向
 
-The page orientation:
+页面方向:
 
-- **Portrait** (default)
+- **Portrait**(默认)
 - **Landscape**
 
-### Margins
+### 边距
 
-Page margins in inches:
+页面边距(以英寸为单位):
 
-- **Margin top**: Defaults to `1.0`
-- **Margin bottom**: Defaults to `1.0`
-- **Margin left**: Defaults to `1.0`
-- **Margin right**: Defaults to `1.0`
+- **上边距**: 默认为 `1.0`
+- **下边距**: 默认为 `1.0`
+- **左边距**: 默认为 `1.0`
+- **右边距**: 默认为 `1.0`
 
-### Filename
+### 文件名
 
-Optional. Custom filename for the generated document. If left empty, a filename is auto-generated with a timestamp.
+可选。生成文档的自定义文件名。如果留空,将自动生成带时间戳的文件名。
 
-### Output directory
+### 输出目录
 
-The server directory where generated documents are saved. Defaults to `/tmp/pdf_outputs`.
+保存生成文档的服务器目录。默认为 `/tmp/pdf_outputs`。
 
-### Add page numbers
+### 添加页码
 
-When enabled, page numbers are added to the footer of each page. Defaults to `true`.
+启用后,页码将添加到每页的页脚。默认为 `true`。
 
-### Add timestamp
+### 添加时间戳
 
-When enabled, a generation timestamp is added to the document footer. Defaults to `true`.
+启用后,生成时间戳将添加到文档页脚。默认为 `true`。
 
-### Watermark text
+### 水印文本
 
-Optional. Text to display as a diagonal watermark across each page. Useful for marking documents as "Draft", "Confidential", etc.
+可选。显示为跨每页对角线水印的文本。用于将文档标记为"草稿"、"机密"等。
 
-## Output
+## 输出
 
-The **Docs Generator** component provides the following output variables:
+**文档生成器**组件提供以下输出变量:
 
-| Variable name | Type      | Description                                                  |
+| 变量名称 | 类型      | 描述                                                  |
 |---------------|-----------|--------------------------------------------------------------|
-| `file_path`   | `string`  | The server path where the generated document is saved.       |
-| `pdf_base64`  | `string`  | The document content encoded in base64 format.               |
-| `download`    | `string`  | JSON containing download information for the chat interface. |
-| `success`     | `boolean` | Indicates whether the document was generated successfully.   |
+| `file_path`   | `string`  | 生成文档保存的服务器路径。       |
+| `pdf_base64`  | `string`  | 以 base64 格式编码的文档内容。               |
+| `download`    | `string`  | 包含聊天界面下载信息的 JSON。 |
+| `success`     | `boolean` | 指示文档是否成功生成。   |
 
-### Displaying the download button
+### 显示下载按钮
 
-To display a download button in the chat, add a **Message** component after the **Docs Generator** and reference the `download` variable:
+要在聊天中显示下载按钮,请在 **文档生成器**之后添加 **消息**组件并引用 `download` 变量:
 
-1. Connect the **Docs Generator** output to a **Message** component.
-2. In the **Message** component's content field, type `/` and select `{Docs Generator_0@download}`.
-3. When the agent runs, a download button will appear in the chat, allowing users to download the generated document.
+1. 将 **文档生成器**输出连接到 **消息**组件。
+2. 在 **消息**组件的内容字段中,输入 `/` 并选择 `{Docs Generator_0@download}`。
+3. 当智能体运行时,聊天中将出现下载按钮,允许用户下载生成的文档。
 
-The download button automatically handles:
-- File type detection (PDF, DOCX, TXT)
-- Proper MIME type for browser downloads
-- Base64 decoding for direct file delivery
+下载按钮自动处理:
+- 文件类型检测(PDF、DOCX、TXT)
+- 浏览器下载的正确 MIME 类型
+- 直接文件传递的 base64 解码
 
-## Unicode and multi-language support
+## Unicode 和多语言支持
 
-The **Docs Generator** includes intelligent font handling for international content:
+**文档生成器**包含针对国际内容的智能字体处理:
 
-### How it works
+### 工作原理
 
-1. **Content analysis**: The component scans the text for non-Latin characters.
-2. **Automatic font switching**: When CJK or other complex scripts are detected, the system automatically switches to a compatible CID font (STSong-Light for Chinese, HeiseiMin-W3 for Japanese, HYSMyeongJo-Medium for Korean).
-3. **Latin content**: For documents containing only Latin characters (including extended Latin, Cyrillic, and Greek), the user-selected font family is used.
+1. **内容分析**: 组件扫描文本中的非拉丁字符。
+2. **自动字体切换**: 当检测到 CJK 或其他复杂文字时,系统自动切换到兼容的 CID 字体(中文使用 STSong-Light,日文使用 HeiseiMin-W3,韩文使用 HYSMyeongJo-Medium)。
+3. **拉丁内容**: 对于仅包含拉丁字符(包括扩展拉丁、西里尔和希腊语)的文档,使用用户选择的字体系列。
 
-### Supported scripts
+### 支持的文字
 
-| Script                       | Unicode Range | Font Used          |
+| 文字                       | Unicode 范围 | 使用的字体          |
 |------------------------------|---------------|--------------------|
-| Chinese (CJK)                | U+4E00–U+9FFF | STSong-Light       |
-| Japanese (Hiragana/Katakana) | U+3040–U+30FF | HeiseiMin-W3       |
-| Korean (Hangul)              | U+AC00–U+D7AF | HYSMyeongJo-Medium |
-| Arabic                       | U+0600–U+06FF | CID font fallback  |
-| Hebrew                       | U+0590–U+05FF | CID font fallback  |
-| Devanagari (Hindi)           | U+0900–U+097F | CID font fallback  |
-| Thai                         | U+0E00–U+0E7F | CID font fallback  |
+| 中文 (CJK)                | U+4E00–U+9FFF | STSong-Light       |
+| 日文 (平假名/片假名) | U+3040–U+30FF | HeiseiMin-W3       |
+| 韩文 (Hangul)              | U+AC00–U+D7AF | HYSMyeongJo-Medium |
+| 阿拉伯语                       | U+0600–U+06FF | CID 字体回退  |
+| 希伯来语                       | U+0590–U+05FF | CID 字体回退  |
+| 天城文 (印地语)           | U+0900–U+097F | CID 字体回退  |
+| 泰语                         | U+0E00–U+0E7F | CID 字体回退  |
 
-### Font installation
+### 字体安装
 
-For full multi-language support in self-hosted deployments, ensure Unicode fonts are installed:
+要在自托管部署中实现完整的多语言支持,请确保安装了 Unicode 字体:
 
 **Linux (Debian/Ubuntu):**
 ```bash
 apt-get install fonts-freefont-ttf fonts-noto-cjk
 ```
 
-**Docker:** The official RAGFlow Docker image includes these fonts. For custom images, add the font packages to your Dockerfile:
+**Docker:** 官方 RAGFlow Docker 镜像包含这些字体。对于自定义镜像,将字体包添加到您的 Dockerfile:
 ```dockerfile
 RUN apt-get update && apt-get install -y fonts-freefont-ttf fonts-noto-cjk
 ```
 
-:::tip NOTE
-CID fonts (STSong-Light, HeiseiMin-W3, etc.) are built into ReportLab and do not require additional installation. They are used automatically when CJK content is detected.
+:::tip 注意
+CID 字体(STSong-Light、HeiseiMin-W3 等)内置在 ReportLab 中,不需要额外安装。当检测到 CJK 内容时会自动使用。
 :::
 
-## Troubleshooting
+## 故障排除
 
-### Characters appear as boxes or question marks
+### 字符显示为方框或问号
 
-This indicates missing font support. Ensure:
-1. The content contains supported Unicode characters.
-2. For self-hosted deployments, Unicode fonts are installed on the server.
-3. The document is being viewed in a PDF reader that supports embedded fonts.
+这表示缺少字体支持。确保:
+1. 内容包含支持的 Unicode 字符。
+2. 对于自托管部署,在服务器上安装了 Unicode 字体。
+3. 在支持嵌入字体的 PDF 阅读器中查看文档。
 
-### Download button not appearing
+### 下载按钮未显示
 
-Ensure:
-1. The **Message** component is connected after the **Docs Generator**.
-2. The `download` variable is correctly referenced using `/` (which appears as `{Docs Generator_0@download}` when copied).
-3. The document generation completed successfully (check `success` output).
+确保:
+1. **消息**组件连接在 **文档生成器**之后。
+2. 使用 `/` 正确引用了 `download` 变量(复制时显示为 `{Docs Generator_0@download}`)。
+3. 文档生成成功完成(检查 `success` 输出)。
 
-### Large tables not rendering correctly
+### 大表格未正确渲染
 
-For tables with many columns or large cell content:
-- The component automatically converts wide tables to a definition list format for better readability.
-- Consider splitting large tables into multiple smaller tables.
-- Use landscape orientation for wide tables.
+对于包含多列或大单元格内容的表格:
+- 组件自动将宽表格转换为定义列表格式以提高可读性。
+- 考虑将大表格拆分为多个较小的表格。
+- 对宽表格使用横向方向。

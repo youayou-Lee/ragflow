@@ -5,29 +5,29 @@ sidebar_custom_props: {
   categoryIcon: LucideSearch
 }
 ---
-# Search
+# 搜索
 
-Conduct an AI search.
+进行 AI 搜索。
 
 ---
 
-An AI search is a single-turn AI conversation using a predefined retrieval strategy (a hybrid search of weighted keyword similarity and weighted vector similarity) and the system's default chat model. It does not involve advanced RAG strategies like knowledge graph, auto-keyword, or auto-question. The related chunks are listed below the chat model's response in descending order based on their similarity scores. 
+AI 搜索是使用预定义检索策略(加权关键字相似性和加权向量相似性的混合搜索)和系统默认聊天模型的单轮 AI 对话。它不涉及高级 RAG 策略,如知识图谱、自动关键字或自动问题。相关块按其相似性分数降序列在聊天模型响应下方。
 
 ![Create search app](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/create_search_app.jpg)
 
 ![Search view](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/search_view.jpg)
 
-:::tip NOTE
-When debugging your chat assistant, you can use AI search as a reference to verify your model settings and retrieval strategy.
+:::tip 注意
+调试聊天助手时,您可以使用 AI 搜索作为参考来验证您的模型设置和检索策略。
 :::
 
-## Prerequisites
+## 前提条件
 
-- Ensure that you have configured the system's default models on the **Model providers** page.
-- Ensure that the intended datasets are properly configured and the intended documents have finished file parsing.
+- 确保您已在 **模型提供商** 页面上配置了系统默认模型。
+- 确保预期的数据集已正确配置,预期的文档已完成文件解析。
 
-## Frequently asked questions
+## 常见问题
 
-### Key difference between an AI search and an AI chat?
+### AI 搜索和 AI 聊天的主要区别?
 
-A chat is a multi-turn AI conversation where you can define your retrieval strategy (a weighted reranking score can be used to replace the weighted vector similarity in a hybrid search) and choose your chat model. In an AI chat, you can configure advanced RAG strategies, such as knowledge graphs, auto-keyword, and auto-question, for your specific case. Retrieved chunks are not displayed along with the answer.
+聊天是多轮 AI 对话,您可以定义检索策略(可以使用加权重排序分数替换混合搜索中的加权向量相似性)并选择您的聊天模型。在 AI 聊天中,您可以为您的特定情况配置高级 RAG 策略,例如知识图谱、自动关键字和自动问题。检索的块不会与答案一起显示。

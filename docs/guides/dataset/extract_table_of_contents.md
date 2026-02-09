@@ -5,37 +5,37 @@ sidebar_custom_props: {
   categoryIcon: LucideTableOfContents
 }
 ---
-# Extract table of contents
+# 提取目录
 
-Extract table of contents (TOC) from documents to provide long context RAG and improve retrieval.
+从文档中提取目录（TOC）以提供长上下文 RAG 并提高检索性能。
 
 ---
 
-During indexing, this technique uses LLM to extract and generate chapter information, which is added to each chunk to provide sufficient global context. At the retrieval stage, it first uses the chunks matched by search, then supplements missing chunks based on the table of contents structure. This addresses issues caused by chunk fragmentation and insufficient context, improving answer quality.
+在索引期间，此技术使用大语言模型提取和生成章节信息，这些信息被添加到每个分块中以提供足够的全局上下文。在检索阶段，它首先使用搜索匹配的分块，然后根据目录结构补充缺失的分块。这解决了分块碎片化和上下文不足导致的问题，提高了答案质量。
 
-:::danger WARNING
-Enabling TOC extraction requires significant memory, computational resources, and tokens.
+:::danger 警告
+启用目录提取需要大量内存、计算资源和令牌。
 :::
 
-## Prerequisites
+## 先决条件
 
-The system's default chat model is used to summarize clustered content. Before proceeding, ensure that you have a chat model properly configured:
+系统的默认聊天模型用于汇总聚类内容。在继续之前，请确保您已正确配置聊天模型：
 
 ![Set default models](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/set_default_models.jpg)
 
-## Quickstart
+## 快速开始
 
-1. Navigate to the **Configuration** page.
+1. 导航到 **配置** 页面。
 
-2. Enable **TOC Enhance**.
+2. 启用 **TOC Enhance**。
 
-3. To use this technique during retrieval, do either of the following:
-   
-   - In the **Chat setting** panel of your chat app, switch on the **TOC Enhance** toggle.
-   - If you are using an agent, click the **Retrieval** agent component to specify the dataset(s) and switch on the **TOC Enhance** toggle.
+3. 要在检索期间使用此技术，请执行以下操作之一：
 
-## Frequently asked questions
+   - 在聊天应用的 **Chat setting** 面板中，打开 **TOC Enhance** 开关。
+   - 如果您使用智能体，请点击 **Retrieval** 智能体组件以指定数据集并打开 **TOC Enhance** 开关。
 
-### Will previously parsed files be searched using the TOC enhancement feature once I enable `TOC Enhance`?
+## 常见问题
 
-No. Only files parsed after you enable **TOC Enhance** will be searched using the TOC enhancement feature. To apply this feature to files parsed before enabling **TOC Enhance**, you must reparse them.
+### 启用 `TOC Enhance` 后，以前解析的文件会使用目录增强功能进行搜索吗？
+
+不会。只有在启用 **TOC Enhance** 之后解析的文件才会使用目录增强功能进行搜索。要将此功能应用于启用 **TOC Enhance** 之前解析的文件，必须重新解析它们。

@@ -5,16 +5,16 @@ sidebar_custom_props: {
   categoryIcon: LucideShare2
 }
 ---
-# Share memory
+# 共享记忆
 
-Share a memory with your team members.
+与团队成员共享记忆。
 
 ---
 
-When ready, you may share your memory with your team members so that they can use it. Please note that your memories are not shared automatically; you must manually enable sharing by selecting the corresponding **Permissions** radio button:
+准备就绪后，您可以与团队成员共享您的记忆，以便他们使用它。请注意，您的记忆不会自动共享；您必须通过选择相应的**权限**单选按钮来手动启用共享：
 
-1. Navigate to the **Memory** page, find the intended memory, and click to open its editing canvas. 
-2. Click **Configurations**.
-3. Change **Permissions** from **Only me** to **Team**.
-4. Click **Save** to apply your changes.  
-   *When completed, your team members will see your shared memories.*
+1. 导航到**记忆**页面，找到预期的记忆，然后点击打开其编辑画布。
+2. 点击**配置**。
+3. 将**权限**从**仅我**更改为**团队**。
+4. 点击**保存**以应用您的更改。
+   *完成后，您的团队成员将看到您共享的记忆。*

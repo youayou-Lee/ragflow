@@ -5,55 +5,55 @@ sidebar_custom_props: {
   categoryIcon: LucideBookA
 }
 ---
-# Contribution guidelines
+# 贡献指南
 
-General guidelines for RAGFlow's community contributors.
+RAGFlow社区贡献者的一般指南。
 
 ---
 
-This document offers guidelines and major considerations for submitting your contributions to RAGFlow.
+本文档提供了向RAGFlow提交贡献的指南和主要注意事项。
 
-- To report a bug, file a [GitHub issue](https://github.com/infiniflow/ragflow/issues/new/choose) with us.
-- For further questions, you can explore existing discussions or initiate a new one in [Discussions](https://github.com/orgs/infiniflow/discussions).
+- 要报告错误，请与我们提交[GitHub issue](https://github.com/infiniflow/ragflow/issues/new/choose)。
+- 如有其他问题，您可以在[讨论](https://github.com/orgs/infiniflow/discussions)中探索现有讨论或发起新讨论。
 
-## What you can contribute
+## 您可以贡献什么
 
-The list below mentions some contributions you can make, but it is not a complete list.
+下面的列表提到了您可以做出的一些贡献，但这不是一个完整的列表。
 
-- Proposing or implementing new features
-- Fixing a bug
-- Adding test cases or demos
-- Posting a blog or tutorial
-- Updates to existing documents, codes, or annotations.
-- Suggesting more user-friendly error codes
+- 提议或实现新功能
+- 修复错误
+- 添加测试用例或演示
+- 发布博客或教程
+- 更新现有文档、代码或注释
+- 建议更友好的错误代码
 
-## File a pull request (PR)
+## 提交拉取请求（PR）
 
-### General workflow
+### 一般工作流程
 
-1. Fork our GitHub repository.
-2. Clone your fork to your local machine:
+1. Fork我们的GitHub仓库。
+2. 将您的fork克隆到本地计算机：
 `git clone git@github.com:<yourname>/ragflow.git`
-3. Create a local branch: 
+3. 创建本地分支：
 `git checkout -b my-branch`
-4. Provide sufficient information in your commit message
-`git commit -m 'Provide sufficient info in your commit message'`
-5. Commit changes to your local branch, and push to GitHub: (include necessary commit message)
+4. 在提交消息中提供充分的信息
+`git commit -m '在提交消息中提供充分信息'`
+5. 将更改提交到本地分支，并推送到GitHub：（包括必要的提交消息）
 `git push origin my-branch.`
-6. Submit a pull request for review.
+6. 提交拉取请求以供审查。
 
-### Before filing a PR
+### 在提交PR之前
 
-- Consider splitting a large PR into multiple smaller, standalone PRs to keep a traceable development history.
-- Ensure that your PR addresses just one issue, or keep any unrelated changes small.
-- Add test cases when contributing new features. They demonstrate that your code functions correctly and protect against potential issues from future changes.
+- 考虑将大型PR拆分为多个较小的、独立的PR，以保持可跟踪的开发历史。
+- 确保您的PR只解决一个问题，或者保持任何不相关的更改较小。
+- 在贡献新功能时添加测试用例。它们证明您的代码正常运行，并防止未来更改可能产生的问题。
 
-### Describing your PR
+### 描述您的PR
 
-- Ensure that your PR title is concise and clear, providing all the required information.
-- Refer to a corresponding GitHub issue in your PR description if applicable.
-- Include sufficient design details for *breaking changes* or *API changes* in your description.
+- 确保您的PR标题简洁明了，提供所有必需的信息。
+- 如果适用，请在PR描述中引用相应的GitHub issue。
+- 在您的描述中包含有关*重大更改*或*API更改*的充分设计细节。
 
-### Reviewing & merging a PR
+### 审查和合并PR
 
-Ensure that your PR passes all Continuous Integration (CI) tests before merging it.
+确保您的PR在合并之前通过所有持续集成（CI）测试。

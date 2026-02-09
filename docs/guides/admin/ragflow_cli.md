@@ -7,166 +7,166 @@ sidebar_custom_props: {
 ---
 # RAGFlow CLI
 
-The RAGFlow CLI is a command-line-based system administration tool that offers administrators an efficient and flexible method for system interaction and control. Operating on a client-server architecture, it communicates in real-time with the Admin Service, receiving administrator commands and dynamically returning execution results.
+RAGFlow CLI是一个基于命令行的系统管理工具，为管理员提供了高效灵活的系统交互和控制方法。基于客户端-服务器架构，它与管理员服务实时通信，接收管理员命令并动态返回执行结果。
 
-## Using the RAGFlow CLI
+## 使用RAGFlow CLI
 
-1. Ensure the Admin Service is running.
+1. 确保管理员服务正在运行。
 
-2. Install ragflow-cli.
+2. 安装ragflow-cli。
 
    ```bash
    pip install ragflow-cli==0.23.1
    ```
 
-3. Launch the CLI client:
+3. 启动CLI客户端：
 
    ```bash
    ragflow-cli -h 127.0.0.1 -p 9381
    ```
 
-    You will be prompted to enter the superuser's password to log in.
-    The default password is admin.
+    您将需要输入超级用户的密码以登录。
+    默认密码是admin。
 
-    **Parameters:**
-    
-    - -h: RAGFlow admin server host address
-    
-    - -p: RAGFlow admin server port
+    **参数：**
 
-## Default administrative account
+    - -h: RAGFlow管理员服务器主机地址
 
-- Username: admin@ragflow.io
-- Password: admin
+    - -p: RAGFlow管理员服务器端口
 
-## Supported Commands
+## 默认管理员帐户
 
-Commands are case-insensitive and must be terminated with a semicolon(;).
+- 用户名：admin@ragflow.io
+- 密码：admin
 
-### Service manage commands
+## 支持的命令
+
+命令不区分大小写，必须以分号(;)结尾。
+
+### 服务管理命令
 
 `LIST SERVICES;`
 
-- Lists all available services within the RAGFlow system.
+- 列出RAGFlow系统内所有可用的服务。
 
-- [Example](#example-list-services)
+- [示例](#example-list-services)
 
 `SHOW SERVICE <id>;`
 
-- Shows detailed status information for the service identified by **id**.
-- [Example](#example-show-service)
+- 显示由**id**标识的服务的详细状态信息。
+- [示例](#example-show-service)
 
 `SHOW VERSION;`
 
-- Shows RAGFlow version.
-- [Example](#example-show-version)
+- 显示RAGFlow版本。
+- [示例](#example-show-version)
 
-### User Management Commands
+### 用户管理命令
 
 `LIST USERS;`
 
-- Lists all users known to the system.
-- [Example](#example-list-users)
+- 列出系统已知的所有用户。
+- [示例](#example-list-users)
 
 `SHOW USER <username>;`
 
-- Shows details and permissions for the user specified by **email**. The username must be enclosed in single or double quotes.
-- [Example](#example-show-user)
+- 显示由**email**指定的用户的详细信息和权限。用户名必须用单引号或双引号括起来。
+- [示例](#example-show-user)
 
 `CREATE USER <username> <password>;`
 
-- Create user by username and password. The username and password must be enclosed in single or double quotes.
-- [Example](#example-create-user)
+- 通过用户名和密码创建用户。用户名和密码必须用单引号或双引号括起来。
+- [示例](#example-create-user)
 
 `DROP USER <username>;`
 
-- Removes the specified user from the system. Use with caution.
-- [Example](#example-drop-user)
+- 从系统中删除指定的用户。请谨慎使用。
+- [示例](#example-drop-user)
 
 `ALTER USER PASSWORD <username> <new_password>;`
 
-- Changes the password for the specified user.
-- [Example](#example-alter-user-password)
+- 更改指定用户的密码。
+- [示例](#example-alter-user-password)
 
 `ALTER USER ACTIVE <username> <on/off>;`
 
-- Changes the user to active or inactive.
-- [Example](#example-alter-user-active)
+- 将用户更改为活动或非活动状态。
+- [示例](#example-alter-user-active)
 
 `GENERATE KEY FOR USER <username>;`
 
-- Generates a new API key for the specified user.
-- [Example](#example-generate-key)
+- 为指定用户生成新的API密钥。
+- [示例](#example-generate-key)
 
 `LIST KEYS OF <username>;`
 
-- Lists all API keys associated with the specified user.
-- [Example](#example-list-keys)
+- 列出与指定用户关联的所有API密钥。
+- [示例](#example-list-keys)
 
 `DROP KEY <key> OF <username>;`
 
-- Deletes a specific API key for the specified user.
-- [Example](#example-drop-key)
+- 删除指定用户的特定API密钥。
+- [示例](#example-drop-key)
 
-### Data and Agent Commands
+### 数据和智能体命令
 
 `LIST DATASETS OF <username>;`
 
-- Lists the datasets associated with the specified user.
-- [Example](#example-list-datasets-of-user)
+- 列出与指定用户关联的数据集。
+- [示例](#example-list-datasets-of-user)
 
 `LIST AGENTS OF <username>;`
 
-- Lists the agents associated with the specified user.
-- [Example](#example-list-agents-of-user)
+- 列出与指定用户关联的智能体。
+- [示例](#example-list-agents-of-user)
 
-### System info
+### 系统信息
 
 `SHOW VERSION;`
-- Display the current RAGFlow version.
-- [Example](#example-show-version)
+- 显示当前的RAGFlow版本。
+- [示例](#example-show-version)
 
 `GRANT ADMIN <username>`
-- Grant administrator privileges to the specified user.
-- [Example](#example-grant-admin)
+- 授予指定用户管理员权限。
+- [示例](#example-grant-admin)
 
 `REVOKE ADMIN <username>`
-- Revoke administrator privileges from the specified user.
-- [Example](#example-revoke-admin)
+- 撤销指定用户的管理员权限。
+- [示例](#example-revoke-admin)
 
 `LIST VARS`
-- List all system settings.
-- [Example](#example-list-vars)
+- 列出所有系统设置。
+- [示例](#example-list-vars)
 
 `SHOW VAR <var_name>`
-- Display the content of a specific system configuration/setting by its name or name prefix.
-- [Example](#example-show-var)
+- 通过其名称或名称前缀显示特定系统配置/设置的内容。
+- [示例](#example-show-var)
 
 `SET VAR <var_name> <var_value>`
-- Set the value for a specified configuration item.
-- [Example](#example-set-var)
+- 为指定的配置项设置值。
+- [示例](#example-set-var)
 
 `LIST CONFIGS`
-- List all system configurations.
-- [Example](#example-list-configs)
+- 列出所有系统配置。
+- [示例](#example-list-configs)
 
 `LIST ENVS`
-- List all system environments which can accessed by Admin service.
-- [Example](#example-list-environments)
+- 列出管理员服务可以访问的所有系统环境。
+- [示例](#example-list-environments)
 
-### Meta-Commands
+### 元命令
 
-- \? or \help
-  Shows help information for the available commands.
-- \q or \quit
-  Exits the CLI application.
-- [Example](#example-meta-commands)
+- \? 或 \help
+  显示可用命令的帮助信息。
+- \q 或 \quit
+  退出CLI应用程序。
+- [示例](#example-meta-commands)
 
-### Examples
+### 示例
 
 <span id="example-list-services"></span>
 
-- List all available services.
+- 列出所有可用的服务。
 
 ```
 ragflow> list services;
@@ -175,19 +175,19 @@ Listing all services
 +-------------------------------------------------------------------------------------------+-----------+----+---------------+-------+----------------+---------+
 | extra                                                                                     | host      | id | name          | port  | service_type   | status  |
 +-------------------------------------------------------------------------------------------+-----------+----+---------------+-------+----------------+---------+
-| {}                                                                                        | 0.0.0.0   | 0  | ragflow_0     | 9380  | ragflow_server | Timeout |
-| {'meta_type': 'mysql', 'password': 'infini_rag_flow', 'username': 'root'}                 | localhost | 1  | mysql         | 5455  | meta_data      | Alive   |
-| {'password': 'infini_rag_flow', 'store_type': 'minio', 'user': 'rag_flow'}                | localhost | 2  | minio         | 9000  | file_store     | Alive   |
-| {'password': 'infini_rag_flow', 'retrieval_type': 'elasticsearch', 'username': 'elastic'} | localhost | 3  | elasticsearch | 1200  | retrieval      | Alive   |
-| {'db_name': 'default_db', 'retrieval_type': 'infinity'}                                   | localhost | 4  | infinity      | 23817 | retrieval      | Timeout |
-| {'database': 1, 'mq_type': 'redis', 'password': 'infini_rag_flow'}                        | localhost | 5  | redis         | 6379  | message_queue  | Alive   |
+| {}                                                                                        | 0.0.0.0   | 0  | ragflow_0     | 9380  | ragflow_server | 超时 |
+| {'meta_type': 'mysql', 'password': 'infini_rag_flow', 'username': 'root'}                 | localhost | 1  | mysql         | 5455  | meta_data      | 存活   |
+| {'password': 'infini_rag_flow', 'store_type': 'minio', 'user': 'rag_flow'}                | localhost | 2  | minio         | 9000  | file_store     | 存活   |
+| {'password': 'infini_rag_flow', 'retrieval_type': 'elasticsearch', 'username': 'elastic'} | localhost | 3  | elasticsearch | 1200  | retrieval      | 存活   |
+| {'db_name': 'default_db', 'retrieval_type': 'infinity'}                                   | localhost | 4  | infinity      | 23817 | retrieval      | 超时   |
+| {'database': 1, 'mq_type': 'redis', 'password': 'infini_rag_flow'}                        | localhost | 5  | redis         | 6379  | message_queue  | 存活   |
 +-------------------------------------------------------------------------------------------+-----------+----+---------------+-------+----------------+---------+
 
 ```
 
 <span id="example-show-service"></span>
 
-- Show ragflow_server.
+- 显示ragflow_server。
 
 ```
 ragflow> show service 0;
@@ -197,7 +197,7 @@ Service ragflow_0 is alive. Detail:
 Confirm elapsed: 26.0 ms.
 ```
 
-- Show mysql.
+- 显示mysql。
 
 ```
 ragflow> show service 1;
@@ -213,7 +213,7 @@ Service mysql is alive. Detail:
 +---------+----------+------------------+------+------------------+------------------------+-------+-----------------+
 ```
 
-- Show minio.
+- 显示minio。
 
 ```
 ragflow> show service 2;
@@ -223,7 +223,7 @@ Service minio is alive. Detail:
 Confirm elapsed: 2.1 ms.
 ```
 
-- Show elasticsearch.
+- 显示elasticsearch。
 
 ```
 ragflow> show service 3;
@@ -237,16 +237,15 @@ Service elasticsearch is alive. Detail:
 +----------------+------+--------------+---------+----------------+--------------+---------------+--------------+------------------------------+----------------------------+-----------------+-------+---------------+---------+-------------+---------------------+--------+------------+--------------------+
 ```
 
-- Show infinity.
+- 显示infinity。
 
 ```
 ragflow> show service 4;
 command: show service 4;
-Showing service: 4
 Fail to show service, code: 500, message: Infinity is not in use.
 ```
 
-- Show redis.
+- 显示redis。
 
 ```
 ragflow> show service 5;
@@ -261,7 +260,7 @@ Service redis is alive. Detail:
 ```
 <span id="example-show-version"></span>
 
-- Show RAGFlow version
+- 显示RAGFlow版本
 
 ```
 ragflow> show version;
@@ -274,7 +273,7 @@ ragflow> show version;
 
 <span id="example-list-users"></span>
 
-- List all user.
+- 列出所有用户。
 
 ```
 ragflow> list users;
@@ -290,7 +289,7 @@ Listing all users
 
 <span id="example-show-user"></span>
 
-- Show specified user.
+- 显示指定用户。
 
 ```
 ragflow> show user "admin@ragflow.io";
@@ -305,7 +304,7 @@ Showing user: admin@ragflow.io
 
 <span id="example-create-user"></span>
 
-- Create new user.
+- 创建新用户。
 
 ```
 ragflow> create user "example@ragflow.io" "psw";
@@ -320,7 +319,7 @@ Create user: example@ragflow.io, password: psw, role: user
 
 <span id="example-alter-user-password"></span>
 
-- Alter user password.
+- 更改用户密码。
 
 ```
 ragflow> alter user password "example@ragflow.io" "newpsw";
@@ -331,7 +330,7 @@ Password updated successfully!
 
 <span id="example-alter-user-active"></span>
 
-- Alter user active, turn off.
+- 更改用户活动状态，关闭。
 
 ```
 ragflow> alter user active "example@ragflow.io" off;
@@ -342,7 +341,7 @@ Turn off user activate status successfully!
 
 <span id="example-drop-user"></span>
 
-- Drop user.
+- 删除用户。
 
 ```
 ragflow> Drop user "example@ragflow.io";
@@ -358,11 +357,11 @@ Start to delete owned tenant.
 Delete done!
 ```
 
-Delete user's data at the same time.
+同时删除用户的数据。
 
 <span id="example-generate-key"></span>
 
-- Generate API key for user.
+- 为用户生成API密钥。
 
 ```
 admin> generate key for user "example@ragflow.io";
@@ -376,7 +375,7 @@ Generating API key for user: example@ragflow.io
 
 <span id="example-list-keys"></span>
 
-- List all API keys for user.
+- 列出用户的所有API密钥。
 
 ```
 admin> list keys of "example@ragflow.io";
@@ -390,7 +389,7 @@ Listing API keys for user: example@ragflow.io
 
 <span id="example-drop-key"></span>
 
-- Drop API key for user.
+- 删除用户的API密钥。
 
 ```
 admin> drop key "ragflow-piwVJHEk09M5UN3LS_Xx9HA7yehs3yNOc9GGsD4jzus" of "example@ragflow.io";
@@ -400,7 +399,7 @@ API key deleted successfully
 
 <span id="example-list-datasets-of-user"></span>
 
-- List the specified user's dataset.
+- 列出指定用户的数据集。
 
 ```
 ragflow> list datasets of "lynn_inf@hotmail.com";
@@ -416,7 +415,7 @@ Listing all datasets of user: lynn_inf@hotmail.com
 
 <span id="example-list-agents-of-user"></span>
 
-- List the specified user's agents.
+- 列出指定用户的智能体。
 
 ```
 ragflow> list agents of "lynn_inf@hotmail.com";
@@ -431,7 +430,7 @@ Listing all agents of user: lynn_inf@hotmail.com
 
 <span id="example-show-version"></span>
 
-- Display the current RAGFlow version.
+- 显示当前的RAGFlow版本。
 
 ```
 ragflow> show version;
@@ -445,7 +444,7 @@ show_version
 
 <span id="example-grant-admin"></span>
 
-- Grant administrator privileges to the specified user.
+- 授予指定用户管理员权限。
 
 ```
 ragflow> grant admin "anakin.skywalker@ragflow.io";
@@ -454,7 +453,7 @@ Grant successfully!
 
 <span id="example-revoke-admin"></span>
 
-- Revoke administrator privileges from the specified user.
+- 撤销指定用户的管理员权限。
 
 ```
 ragflow> revoke admin "anakin.skywalker@ragflow.io";
@@ -463,7 +462,7 @@ Revoke successfully!
 
 <span id="example-list-vars"></span>
 
-- List all system settings.
+- 列出所有系统设置。
 
 ```
 ragflow> list vars;
@@ -485,7 +484,7 @@ ragflow> list vars;
 
 <span id="example-show-var"></span>
 
-- Display the content of a specific system configuration/setting by its name or name prefix.
+- 通过其名称或名称前缀显示特定系统配置/设置的内容。
 
 ```
 ragflow> show var mail.server;
@@ -498,7 +497,7 @@ ragflow> show var mail.server;
 
 <span id="example-set-var"></span>
 
-- Set the value for a specified configuration item.
+- 为指定的配置项设置值。
 
 ```
 ragflow> set var mail.server 127.0.0.1;
@@ -508,7 +507,7 @@ Set variable successfully
 
 <span id="example-list-configs"></span>
 
-- List all system configurations.
+- 列出所有系统配置。
 
 ```
 ragflow> list configs;
@@ -527,7 +526,7 @@ ragflow> list configs;
 
 <span id="example-list-environments"></span>
 
-- List all system environments which can accessed by Admin service.
+- 列出管理员服务可以访问的所有系统环境。
 
 ```
 ragflow> list envs;
@@ -545,7 +544,7 @@ ragflow> list envs;
 
 <span id="example-meta-commands"></span>
 
-- Show help information.
+- 显示帮助信息。
 
 ```
 ragflow> \help
@@ -586,7 +585,7 @@ Meta Commands:
   \q, \quit, \exit   Quit the CLI
 ```
 
-- Exit
+- 退出
 
 ```
 ragflow> \q

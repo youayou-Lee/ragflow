@@ -5,93 +5,93 @@ sidebar_custom_props: {
   categoryIcon: LucideTextSearch
 }
 ---
-# Run retrieval test
+# 运行检索测试
 
-Conduct a retrieval test on your dataset to check whether the intended chunks can be retrieved.
+对您的数据集进行检索测试，以检查是否可以检索到预期的分块。
 
 ---
 
-After your files are uploaded and parsed, it is recommended that you run a retrieval test before proceeding with the chat assistant configuration. Running a retrieval test is *not* an unnecessary or superfluous step at all! Just like fine-tuning a precision instrument, RAGFlow requires careful tuning to deliver optimal question answering performance. Your dataset settings, chat assistant configurations, and the specified large and small models can all significantly impact the final results. Running a retrieval test verifies whether the intended chunks can be recovered, allowing you to quickly identify areas for improvement or pinpoint any issue that needs addressing. For instance, when debugging your question answering system, if you know that the correct chunks can be retrieved, you can focus your efforts elsewhere. For example, in issue [#5627](https://github.com/infiniflow/ragflow/issues/5627), the problem was found to be due to the LLM's limitations.
+文件上传并解析后，建议您在继续配置聊天助手之前运行检索测试。运行检索测试*绝非*多余或不必要的步骤！就像调校精密仪器一样，RAGFlow 需要仔细调整以提供最佳的问答性能。您的数据集设置、聊天助手配置以及指定的各种模型都会显著影响最终结果。运行检索测试可以验证是否可以检索到预期的分块，使您能够快速识别需要改进的领域或确定需要解决的任何问题。例如，在调试问答系统时，如果您知道可以检索到正确的分块，则可以将精力集中在其他地方。例如，在问题 [#5627](https://github.com/infiniflow/ragflow/issues/5627) 中，发现问题是由大语言模型的局限性造成的。
 
-During a retrieval test, chunks created from your specified chunking method are retrieved using a hybrid search. This search combines weighted keyword similarity with either weighted vector cosine similarity or a weighted reranking score, depending on your settings:
+在检索测试期间，使用混合搜索检索从您指定的分块方法创建的分块。此搜索将加权关键词相似度与加权向量余弦相似度或加权重排序分数相结合，具体取决于您的设置：
 
-- If no rerank model is selected, weighted keyword similarity will be combined with weighted vector cosine similarity.
-- If a rerank model is selected, weighted keyword similarity will be combined with weighted vector reranking score.
+- 如果未选择重排序模型，加权关键词相似度将与加权向量余弦相似度结合。
+- 如果选择了重排序模型，加权关键词相似度将与加权向量重排序分数结合。
 
-In contrast, chunks created from [knowledge graph construction](./construct_knowledge_graph.md) are retrieved solely using vector cosine similarity.
+相比之下，从[知识图谱构建](./construct_knowledge_graph.md)创建的分块仅使用向量余弦相似度进行检索。
 
-## Prerequisites
+## 先决条件
 
-- Your files are uploaded and successfully parsed before running a retrieval test.
-- A knowledge graph must be successfully built before enabling **Use knowledge graph**.
+- 在运行检索测试之前，您的文件已上传并成功解析。
+- 必须成功构建知识图谱才能启用 **Use knowledge graph**。
 
-## Configurations
+## 配置
 
-### Similarity threshold
+### 相似度阈值
 
-This sets the bar for retrieving chunks: chunks with similarities below the threshold will be filtered out. By default, the threshold is set to 0.2. This means that only chunks with hybrid similarity score of 20 or higher will be retrieved.
+这设置了检索分块的门槛：相似度低于阈值的分块将被过滤掉。默认情况下，阈值设置为 0.2。这意味着仅检索混合相似度分数为 20 或更高的分块。
 
-### Vector similarity weight
+### 向量相似度权重
 
-This sets the weight of vector similarity in the composite similarity score, whether used with vector cosine similarity or a reranking score. By default, it is set to 0.3, making the weight of the other component 0.7 (1 - 0.3).
+这将设置向量相似度在组合相似度评分中的权重，无论与向量余弦相似度还是重排序分数一起使用。默认情况下，它设置为 0.3，使另一个组件的权重为 0.7（1 - 0.3）。
 
-### Rerank model
+### 重排序模型
 
-- If left empty, RAGFlow will use a combination of weighted keyword similarity and weighted vector cosine similarity.
-- If a rerank model is selected, weighted keyword similarity will be combined with weighted vector reranking score.
+- 如果留空，RAGFlow 将使用加权关键词相似度和加权向量余弦相似度的组合。
+- 如果选择了重排序模型，加权关键词相似度将与加权向量重排序分数结合。
 
-:::danger IMPORTANT
-Using a rerank model will significantly increase the time to receive a response.
+:::danger 重要
+使用重排序模型将显著增加接收响应的时间。
 :::
 
-### Use knowledge graph
+### 使用知识图谱
 
-In a knowledge graph, an entity description, a relationship description, or a community report each exists as an independent chunk. This switch indicates whether to add these chunks to the retrieval.
+在知识图谱中，实体描述、关系描述或社区报告各自作为独立的分块存在。此开关指示是否将这些分块添加到检索中。
 
-The switch is disabled by default. When enabled, RAGFlow performs the following during a retrieval test:
+该开关默认禁用。启用后，RAGFlow 在检索测试期间执行以下操作：
 
-1. Extract entities and entity types from your query using the LLM.
-2. Retrieve top N entities from the graph based on their PageRank values, using the extracted entity types.
-3. Find similar entities and their N-hop relationships from the graph using the embeddings of the extracted query entities.
-4. Retrieve similar relationships from the graph using the query embedding.
-5. Rank these retrieved entities and relationships by multiplying each one's PageRank value with its similarity score to the query, returning the top n as the final retrieval.
-6. Retrieve the report for the community involving the most entities in the final retrieval.  
-   *The retrieved entity descriptions, relationship descriptions, and the top 1 community report are sent to the LLM for content generation.*
+1. 使用大语言模型从查询中提取实体和实体类型。
+2. 使用提取的实体类型，根据其 PageRank 值从图中检索前 N 个实体。
+3. 使用提取的查询实体的嵌入从图中查找相似实体及其 N 跳关系。
+4. 使用查询嵌入从图中检索相似关系。
+5. 通过将每个实体的 PageRank 值与其与查询的相似度分数相乘来排序这些检索到的实体和关系，返回前 n 个作为最终检索。
+6. 检索涉及最终检索中最多实体的社区的报告。
+   *检索到的实体描述、关系描述和前 1 个社区报告将发送到大语言模型进行内容生成。*
 
-:::danger IMPORTANT
-Using a knowledge graph in a retrieval test will significantly increase the time to receive a response.
+:::danger 重要
+在检索测试中使用知识图谱将显著增加接收响应的时间。
 :::
 
-### Cross-language search
+### 跨语言搜索
 
-To perform a [cross-language search](../../references/glossary.mdx#cross-language-search), select one or more target languages from the dropdown menu. The system’s default chat model will then translate your query entered in the Test text field into the selected target language(s). This translation ensures accurate semantic matching across languages, allowing you to retrieve relevant results regardless of language differences.
+要执行[跨语言搜索](../../references/glossary.mdx#cross-language-search)，请从下拉菜单中选择一个或多个目标语言。系统的默认聊天模型随后会将您在 Test text 字段中输入的查询翻译为所选的目标语言。这种翻译确保了跨语言的准确语义匹配，允许您无论语言差异都能检索到相关结果。
 
-:::tip NOTE
-- When selecting target languages, please ensure that these languages are present in the dataset to guarantee an effective search.
-- If no target language is selected, the system will search only in the language of your query, which may cause relevant information in other languages to be missed.
+:::tip 注意
+- 选择目标语言时，请确保这些语言存在于数据集中以保证有效搜索。
+- 如果未选择目标语言，系统将仅以您的查询语言进行搜索，这可能会遗漏其他语言中的相关信息。
 :::
 
-### Test text
+### 测试文本
 
-This field is where you put in your testing query.
+此字段是您输入测试查询的地方。
 
-## Procedure
+## 操作步骤
 
-1. Navigate to the **Retrieval testing** page of your dataset, enter your query in **Test text**, and click **Testing** to run the test.
-2. If the results are unsatisfactory, tune the options listed in the Configuration section and rerun the test.
+1. 导航到数据集的 **Retrieval testing** 页面，在 **Test text** 中输入查询，然后点击 **Testing** 运行测试。
+2. 如果结果不令人满意，请调整配置部分中列出的选项并重新运行测试。
 
-   *The following is a screenshot of a retrieval test conducted without using knowledge graph. It demonstrates a hybrid search combining weighted keyword similarity and weighted vector cosine similarity. The overall hybrid similarity score is 28.56, calculated as 25.17 (term similarity score) x 0.7 + 36.49 (vector similarity score) x 0.3:*  
+   *以下是不使用知识图谱进行的检索测试的屏幕截图。它演示了结合加权关键词相似度和加权向量余弦相似度的混合搜索。总体混合相似度分数为 28.56，计算方式为 25.17（术语相似度分数）x 0.7 + 36.49（向量相似度分数）x 0.3：*
    ![Image](https://github.com/user-attachments/assets/541554d4-3f3e-44e1-954b-0ae77d7372c6)
 
-   *The following is a screenshot of a retrieval test conducted using a knowledge graph. It shows that only vector similarity is used for knowledge graph-generated chunks:*  
+   *以下是使用知识图谱进行的检索测试的屏幕截图。它显示仅对知识图谱生成的分块使用向量相似度：*
    ![Image](https://github.com/user-attachments/assets/30a03091-0f7b-4058-901a-f4dc5ca5aa6b)
 
-:::caution WARNING
-If you have adjusted the default settings, such as keyword similarity weight or similarity threshold, to achieve the optimal results, be aware that these changes will not be automatically saved. You must apply them to your chat assistant settings or the **Retrieval** agent component settings.
+:::caution 警告
+如果您调整了默认设置（例如关键词相似度权重或相似度阈值）以实现最佳结果，请注意这些更改不会自动保存。您必须将它们应用到聊天助手设置或 **Retrieval** 智能体组件设置。
 :::
 
-## Frequently asked questions
+## 常见问题
 
-### Is an LLM used when the Use Knowledge Graph switch is enabled?
+### 启用使用知识图谱开关时是否使用大语言模型？
 
-Yes, your LLM will be involved to analyze your query and extract the related entities and relationship from the knowledge graph. This also explains why additional tokens and time will be consumed.
+是的，您的大语言模型将参与分析您的查询并从知识图中提取相关实体和关系。这也解释了为什么将消耗额外的令牌和时间。

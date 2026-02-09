@@ -5,40 +5,40 @@ sidebar_custom_props: {
   categoryIcon: LucideUserCog
 }
 ---
-# Manage team members
+# 管理团队成员
 
-Invite or remove team members.
+邀请或删除团队成员。
 
 ---
 
-By default, each RAGFlow user is assigned a single team named after their name. RAGFlow allows you to invite RAGFlow users to your team. Your team members can help you:
+默认情况下，每个 RAGFlow 用户都被分配一个以其名称命名的单个团队。RAGFlow 允许您邀请 RAGFlow 用户加入您的团队。您的团队成员可以帮助您：
 
-- Upload documents to your shared datasets.
-- Parse documents in your shared datasets.
-- Use your shared Agents.
+- 向您的共享数据集上传文档。
+- 解析您的共享数据集中的文档。
+- 使用您的共享智能体。
 
-:::tip NOTE
-- Your team members are currently *not* allowed to invite users to your team, and only you, the team owner, is permitted to do so.
-- Sharing added models with team members is only available in RAGFlow's Enterprise edition.
+:::tip 注意
+- 您的团队成员目前*不*允许邀请用户加入您的团队，只有您作为团队所有者才能这样做。
+- 与团队成员共享添加的模型仅在 RAGFlow 企业版中可用。
 :::
 
-## Prerequisites
+## 前提条件
 
-1. Ensure that the invited team member is a RAGFlow user and that the Email address used is associated with a RAGFlow user account.
-2. To allow your team members to view and update your dataset, ensure that you set **Permissions** on its **Configuration** page from **Only me** to **Team**.
+1. 确保被邀请的团队成员是 RAGFlow 用户，并且使用的电子邮件地址与 RAGFlow 用户账户关联。
+2. 要允许您的团队成员查看和更新您的数据集，请确保在其**配置**页面将**权限**从**仅我**更改为**团队**。
 
-## Invite team members
+## 邀请团队成员
 
-Click on your avatar in the top right corner of the page, then select **Team** in the left-hand panel to access the **Team** page.
+点击页面右上角的头像，然后在左侧面板中选择**团队**以访问**团队**页面。
 
 ![team_view](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/team_view.jpg)
 
-_On the **Team** page, you can view the information about members of your team and the teams you have joined._
+_在**团队**页面上，您可以查看团队成员以及您加入的团队的信息。_
 
-You are, by default, the owner of your own team and the only person permitted to invite users to join your team or remove team members.
+默认情况下，您是自己团队的所有者，也是唯一被允许邀请用户加入您的团队或删除团队成员的人。
 
 ![invite_user](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/invite_user.jpg)
 
-## Remove team members
+## 删除团队成员
 
 ![delete_invite](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/delete_invite.jpg)

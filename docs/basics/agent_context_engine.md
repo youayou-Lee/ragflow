@@ -3,59 +3,61 @@ sidebar_position: 2
 slug: /what-is-agent-context-engine
 ---
 
-# What is Agent context engine?
+# 什么是智能体上下文引擎？
 
-From 2025, a silent revolution began beneath the dazzling surface of AI Agents. While the world marveled at agents that could write code, analyze data, and automate workflows, a fundamental bottleneck emerged: why do even the most advanced agents still stumble on simple questions, forget previous conversations, or misuse available tools?
+从2025年开始，在AI智能体耀眼表面的下⾯，一场静默的变⾰开始了。当世界惊叹于能够编写代码、分析数据⾃动化⼯作流的智能体时，⼀个根本性的瓶颈出现了：为什么即使是最先进的智能体仍然会在简单的问题上跌倒，忘记之前的对话，或者误⽤可⽤的⼯具？
 
-The answer lies not in the intelligence of the Large Language Model (LLM) itself, but in the quality of the Context it receives. An LLM, no matter how powerful, is only as good as the information we feed it. Today’s cutting-edge agents are often crippled by a cumbersome, manual, and error-prone process of context assembly—a process known as Context Engineering.
+答案不在于⼤语⾔模型（LLM）本身的智能，⽽在于它接收到的上下⽂的质量。LLM⽆论多么强⼤，都取决于我们提供给它的信息。当今最先进的智能体常常因为繁琐、⼿动且容易出错的上下⽂组装过程⽽受到限制，这个过程被称为上下⽂⼯程。
 
-This is where the Agent Context Engine comes in. It is not merely an incremental improvement but a foundational shift, representing the evolution of RAG from a singular technique into the core data and intelligence substrate for the entire Agent ecosystem.
+这就是智能体上下⽂引擎的⽤武之地。它不仅仅是增量改进，⽽是基础性的转变，代表了RAG从单⼀技术演变为整个智能体⽣态系统的核⼼数据和智能基座。
 
-## Beyond the hype: The reality of today's "intelligent" Agents
-Today, the “intelligence” behind most AI Agents hides a mountain of human labor. Developers must:
+## 超越炒作：当今"智能"智能体的现实
 
-- Hand-craft elaborate prompt templates
-- Hard-code document-retrieval logic for every task
-- Juggle tool descriptions, conversation history, and knowledge snippets inside a tiny context window
-- Repeat the whole process for each new scenario
+如今，⼤多数AI智能体背后的"智能"隐藏着⼤量的⼈⼯劳动。开发者必须：
 
-This pattern is called Context Engineering. It is deeply tied to expert know-how, almost impossible to scale, and prohibitively expensive to maintain. When an enterprise needs to keep dozens of distinct agents alive, the artisanal workshop model collapses under its own weight.
+- ⼯⼥精心制作复杂的提示模板
+- 为每个任务硬编码文档检索逻辑
+- 在微小的上下⽂窗⼝中管理⼯具描述、对话历史和知识片段
+- 为每个新场景重复整个过程
 
-The mission of an Agent Context Engine is to turn Context Engineering from an “art” into an industrial-grade science.
+这种模式称为上下⽂⼯程。它与专业知识深度绑定，⼏乎⽆法扩展，维护成本极其昂贵。当企业需要保持⼏⼗个不同的智能体运⾏时，这种⼿⼯作坊模式会在⾃身的重量下崩溃。
 
-Deconstructing the Agent Context Engine
-So, what exactly is an Agent Context Engine? It is a unified, intelligent, and automated platform responsible for the end-to-end process of assembling the optimal context for an LLM or Agent at the moment of inference. It moves from artisanal crafting to industrialized production.
-At its core, an Agent Context Engine is built on a triumvirate of next-generation retrieval capabilities, seamlessly integrated into a single service layer:
+智能体上下⽂引擎的使命是将上下⽂⼯程从"艺术"转变为⼯业级的科学。
 
-1. The Knowledge Core (Advanced RAG): This is the evolution of traditional RAG. It moves beyond simple chunk-and-embed to intelligently process static, private enterprise knowledge. Techniques like TreeRAG (building LLM-generated document outlines for "locate-then-expand" retrieval) and GraphRAG (extracting entity networks to find semantically distant connections) work to close the "semantic gap." The engine’s Ingestion Pipeline acts as the ETL for unstructured data, parsing multi-format documents and using LLMs to enrich content with summaries, metadata, and structure before indexing.
+### 解构智能体上下⽂引擎
 
-2. The Memory Layer: An Agent’s intelligence is defined by its ability to learn from interaction. The Memory Layer is a specialized retrieval system for dynamic, episodic data: conversation history, user preferences, and the agent’s own internal state (e.g., "waiting for human input"). It manages the lifecycle of this data—storing raw dialogue, triggering summarization into semantic memory, and retrieving relevant past interactions to provide continuity and personalization. Technologically, it is a close sibling to RAG, but focused on a temporal stream of data.
+那么，究竟什么是智能体上下⽂引擎？它是⼀个统⼀的、智能的、⾃动化的平台，负责在推理时刻为LLM或智能体组装最佳上下⽂的端到端过程。它从⼿⼯制作转向⼯业化⽣产。
 
-3. The Tool Orchestrator: As MCP (Model Context Protocol) enables the connection of hundreds of internal services as tools, a new problem arises: tool selection. The Context Engine solves this with Tool Retrieval. Instead of dumping all tool descriptions into the prompt, it maintains an index of tools and—critically—an index of Skills (best practices on when and how to use tools). For a given task, it retrieves only the most relevant tools and instructions, transforming the LLM’s job from "searching a haystack" to "following a recipe."
+在其核⼼，智能体上下⽂引擎建⽴在三⼤下⼀代检索能⼒之上，⽆缝集成到单个服务层中：
 
-## Why we need a dedicated engine? The case for a unified substrate
+1. **知识核⼼（⾼级RAG）**：这是传统RAG的演进。它超越了简单的分块和嵌⼊，智能地处理静态的私有企业知识。TreeRAG（构建LLM⽣成的⽂档⼤纲以实现"定位后扩展"检索）和GraphRAG（提取实体⽹络以找到语义上遥远的连接）等技术致⼒于缩⼩"语义差距"。引擎的摄取管道充当⾮结构化数据的ETL，解析多格式⽂档，并在索引前使⽤LLM通过摘要、元数据和结构来丰富内容。
 
-The necessity of an Agent Context Engine becomes clear when we examine the alternative: siloed, manually wired components.
+2. **记忆层**：智能体的智能由其从交互中学习的能力定义。记忆层是⼀个专⽤于动态的、情节性数据的检索系统：对话历史、用户偏好和智能体⾃身的内部状态（例如"等待⼈类输⼊"）。它管理这些数据的⽣命周期——存储原始对话，触发摘要成语义记忆，并检索相关的过去交互以提供连续性和个性化。在技术上，它是RAG的近亲，但专注于时间数据流。
 
-- The Data Silo Problem: Knowledge, memory, and tools reside in separate systems, requiring complex integration for each new agent.
-- The Assembly Line Bottleneck: Developers spend more time on context plumbing than on agent logic, slowing innovation to a crawl.
-- The "Context Ownership" Dilemma: In manually engineered systems, context logic is buried in code, owned by developers, and opaque to business users. An Engine makes context a configurable, observable, and customer-owned asset.
+3. **⼯具编排器**：随着MCP（模型上下⽂协议）将数百个内部服务连接为⼯具，⼀个新问题出现了：⼯具选择。上下⽂引擎通过⼯具检索解决这个问题。它不是将所有⼯具描述倒⼊提示中，⽽是维护⼯具索引——关键的是技能索引（关于何时以及如何使⽤⼯具的最佳实践）。对于给定任务，它只检索最相关的⼯具和说明，将LLM的⼯作从"⼤海捞针"转变为"照⽅抓药"。
 
-The shift from Context Engineering to a Context Platform/Engine marks the maturation of enterprise AI, as summarized in the table below:
+## 为什么我们需要专⽤引擎？统⼀基座的理由
 
-| Dimension           | Context engineering (present)                                              | Context engineering/Platform (future)                                                               |
+当我们审视替代方案时——孤岛式的、⼿动连接的组件——智能体上下⽂引擎的必要性变得清晰。
+
+- **数据孤岛问题**：知识、记忆和⼯具驻留在单独的系统中，每个新智能体需要复杂的集成。
+- **装配线瓶颈**：开发者在上下⽂管道⼯作上花费的时间⽐在智能体逻辑上更多，使创新缓慢⾄⽌。
+- **"上下⽂所有权"困境**：在⼿动⼯程化的系统中，上下⽂逻辑埋藏在代码中，由开发者拥有，对企业⽤户不透明。引擎使上下⽂成为可配置的、可观察的和客户拥有的资产。
+
+从上下⽂⼯程到上下⽂平台/引擎的转变标志着企业AI的成熟，如下表总结：
+
+| 维度           | 上下⽂⼯程（现在）                                              | 上下⽂⼯程/平台（未来）                                                               |
 | ------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Context creation    | Manual, artisanal work by developers and prompt engineers.                 | Automated, driven by intelligent ingestion pipelines and configurable rules.                        |
-| Context delivery    | Hard-coded prompts and static retrieval logic embedded in agent workflows. | Dynamic, real-time retrieval and assembly based on the agent's live state and intent.               |
-| Context maintenance | A development and operational burden, logic locked in code.                | A manageable platform function, with visibility and control returned to the business.               |
+| 上下⽂创建    | 开发者和提示工程师的⼿动、⼿⼯工作。                 | ⾃动化，由智能摄取管道和可配置规则驱动。                        |
+| 上下⽂交付    | 嵌入在智能体工作流中的硬编码提示和静态检索逻辑。 | 基于智能体的实时状态和意图的动态、实时检索和组装。               |
+| 上下⽂维护 | 开发和运营负担，逻辑锁定在代码中。                | 可管理的平台功能，将可见性和控制权还给企业。               |
 
+## RAGFlow：向智能体的上下⽂引擎坚定迈进
 
-## RAGFlow: A resolute march toward the context engine of Agents
+这就是RAGFlow正在锻造的未来。
 
-This is the future RAGFlow is forging.
+我们早已抛弃"另⼀个RAG系统"的标签。从DeepDoc——我们深度优化的多模态⽂档解析器——到在复杂RAG场景中弥合语义鸿沟的最前沿架构，再到全⾯的企业级摄取管道，RAGFlow的每⼀个进化步骤都是向终极形式的坚定迈进：智能体上下⽂引擎。
 
-We left behind the label of “yet another RAG system” long ago. From DeepDoc—our deeply-optimized, multimodal document parser—to the bleeding-edge architectures that bridge semantic chasms in complex RAG scenarios, all the way to a full-blown, enterprise-grade ingestion pipeline, every evolutionary step RAGFlow takes is a deliberate stride toward the ultimate form: an Agentic Context Engine.
+我们相信，未来企业的AI优势将不取决于谁拥有最⼤的模型，⽽取决于谁能够为该模型提供最⾼质量、最实时和最相关的上下⽂。智能体上下⽂引擎是将这⼀愿景变为现实的关键基础设施。
 
-We believe tomorrow’s enterprise AI advantage will hinge not on who owns the largest model, but on who can feed that model the highest-quality, most real-time, and most relevant context. An Agentic Context Engine is the critical infrastructure that turns this vision into reality.
-
-In the paradigm shift from “hand-crafted prompts” to “intelligent context,” RAGFlow is determined to be the most steadfast propeller and enabler. We invite every developer, enterprise, and researcher who cares about the future of AI agents to follow RAGFlow’s journey—so together we can witness and build the cornerstone of the next-generation AI stack.
+在从"⼿⼯制作的提示"到"智能上下⽂"的范式转变中，RAGFlow决⼼成为最坚定的推动者和赋能者。我们邀请每个关⼼AI智能体未来的开发者、企业和研究⼈员跟随RAGFlow的旅程——共同见证和构建下⼀代AI堆栈的基⽯。

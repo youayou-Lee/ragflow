@@ -5,29 +5,29 @@ sidebar_custom_props: {
   categoryIcon: LucideMessageSquareReply
 }
 ---
-# Message component
+# 消息组件
 
-A component that sends out a static or dynamic message.
+一个发送静态或动态消息的组件。
 
 ---
 
-As the final component of the workflow, a Message component returns the workflow’s ultimate data output accompanied by predefined message content. The system selects one message at random if multiple messages are provided.
+作为工作流的最终组件,消息组件返回工作流的最终数据输出,并附带预定义的消息内容。如果提供多个消息,系统将随机选择一条消息。
 
-## Configurations
+## 配置
 
-### Status
+### 状态
 
-The HTTP status code (`200` ~ `399`) to return when the entire workflow completes. Available *only* when you select **Final response** as **Execution mode** in the [Begin](./begin.md) component.
+整个工作流完成时返回的 HTTP 状态码(`200` ~ `399`)。仅当您在 [开始](./begin.md) 组件中选择 **最终响应** 作为 **执行模式** 时可用。
 
-### Messages
+### 消息
 
-The message to send out. Click `(x)` or type `/` to quickly insert variables.
+要发送的消息。点击 `(x)` 或输入 `/` 以快速插入变量。
 
-Click **+ Add message** to add message options. When multiple messages are supplied, the **Message** component randomly selects one to send.
+点击 **+ 添加消息** 添加消息选项。当提供多个消息时,**消息**组件随机选择一条发送。
 
-### Save to memory
+### 保存到记忆
 
-Save the conversation to specified memories. Expand the dropdown list to either select all available memories or specified memories:
+将对话保存到指定的记忆。展开下拉列表以选择所有可用的记忆或指定的记忆:
 
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/save_to_memory.png)

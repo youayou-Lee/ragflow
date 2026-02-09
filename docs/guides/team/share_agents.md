@@ -5,17 +5,17 @@ sidebar_custom_props: {
   categoryIcon: LucideShare2
 }
 ---
-# Share Agent
+# 共享智能体
 
-Share an Agent with your team members.
+与团队成员共享智能体。
 
 ---
 
-When ready, you may share your Agents with your team members so that they can use them. Please note that your Agents are not shared automatically; you must manually enable sharing by selecting the corresponding **Permissions** radio button:
+准备就绪后，您可以与团队成员共享您的智能体，以便他们使用它们。请注意，您的智能体不会自动共享；您必须通过选择相应的**权限**单选按钮来手动启用共享：
 
-1. Click the intended Agent to open its editing canvas. 
-2. Click **Management** > **Settings** to show the **Agent settings** dialogue.
-3. Change **Permissions** from **Only me** to **Team**.
-4. Click **Save** to apply your changes.
+1. 点击预期的智能体以打开其编辑画布。
+2. 点击**管理** > **设置**以显示**智能体设置**对话框。
+3. 将**权限**从**仅我**更改为**团队**。
+4. 点击**保存**以应用您的更改。
 
-*When completed, your team members will see your shared Agents.*
+*完成后，您的团队成员将看到您共享的智能体。*

@@ -5,32 +5,32 @@ sidebar_custom_props: {
   categoryIcon: LucideGroup
 }
 ---
-# Configure child chunking strategy
+# 配置子分块策略
 
-Set parent-child chunking strategy to improve retrieval.
+设置父子分块策略以提高检索性能。
 
 ---
 
-A persistent challenge in practical RAG applications lies in a structural tension within the traditional "chunk-embed-retrieve" pipeline: a single text chunk is tasked with both semantic matching (recall) and contextual understanding (utilization)—two inherently conflicting objectives. Recall demands fine-grained, precise chunks, while answer generation requires coherent, informationally complete context.
+在实际的 RAG 应用中，一个持久的挑战在于传统的"分块-嵌入-检索"流程中的结构性张力：单个文本块被同时赋予语义匹配（召回）和上下文理解（利用）这两个本质上相互冲突的目标。召回需要细粒度、精确的分块，而答案生成需要连贯、信息完整的上下文。
 
-To resolve this tension, RAGFlow previously introduced the Table of Contents (TOC) enhancement feature, which uses a large language model (LLM) to generate document structure and automatically supplements missing context during retrieval based on that TOC. In version 0.23.0, this capability has been systematically integrated into the Ingestion Pipeline, and a novel parent-child chunking mechanism has been introduced.
+为了解决这一张力，RAGFlow 之前引入了目录（TOC）增强功能，该功能使用大语言模型（LLM）生成文档结构，并在检索时根据该目录自动补充缺失的上下文。在 0.23.0 版本中，此功能已系统地集成到摄入流程中，并引入了一种新颖的父子分块机制。
 
-Under this mechanism, a document is first segmented into larger parent chunks, each maintaining a relatively complete semantic unit to ensure logical and background integrity. Each parent chunk can then be further subdivided into multiple child chunks for precise recall. During retrieval, the system first locates the most relevant text segments based on the child chunks while automatically associating and recalling their parent chunk. This approach maintains high recall relevance while providing ample semantic background for the generation phase.
+在此机制下，文档首先被分割成较大的父分块，每个父分块保持相对完整的语义单元以确保逻辑和背景完整性。每个父分块可以进一步细分为多个子分块以实现精确召回。在检索期间，系统首先根据子分块定位最相关的文本段，同时自动关联并召回其父分块。这种方法在保持高召回相关性的同时，为生成阶段提供了充足的语义背景。
 
-For instance, when processing a *Compliance Handbook*, a user query about "liability for breach" might precisely retrieve a child chunk stating, "The penalty for breach is 20% of the total contract value," but without context, it cannot clarify whether this clause applies to "minor breach" or "material breach." Leveraging the parent-child chunking mechanism, the system returns this child chunk along with its parent chunk, which contains the complete section of the clause. This allows the LLM to make accurate judgments based on broader context, avoiding misinterpretation.
+例如，在处理*合规手册*时，用户关于"违约责任"的查询可能会精确检索到一个子分块，其中陈述"违约金为合同总价值的 20%"，但没有上下文，无法明确此条款适用于"轻微违约"还是"重大违约"。利用父子分块机制，系统返回此子分块及其包含该条款完整章节的父分块。这使得大语言模型能够基于更广泛的上下文做出准确判断，避免误解。
 
-Through this dual-layer structure of "precise localization + contextual supplementation," RAGFlow ensures retrieval accuracy while significantly enhancing the reliability and completeness of generated answers.
+通过这种"精确定位 + 上下文补充"的双层结构，RAGFlow 确保了检索准确性，同时显著提高了生成答案的可靠性和完整性。
 
 
-## Procedure
+## 操作步骤
 
-1. On your dataset's **Configuration** page, find the **Child chunk are used for retrieval** toggle:
+1. 在数据集的 **配置** 页面上，找到 **Child chunk are used for retrieval** 开关：
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/child_chunking.png)
 
 
-2. Set the delimiter for child chunks.
+2. 设置子分块的分隔符。
 
-3. This configuration applies to the **Chunker** component when it comes to ingestion pipeline settings:
+3. 此配置适用于 **Chunker** 组件，当涉及摄入流程设置时：
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/child_chunking_parser.png)

@@ -5,122 +5,121 @@ sidebar_custom_props: {
   categoryIcon: LucideHome
 }
 ---
-# Begin component
+# 开始组件
 
-The starting component in a workflow.
+工作流中的起始组件。
 
 ---
 
-The **Begin** component sets an opening greeting or accepts inputs from the user. It is automatically populated onto the canvas when you create an agent, whether from a template or from scratch (from a blank template). There should be only one **Begin** component in the workflow.
+**开始**组件设置开场问候或接受来自用户的输入。当您创建智能体时，无论是从模板还是从头开始（从空白模板），它都会自动填充到画布上。工作流中应该只有一个**开始**组件。
 
-## Scenarios
+## 场景
 
-A **Begin** component is essential in all cases. Every agent includes a **Begin** component, which cannot be deleted.
+**开始**组件在所有情况下都是必不可少的。每个智能体都包括一个**开始**组件，该组件不能被删除。
 
-## Configurations
+## 配置
 
-Click the component to display its **Configuration** window. Here, you can set an opening greeting and the input parameters (global variables) for the agent.
+单击组件以显示其**配置**窗口。在这里，您可以设置开场问候和智能体的输入参数（全局变量）。
 
-### Mode
+### 模式
 
-Mode defines how the workflow is triggered.
+模式定义如何触发工作流。
 
-- Conversational: The agent is triggered from a conversation.
-- Task: The agent starts without a conversation.
-- Webhook: Receive external HTTP requests via webhooks, enabling automated triggers and workflow initiation.  
-  *When selected, a unique Webhook URL is generated for the current agent.*
+- **对话式**：智能体从对话中触发。
+- **任务**：智能体在没有对话的情况下启动。
+- **Webhook**：通过webhook接收外部HTTP请求，实现自动触发和工作流启动。
+  *选择后，会为当前智能体生成唯一的Webhook URL。*
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/webhook_mode.png)
 
-### Methods
+### 方法
 
-The supported HTTP methods. Available only when **Webhook** is selected as **Mode**.
+支持的HTTP方法。仅在将**Webhook**选择为**模式**时可用。
 
+### 安全性
 
-### Security
+要选择的身份验证方法，仅在将**Webhook**选择为**模式**时可用。包括：
 
-The authentication method to choose, available *only* when **Webhook** is selected as **Mode**. Including:
+- **token**：基于令牌的身份验证。
+- **basic**：基本身份验证。
+- **jwt**：JWT身份验证。
 
-- **token**: Token-based authentication.
-- **basic**: Basic authentication.
-- **jwt**: JWT authentication.  
+### 模式
 
-### Schema
+模式定义系统在**Webhook**模式下接收的HTTP请求的数据结构。其配置包括：
 
-The schema defines the data structure for HTTP requests received by the system in **Webhook** mode. It configurations include:
-
-- Content type:
+- 内容类型：
   - `application/json`
   - `multipart/form-data`
   - `application/x-www-form-urlencoded`
   - `text-plain`
   - `application/octet-stream`
-- Query parameters
-- Header parameters
-- Request body parameters
+- 查询参数
+- 标头参数
+- 请求正文参数
 
-### Response
+### 响应
 
-Available only when **Webhook** is selected as **Mode**. 
+仅在将**Webhook**选择为**模式**时可用。
 
-The response mode of the workflow, i.e., how the workflow respond to external HTTP requests. Supported options:
+工作流的响应模式，即工作流如何响应外部HTTP请求。支持的选项：
 
-- **Accepted response**: When an HTTP request is validated, a success response is returned immediately, and the workflow runs asynchronously in the background.
-  - When selected, you configure the corresponding HTTP status code and message in the **Begin** component.
-  - The HTTP status code to return is in the range of `200-399`.
-- **Final response**: The system returns the final processing result only after the entire workflow completes.
-  - When selected, you configure the corresponding HTTP status code and message in the [message](./message.md) component.
-  - The HTTP status code to return is in the range of `200-399`.
+- **接受响应**：当验证HTTP请求时，立即返回成功响应，工作流在后台异步运行。
+  - 选择后，您在**开始**组件中配置相应的HTTP状态码和消息。
+  - 返回的HTTP状态码在`200-399`范围内。
+- **最终响应**：系统仅在整个工作流完成后返回最终处理结果。
+  - 选择后，您在[消息](./message.md)组件中配置相应的HTTP状态码和消息。
+  - 返回的HTTP状态码在`200-399`范围内。
 
-### Opening greeting
+### 开场问候
 
-**Conversational mode only.**
+**仅对话模式。**
 
-An agent in conversational mode begins with an opening greeting. It is the agent's first message to the user in conversational mode, which can be a welcoming remark or an instruction to guide the user forward.
+对话模式中的智能体以开场问候开始。它是智能体在对话模式下对用户的第一条消息，可以是欢迎语或引导用户前进的说明。
 
-### Global variables
+### 全局变量
 
-You can define global variables within the **Begin** component, which can be either mandatory or optional. Once set, users will need to provide values for these variables when engaging with the agent. Click **+ Add variable** to add a global variable, each with the following attributes:
+您可以在**开始**组件中定义全局变量，这些变量可以是必需的或可选的。一旦设置，用户在与智能体交互时需要为这些变量提供值。单击**+添加变量**以添加全局变量，每个变量具有以下属性：
 
-- **Name**: _Required_  
-  A descriptive name providing additional details about the variable.  
-- **Type**: _Required_  
-  The type of the variable:
-  - **Single-line text**: Accepts a single line of text without line breaks.
-  - **Paragraph text**: Accepts multiple lines of text, including line breaks.
-  - **Dropdown options**: Requires the user to select a value for this variable from a dropdown menu. And you are required to set _at least_ one option for the dropdown menu.
-  - **file upload**: Requires the user to upload one or multiple files.
-  - **Number**: Accepts a number as input.
-  - **Boolean**: Requires the user to toggle between on and off.
-- **Key**: _Required_  
-  The unique variable name.
-- **Optional**: A toggle indicating whether the variable is optional.
+- **名称**：_必需_
+  提供有关变量的其他详细信息的描述性名称。
+- **类型**：_必需_
+  变量的类型：
+  - **单行文本**：接受不带换行符的单行文本。
+  - **段落文本**：接受多行文本，包括换行符。
+  - **下拉选项**：要求用户从下拉菜单中为此变量选择一个值。您需要为下拉菜单设置_至少_一个选项。
+  - **文件上传**：要求用户上传一个或多个文件。
+  - **数字**：接受一个数字作为输入。
+  - **布尔值**：要求用户在打开和关闭之间切换。
+- **键**：_必需_
+  唯一的变量名称。
+- **可选**：一个切换开关，指示变量是否可选。
 
-:::tip NOTE
-To pass in parameters from a client, call:
+:::tip 注意
+要从客户端传入参数，请调用：
 
-- HTTP method [Converse with agent](../../../references/http_api_reference.md#converse-with-agent), or
-- Python method [Converse with agent](../../../references/python_api_reference.md#converse-with-agent).
+- HTTP方法[与智能体对话](../../../references/http_api_reference.md#converse-with-agent)，或
+- Python方法[与智能体对话](../../../references/python_api_reference.md#converse-with-agent)。
   :::
 
-:::danger IMPORTANT
-If you set the key type as **file**, ensure the token count of the uploaded file does not exceed your model provider's maximum token limit; otherwise, the plain text in your file will be truncated and incomplete.
+:::danger 重要
+如果您将键类型设置为**文件**，请确保上传文件的令牌数不超过您的模型提供商的最大令牌限制；否则，文件中的纯文本将被截断且不完整。
 :::
 
 :::note
-You can tune document parsing and embedding efficiency by setting the environment variables `DOC_BULK_SIZE` and `EMBEDDING_BATCH_SIZE`.
+您可以通过设置环境变量`DOC_BULK_SIZE`和`EMBEDDING_BATCH_SIZE`来调整文档解析和嵌入效率。
 :::
 
-## Frequently asked questions
+## 常见问题
 
-### Is the uploaded file in a dataset?
+### 上传的文件在数据集中吗？
 
-No. Files uploaded to an agent as input are not stored in a dataset and hence will not be processed using RAGFlow's built-in OCR, DLR or TSR models, or chunked using RAGFlow's built-in chunking methods.
+不。作为输入上传到智能体的文件不会存储在数据集中，因此不会使用RAGFlow内置的OCR、DLR或TSR模型进行处理，也不会使用RAGFlow内置的分块方法进行分块。
 
-### File size limit for an uploaded file
+### 上传文件的文件大小限制
 
-There is no _specific_ file size limit for a file uploaded to an agent. However, note that model providers typically have a default or explicit maximum token setting, which can range from 8196 to 128k: The plain text part of the uploaded file will be passed in as the key value, but if the file's token count exceeds this limit, the string will be truncated and incomplete.
+上传到智能体的文件没有_特定_的文件大小限制。但是请注意，模型提供商通常具有默认或明确的最大令牌设置，范围可能从8196到128k：上传文件的纯文本部分将作为键值传入，但如果文件的令牌数超过此限制，字符串将被截断且不完整。
 
-:::tip NOTE
-The variables `MAX_CONTENT_LENGTH` in `/docker/.env` and `client_max_body_size` in `/docker/nginx/nginx.conf` set the file size limit for each upload to a dataset or RAGFlow's File system. These settings DO NOT apply in this scenario.
+:::tip 注意
+`/docker/.env`中的变量`MAX_CONTENT_LENGTH`和`/docker/nginx/nginx.conf`中的`client_max_body_size`设置每次上传到数据集或RAGFlow文件系统的文件大小限制。这些设置在此场景中不适用。
 :::

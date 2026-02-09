@@ -6,73 +6,73 @@ sidebar_custom_props: {
 }
 
 ---
-# RAGFlow MCP client examples
+# RAGFlow MCP客户端示例
 
-Python and curl MCP client examples.
+Python和curl MCP客户端示例。
 
 ------
 
-## Example MCP Python client
+## 示例MCP Python客户端
 
-We provide a *prototype* MCP client example for testing [here](https://github.com/infiniflow/ragflow/blob/main/mcp/client/client.py).
+我们在[这里](https://github.com/infiniflow/ragflow/blob/main/mcp/client/client.py)提供了一个用于测试的*原型*MCP客户端示例。
 
-:::info IMPORTANT
-If your MCP server is running in host mode, include your acquired API key in your client's `headers` when connecting asynchronously to it:
+:::info 重要
+如果您的MCP服务器在主机模式下运行，请在异步连接时在客户端的`headers`中包含您获取的API密钥：
 
 ```python
 async with sse_client("http://localhost:9382/sse", headers={"api_key": "YOUR_KEY_HERE"}) as streams:
-    # Rest of your code...
+    # 您的其余代码...
 ```
 
-Alternatively, to comply with [OAuth 2.1 Section 5](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-12#section-5), you can run the following code *instead* to connect to your MCP server:
+或者，为了符合[OAuth 2.1第5节](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-12#section-5)，您可以改为运行以下代码来连接到您的MCP服务器：
 
 ```python
 async with sse_client("http://localhost:9382/sse", headers={"Authorization": "YOUR_KEY_HERE"}) as streams:
-    # Rest of your code...
+    # 您的其余代码...
 ```
 :::
 
-## Use curl to interact with the RAGFlow MCP server
+## 使用curl与RAGFlow MCP服务器交互
 
-When interacting with the MCP server via HTTP requests, follow this initialization sequence:
+当通过HTTP请求与MCP服务器交互时，请遵循以下初始化序列：
 
-1. **The client sends an `initialize` request** with protocol version and capabilities.
-2. **The server replies with an `initialize` response**, including the supported protocol and capabilities.
-3. **The client confirms readiness with an `initialized` notification**.  
-   _The connection is established between the client and the server, and further operations (such as tool listing) may proceed._
+1. **客户端发送带有协议版本和功能的`initialize`请求**。
+2. **服务器回复`initialize`响应**，包括支持的协议和功能。
+3. **客户端使用`initialized`通知确认准备就绪**。
+   _客户端和服务器之间建立了连接，可以进一步进行操作（例如工具列表）。_
 
-:::tip NOTE
-For more information about this initialization process, see [here](https://modelcontextprotocol.io/docs/concepts/architecture#1-initialization). 
+:::tip 注意
+有关此初始化过程的更多信息，请参阅[此处](https://modelcontextprotocol.io/docs/concepts/architecture#1-initialization)。
 :::
 
-In the following sections, we will walk you through a complete tool calling process.
+在以下部分中，我们将引导您完成完整的工具调用过程。
 
-### 1. Obtain a session ID
+### 1. 获取会话ID
 
-Each curl request with the MCP server must include a session ID:
+每个与MCP服务器的curl请求都必须包含会话ID：
 
 ```bash
 $ curl -N -H "api_key: YOUR_API_KEY" http://127.0.0.1:9382/sse
 ```
 
-:::tip NOTE
-See [here](../acquire_ragflow_api_key.md) for information about acquiring an API key.
+:::tip 注意
+有关获取API密钥的信息，请参阅[此处](../acquire_ragflow_api_key.md)。
 :::
 
-#### Transport
+#### 传输
 
-The transport will stream messages such as tool results, server responses, and keep-alive pings.
+传输将流式传输工具结果、服务器响应和保活ping等消息。
 
-_The server returns the session ID:_
+_服务器返回会话ID：_
 
 ```bash
 event: endpoint
 data: /messages/?session_id=5c6600ef61b845a788ddf30dceb25c54
 ```
 
-### 2. Send an `Initialize` request
+### 2. 发送`initialize`请求
 
-The client sends an `initialize` request with protocol version and capabilities:
+客户端发送带有协议版本和功能的`initialize`请求：
 
 ```bash
 session_id="5c6600ef61b845a788ddf30dceb25c54" && \
@@ -95,18 +95,18 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
   }' && \
 ```
 
-#### Transport
+#### 传输
 
-_The server replies with an `initialize` response, including the supported protocol and capabilities:_
+_服务器回复`initialize`响应，包括支持的协议和功能：_
 
 ```bash
 event: message
 data: {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2025-03-26","capabilities":{"experimental":{"headers":{"host":"127.0.0.1:9382","user-agent":"curl/8.7.1","accept":"*/*","api_key":"ragflow-xxxxxxxxxxxx","accept-encoding":"gzip"}},"tools":{"listChanged":false}},"serverInfo":{"name":"docker-ragflow-cpu-1","version":"1.9.4"}}}
 ```
 
-### 3. Acknowledge readiness
+### 3. 确认准备就绪
 
-The client confirms readiness with an `initialized` notification:
+客户端使用`initialized`通知确认准备就绪：
 
 ```bash
 curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
@@ -119,9 +119,9 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
   }' && \
 ```
 
- _The connection is established between the client and the server, and further operations (such as tool listing) may proceed._
+ _客户端和服务器之间建立了连接，可以进一步进行操作（例如工具列表）。_
 
-### 4. Tool listing
+### 4. 工具列表
 
 ```bash
 curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
@@ -135,15 +135,15 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
   }' && \
 ```
 
-#### Transport
+#### 传输
 
 ```bash
 event: message
-data: {"jsonrpc":"2.0","id":3,"result":{"tools":[{"name":"ragflow_retrieval","description":"Retrieve relevant chunks from the RAGFlow retrieve interface based on the question, using the specified dataset_ids and optionally document_ids. Below is the list of all available datasets, including their descriptions and IDs. If you're unsure which datasets are relevant to the question, simply pass all dataset IDs to the function.","inputSchema":{"type":"object","properties":{"dataset_ids":{"type":"array","items":{"type":"string"}},"document_ids":{"type":"array","items":{"type":"string"}},"question":{"type":"string"}},"required":["dataset_ids","question"]}}]}}
+data: {"jsonrpc":"2.0","id":3,"result":{"tools":[{"name":"ragflow_retrieval","description":"从RAGFlow检索接口根据问题检索相关块，使用指定的dataset_ids和可选的document_ids。以下是所有可用数据集的列表，包括其描述和ID。如果您不确定哪些数据集与问题相关，只需将所有数据集ID传递给函数。","inputSchema":{"type":"object","properties":{"dataset_ids":{"type":"array","items":{"type":"string"}},"document_ids":{"type":"array","items":{"type":"string"}},"question":{"type":"string"}},"required":["dataset_ids","question"]}}]}}
 
 ```
 
-### 5. Tool calling
+### 5. 工具调用
 
 ```bash
 curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
@@ -156,7 +156,7 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
     "params": {
       "name": "ragflow_retrieval",
       "arguments": {
-        "question": "How to install neovim?",
+        "question": "如何安装neovim？",
         "dataset_ids": ["DATASET_ID_HERE"],
         "document_ids": []
       }
@@ -164,7 +164,7 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
   }'
 ```
 
-#### Transport
+#### 传输
 
 ```bash
 event: message
@@ -172,12 +172,12 @@ data: {"jsonrpc":"2.0","id":4,"result":{...}}
 
 ```
 
-### A complete curl example
+### 完整的curl示例
 
 ```bash
 session_id="YOUR_SESSION_ID" && \
 
-# Step 1: Initialize request
+# 步骤1：初始化请求
 curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
   -H "api_key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -197,7 +197,7 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
 
 sleep 2 && \
 
-# Step 2: Initialized notification
+# 步骤2：已初始化通知
 curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
   -H "api_key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -209,7 +209,7 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
 
 sleep 2 && \
 
-# Step 3: Tool listing
+# 步骤3：工具列表
 curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
   -H "api_key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -222,7 +222,7 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
 
 sleep 2 && \
 
-# Step 4: Tool call
+# 步骤4：工具调用
 curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
   -H "api_key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -233,7 +233,7 @@ curl -X POST "http://127.0.0.1:9382/messages/?session_id=$session_id" \
     "params": {
       "name": "ragflow_retrieval",
       "arguments": {
-        "question": "How to install neovim?",
+        "question": "如何安装neovim？",
         "dataset_ids": ["DATASET_ID_HERE"],
         "document_ids": []
       }

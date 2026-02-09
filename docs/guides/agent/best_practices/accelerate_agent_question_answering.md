@@ -3,56 +3,55 @@ sidebar_position: 1
 slug: /accelerate_agent_question_answering
 ---
 
-# Accelerate answering
+# 加速回答
 
-A checklist to speed up question answering.
+一个加快问题回答速度的检查清单。
 
 ---
 
-Please note that some of your settings may consume a significant amount of time. If you often find that your question answering is time-consuming, here is a checklist to consider:
+请注意,您的一些设置可能会消耗大量时间。如果您经常发现问题回答很耗时,以下是可供考虑的检查清单:
 
-## Balance task complexity with an Agent’s performance and speed?
+## 平衡任务复杂性与智能体的性能和速度?
 
-An Agent’s response time generally depends on many factors, e.g., the LLM’s capabilities and the prompt, the latter reflecting task complexity. When using an Agent, you should always balance task demands with the LLM’s ability. 
+智能体的响应时间通常取决于许多因素,例如 LLM 的能力和提示,后者反映任务复杂性。使用智能体时,您应该始终平衡任务需求与 LLM 的能力。
 
-- For simple tasks, such as retrieval, rewriting, formatting, or structured data extraction, use concise prompts, remove planning or reasoning instructions, enforce output length limits, and select smaller or Turbo-class models. This significantly reduces latency and cost with minimal impact on quality.
+- 对于简单任务,例如检索、重写、格式化或结构化数据提取,使用简洁的提示,删除规划或推理指令,强制执行输出长度限制,并选择较小或 Turbo 级别的模型。这显著减少了延迟和成本,而对质量的影响最小。
 
-- For complex tasks, like multistep reasoning, cross-document synthesis, or tool-based workflows, maintain or enhance prompts that include planning, reflection, and verification steps.
+- 对于复杂任务,如多步推理、跨文档综合或基于工具的工作流,保持或增强包含规划、反思和验证步骤的提示。
 
-- In multi-Agent orchestration systems, delegate simple subtasks to sub-Agents using smaller, faster models, and reserve more powerful models for the lead Agent to handle complexity and uncertainty.
+- 在多智能体编排系统中,将简单子任务委托给使用较小、更快模型的子智能体,并为主导智能体保留更强大的模型以处理复杂性和不确定性。
 
-:::tip KEY INSIGHT
-Focus on minimizing output tokens — through summarization, bullet points, or explicit length limits — as this has far greater impact on reducing latency than optimizing input size.
+:::tip 关键见解
+专注于最小化输出标记 — 通过摘要、项目符号或明确的长度限制 — 因为这在减少延迟方面比优化输入大小有更大的影响。
 :::
 
-## Disable Reasoning
+## 禁用推理
 
-Disabling the **Reasoning** toggle will reduce the LLM's thinking time. For a model like Qwen3, you also need to add `/no_think` to the system prompt to disable reasoning.
+禁用 **推理** 切换将减少 LLM 的思考时间。对于像 Qwen3 这样的模型,您还需要在系统提示中添加 `/no_think` 来禁用推理。
 
-## Disable Rerank model
+## 禁用重排序模型
 
-- Leaving the **Rerank model** field empty (in the corresponding **Retrieval** component) will significantly decrease retrieval time.
-- When using a rerank model, ensure you have a GPU for acceleration; otherwise, the reranking process will be *prohibitively* slow.
+- 将 **重排序模型** 字段留空(在相应的 **检索** 组件中)将显著减少检索时间。
+- 使用重排序模型时,请确保您有 GPU 进行加速;否则,重排序过程将*非常*慢。
 
-:::tip NOTE 
-Please note that rerank models are essential in certain scenarios. There is always a trade-off between speed and performance; you must weigh the pros against cons for your specific case.
+:::tip 注意
+请注意,重排序模型在某些场景中是必不可少的。速度和性能之间总是存在权衡;您必须针对自己的具体情况权衡利弊。
 :::
 
-## Check the time taken for each task
+## 检查每个任务所花费的时间
 
-Click the light bulb icon above the *current* dialogue and scroll down the popup window to view the time taken for each task:  
+点击*当前*对话上方的灯泡图标并向下滚动弹出窗口以查看每个任务所花费的时间:
 
 
-
-| Item name         | Description                                                                                   |
+| 项目名称         | 描述                                                                                   |
 |-------------------|-----------------------------------------------------------------------------------------------|
-| Total             | Total time spent on this conversation round, including chunk retrieval and answer generation. |
-| Check LLM         | Time to validate the specified LLM.                                                           |
-| Create retriever  | Time to create a chunk retriever.                                                             |
-| Bind embedding    | Time to initialize an embedding model instance.                                               |
-| Bind LLM          | Time to initialize an LLM instance.                                                           |
-| Tune question     | Time to optimize the user query using the context of the multi-turn conversation.             |
-| Bind reranker     | Time to initialize an reranker model instance for chunk retrieval.                            |
-| Generate keywords | Time to extract keywords from the user query.                                                 |
-| Retrieval         | Time to retrieve the chunks.                                                                  |
-| Generate answer   | Time to generate the answer.                                                                  |
+| 总计             | 此对话轮次花费的总时间,包括块检索和答案生成。 |
+| 检查 LLM         | 验证指定 LLM 的时间。                                                           |
+| 创建检索器  | 创建块检索器的时间。                                                             |
+| 绑定嵌入    | 初始化嵌入模型实例的时间。                                               |
+| 绑定 LLM          | 初始化 LLM 实例的时间。                                                          |
+| 调整问题     | 使用多轮对话的上下文优化用户查询的时间。             |
+| 绑定重排序器     | 初始化用于块检索的重排序器模型实例的时间。                            |
+| 生成关键字 | 从用户查询中提取关键字的时间。                                                 |
+| 检索         | 检索块的时间。                                                                  |
+| 生成答案   | 生成答案的时间。                                                                  |

@@ -5,40 +5,40 @@ sidebar_custom_props: {
   categoryIcon: LucideToggleRight
 }
 ---
-# Enable Excel2HTML
+# 启用 Excel2HTML
 
-Convert complex Excel spreadsheets into HTML tables.
+将复杂的 Excel 电子表格转换为 HTML 表格。
 
 ---
 
-When using the **General** chunking method, you can enable the **Excel to HTML** toggle to convert spreadsheet files into HTML tables. If it is disabled, spreadsheet tables will be represented as key-value pairs. For complex tables that cannot be simply represented this way, you must enable this feature.
+使用 **General** 分块方法时，您可以启用 **Excel to HTML** 开关将电子表格文件转换为 HTML 表格。如果禁用，电子表格表格将表示为键值对。对于无法简单地表示为键值对的复杂表格，必须启用此功能。
 
-:::caution WARNING
-The feature is disabled by default. If your dataset contains spreadsheets with complex tables, and you do not enable this feature, RAGFlow will not throw an error but your tables are likely to be garbled.
+:::caution 警告
+该功能默认禁用。如果您的数据集包含具有复杂表格的电子表格，并且您未启用此功能，RAGFlow 不会抛出错误，但您的表格可能会出现乱码。
 :::
 
-## Scenarios
+## 应用场景
 
-Works with complex tables that cannot be represented as key-value pairs. Examples include spreadsheet tables with multiple columns, tables with merged cells, or multiple tables within one sheet. In such cases, consider converting these spreadsheet tables into HTML tables.
+适用于无法表示为键值对的复杂表格。示例包括具有多列的电子表格表格、具有合并单元格的表格或一个工作表中的多个表格。在这种情况下，请考虑将这些电子表格表格转换为 HTML 表格。
 
-## Considerations
+## 注意事项
 
-- The Excel2HTML feature applies only to spreadsheet files (XLSX or XLS (Excel 97-2003)).
-- This feature is associated with the **General** chunking method. In other words, it is available *only when* you select the **General** chunking method.
-- When this feature is enabled, spreadsheet tables with more than 12 rows will be split into chunks of 12 rows each.
+- Excel2HTML 功能仅适用于电子表格文件（XLSX 或 XLS (Excel 97-2003)）。
+- 此功能与 **General** 分块方法相关联。换句话说，*仅当*您选择 **General** 分块方法时才可用。
+- 启用此功能时，超过 12 行的电子表格表格将被分成每 12 行的分块。
 
-## Procedure
+## 操作步骤
 
-1. On your dataset's **Configuration** page, select **General** as the chunking method.
+1. 在数据集的 **配置** 页面上，选择 **General** 作为分块方法。
 
-   _The **Excel to HTML** toggle appears._
+   _**Excel to HTML** 开关出现。_
 
-2. Enable **Excel to HTML** if your dataset contains complex spreadsheet tables that cannot be represented as key-value pairs.
-3. Leave **Excel to HTML** disabled if your dataset has no spreadsheet tables or if its spreadsheet tables can be represented as key-value pairs.
-4. If question-answering regarding complex tables is unsatisfactory, check if **Excel to HTML** is enabled.
+2. 如果数据集包含无法表示为键值对的复杂电子表格表格，请启用 **Excel to HTML**。
+3. 如果数据集没有电子表格表格或其电子表格表格可以表示为键值对，请禁用 **Excel to HTML**。
+4. 如果关于复杂表格的问答不令人满意，请检查 **Excel to HTML** 是否已启用。
 
-## Frequently asked questions
+## 常见问题
 
-### Should I enable this feature for PDFs with complex tables?
+### 我应该为具有复杂表格的 PDF 启用此功能吗？
 
-Nope. This feature applies to spreadsheet files only. Enabling **Excel to HTML** does not affect your PDFs.
+不应该。此功能仅适用于电子表格文件。启用 **Excel to HTML** 不会影响您的 PDF。

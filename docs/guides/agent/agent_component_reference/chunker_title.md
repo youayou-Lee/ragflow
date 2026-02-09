@@ -5,38 +5,38 @@ sidebar_custom_props: {
   categoryIcon: LucideBlocks
 }
 ---
-# Title chunker component
+# 标题分块器组件
 
-A component that splits texts into chunks by heading level.
+一个按标题级别拆分文本的组件。
 
 ---
 
-A **Token chunker** component is a text splitter that uses specified heading level as delimiter to define chunk boundaries and create chunks.
+**标题分块器**组件是一个文本分割器，使用指定的标题级别作为分隔符来定义分块边界并创建分块。
 
-## Scenario
+## 场景
 
-A **Title chunker** component is optional, usually placed immediately after **Parser**.
+**标题分块器**组件是可选的，通常紧接在**解析器**之后放置。
 
-:::caution WARNING
-Placing a **Title chunker** after a **Token chunker** is invalid and will cause an error. Please note that this restriction is not currently system-enforced and requires your attention.
+:::caution 警告
+在**令牌分块器**之后放置**标题分块器**是无效的，将导致错误。请注意，此限制目前不是系统强制执行的，需要您注意。
 :::
 
-## Configurations
+## 配置
 
-### Hierarchy
+### 层次结构
 
-Specifies the heading level to define chunk boundaries: 
+指定用于定义分块边界的标题级别：
 
 - H1
 - H2
-- H3 (Default)
+- H3（默认）
 - H4
 
-Click **+ Add** to add heading levels here or update the corresponding **Regular Expressions** fields for custom heading patterns.
+单击**+添加**在此处添加标题级别或更新相应的**正则表达式**字段以自定义标题模式。
 
-### Output
+### 输出
 
-The global variable name for the output of the **Title chunker** component, which can be referenced by subsequent components in the ingestion pipeline.
+**标题分块器**组件输出的全局变量名称，可以被摄取管道中的后续组件引用。
 
-- Default: `chunks`
-- Type: `Array<Object>`
+- 默认：`chunks`
+- 类型：`Array<Object>`

@@ -6,103 +6,100 @@ sidebar_custom_props: {
 }
 ---
 
-# Use memory
+# 使用记忆
 
-RAGFlow's Memory module is built to save everything, including conversation that happens while an Agent is working. It keeps the raw logs of conversations, like what a user says and what the AI says back. It also saves extra information created during the chat, like summaries or notes the AI makes about the interaction. Its main jobs are to make conversations flow smoothly from one to the next, to allow the AI to remember personal details about a user, and to let the AI learn from all its past talks.
+RAGFlow 的记忆模块旨在保存所有内容，包括智能体工作时的对话。它保存对话的原始日志，比如用户说的话和 AI 回复的话。它还保存聊天过程中生成的额外信息，比如 AI 对交互的摘要或注释。它的主要工作是使对话之间流畅衔接，让 AI 记住关于用户的个人详细信息，并让 AI 从所有过去的对话中学习。
 
-This module does more than just store the raw data. It is smart enough to sort information into different useful types. It can pull out key facts and meanings (semantic memory), remember specific events and stories from past chats (episodic memory), and hold details needed for the current task (working memory). This turns a simple log into an organized library of past experiences.
+这个模块不仅仅是存储原始数据。它足够智能，可以将信息分类为不同有用的类型。它可以提取关键事实和含义（语义记忆），记住过去聊天中的特定事件和故事（情景记忆），并保留当前任务所需的详细信息（工作记忆）。这使简单的日志变成了有组织的经验库。
 
-Because of this, users can easily bring back any saved information into a new conversation. This past context helps the AI stay on topic and avoid repeating itself, making chats feel more connected and natural. More importantly, it gives the AI a reliable history to think from, which makes its answers more accurate and useful.
+因此，用户可以轻松地将任何保存的信息带回新的对话中。这个过去的上下文有助于 AI 保持主题，避免重复自己，使聊天感觉更加连贯和自然。更重要的是，它为 AI 提供了可靠的历史基础，使其答案更加准确和有用。
 
-## Create memory
+## 创建记忆
 
-The Memory module offers streamlined, centralized management of all memories.
+记忆模块为所有记忆提供简化的集中管理。
 
-When creating a Memory, users can precisely define which types of information to extract, helping ensure that only relevant data is captured and organized. From the navigation path Overview >> Memory, users can then perform key management actions, including renaming memories, organizing them, and sharing them with team members to support collaborative workflows.
+创建记忆时，用户可以精确定义要提取的信息类型，帮助确保仅捕获和整理相关数据。从导航路径概览 >> 记忆，用户可以执行关键管理操作，包括重命名记忆、组织记忆以及与团队成员共享记忆以支持协作工作流程。
 
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/memory_interface.PNG)
 
-## Configure memory
+## 配置记忆
 
-On the **Memory** page, click the intended memory **>** **Configuration** to view and update its settings.
+在**记忆**页面上，点击预期的记忆 **>** **配置**以查看和更新其设置。
 
-### Name
+### 名称
 
-The unique name of the memory created.
+创建的记忆的唯一名称。
 
-### Embedding model
+### 嵌入模型
 
-The embedding model for converting the memory into embeddings.
+用于将记忆转换为嵌入的嵌入模型。
 
 ### LLM
 
-The chat model for extracting knowledge from the memory.
+用于从记忆中提取知识的聊天模型。
 
-### Memory type
+### 记忆类型
 
-What is stored in the memory:
+记忆中存储的内容：
 
-`Raw`: The raw dialogue between the user and the Agent (Required by default).
-`Semantic Memory`: General knowledge and facts about the user and world.
-`Episodic Memory`: Time-stamped records of specific events and experiences.
-`Procedural Memory`: Learned skills, habits, and automated procedures.
+`原始`：用户与智能体之间的原始对话（默认必需）。
+`语义记忆`：关于用户和世界的一般知识和事实。
+`情景记忆`：特定事件和体验的带时间戳的记录。
+`程序记忆`：学到的技能、习惯和自动化过程。
 
-### Memory size
+### 记忆大小
 
-The default capacity allocated to the memory and the corresponding embeddings in bytes. Defaults to `5242880` (5MB). 
+为记忆及其相应嵌入分配的默认容量（以字节为单位）。默认为 `5242880`（5MB）。
 
-:::tip NOTE
-A 1KB message with a 1024-dimension embedding occupies approximately 9KB of memory (1KB + 1024 x 8Bytes = 9KB). With a default limit of 5 MB, the system can store roughly 500 such messages.
+:::tip 注意
+一条带有 1024 维嵌入的 1KB 消息大约占用 9KB 的内存（1KB + 1024 x 8 字节 = 9KB）。在默认限制 5MB 的情况下，系统可以存储大约 500 条这样的消息。
 :::
 
-### Permission
+### 权限
 
-- **Only me**: Exclusive to the user.
-- **Team**: Share this memory with the team members.
+- **仅我**：仅限用户本人。
+- **团队**：与团队成员共享此记忆。
 
 
-## Manage memory
+## 管理记忆
 
-Within an individual Memory page, you can fine-tune how saved entries are used during Agent calls. Each entry can be selectively enabled or disabled, allowing you to control which pieces of information remain active without permanently removing anything.
+在单个记忆页面内，您可以微调保存的条目在智能体调用期间的使用方式。可以选择性地启用或禁用每个条目，允许您控制哪些信息保持活动状态而无需永久删除任何内容。
 
-When certain details are no longer relevant, you can also choose to forget specific memory entries entirely. This keeps the Memory clean, focused, and easier to maintain over time, ensuring that Agents rely only on up‑to‑date and useful information.
+当某些细节不再相关时，您还可以选择完全忘记特定的记忆条目。这使记忆保持清洁、专注，并易于随着时间的推移维护，确保智能体仅依赖于最新和有用的信息。
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/memory_interface.PNG)
 
-Manually forgotten memory entries are completely excluded from the results returned by Agent calls, ensuring they no longer influence downstream behavior. This helps keep responses focused on the most relevant and intentionally retained information.
+手动遗忘的记忆条目完全从智能体调用返回的结果中排除，确保它们不再影响下游行为。这有助于保持响应专注于最相关和有意保留的信息。
 
-When the Memory reaches its storage limit and the automatic forgetting policy is applied, entries that were previously forgotten manually are also prioritized for removal. This allows the system to reclaim capacity more intelligently while respecting earlier user curation decisions.
+当记忆达到其存储限制并应用自动遗忘策略时，之前手动遗忘的条目也将优先被删除。这允许系统更智能地回收容量，同时尊重用户早期的策划决策。
 
-## Enhance Agent context 
+## 增强 Agent 上下文
 
-Under [Retrieval](../agent/agent_component_reference/retrieval.mdx) and [Message](../agent/agent_component_reference/message.mdx) component settings, a new Memory invocation capability is available. In the Message component, users can configure the Agent to write selected data into a designated Memory, while the Retrieval component can be set to read from that same Memory to answer future queries.  This enables a simple Q&A bot Agent to accumulate context over time and respond with richer, memory-aware answers.
+在[检索](../agent/agent_component_reference/retrieval.mdx)和[消息](../agent/agent_component_reference/message.mdx)组件设置下，提供了一种新的记忆调用功能。在消息组件中，用户可以配置智能体将选定的数据写入指定的记忆，而检索组件可以设置为从同一记忆中读取以回答未来的查询。这使得简单的问答机器人智能体能够随着时间积累上下文，并用更丰富的、具有记忆意识的答案进行响应。
 
-### Retrieve from memory
+### 从记忆中检索
 
-For any Agent configuration that uses Memory, a **Retrieval** component is required to bring stored information back into the conversation.  By including Retrieval alongside Memory-aware components, the Agent can consistently recall and apply relevant past data whenever it is needed.
+对于任何使用记忆的智能体配置，都需要**检索**组件来将存储的信息带回对话中。通过在支持记忆的组件中包含检索，智能体可以在需要时始终召回和应用相关的过去数据。
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/retrieve_from_memory.PNG)
 
-### Save to memory
+### 保存到记忆
 
-At the same time you have finished **Retrieval** component settings, select the corresponding Memory in the **Message** component under **Save to Memory**:
+完成**检索**组件设置后，在**保存到记忆**下的**消息**组件中选择相应的记忆：
 
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/save_to_memory.png)
 
 
-## Frequently asked questions
+## 常见问题
 
-### Can I share my memory?
+### 我可以共享我的记忆吗？
 
-Yes, you can. Your memory can be shared between Agents. See these topics:
+可以。您的记忆可以在智能体之间共享。请参阅以下主题：
 
-- [Create memory](#create-memory)
-- [Enhance Agent context](#enhance-agent-context)
+- [创建记忆](#创建记忆)
+- [增强 Agent 上下文](#增强-agent-上下文)
 
-If you wish to share your memory with your team members, please ensure you have configured its team permissions. See [Share memory](../team/share_memory.md) for details.
-
-
-
+如果您希望与团队成员共享您的记忆，请确保您已配置其团队权限。有关详情，请参阅[共享记忆](../team/share_memory.md)。
 

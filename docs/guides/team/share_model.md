@@ -5,6 +5,6 @@ sidebar_custom_props: {
   categoryIcon: LucideShare2
 }
 ---
-# Share models
+# 共享模型
 
-Sharing models is currently exclusive to RAGFlow Enterprise.
+共享模型目前仅限于 RAGFlow 企业版。

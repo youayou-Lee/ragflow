@@ -5,49 +5,49 @@ sidebar_custom_props: {
   categoryIcon: LucidePalette
 }
 ---
-# Admin UI
+# 管理员UI
 
-The RAGFlow Admin UI is a web-based interface that provides comprehensive system status monitoring and user management capabilities.
+RAGFlow管理员UI是一个基于Web的界面，提供全面的系统状态监控和用户管理功能。
 
 
-## Accessing the Admin UI
+## 访问管理员UI
 
-To access the RAGFlow admin UI, append `/admin` to the web UI's address, e.g. `http://[RAGFLOW_WEB_UI_ADDR]/admin`, replace `[RAGFLOW_WEB_UI_ADDR]` with real RAGFlow web UI address.
+要访问RAGFlow管理员UI，请在Web UI的地址后附加`/admin`，例如`http://[RAGFLOW_WEB_UI_ADDR]/admin`，将`[RAGFLOW_WEB_UI_ADDR]`替换为真实的RAGFlow Web UI地址。
 
-### Default Credentials
-| Username           | Password |
+### 默认凭据
+| 用户名           | 密码 |
 |--------------------|----------|
 | `admin@ragflow.io` | `admin`  |
 
-## Admin UI Overview
+## 管理员UI概述
 
-### Service status
+### 服务状态
 
-The service status page displays of all services within the RAGFlow system.
+服务状态页面显示RAGFlow系统内所有服务的状态。
 
-- **Service List**: View all services in a table.
-- **Filtering**: Use the filter button to filter services by **Service Type**.
-- **Search**: Use the search bar to quickly find services by **Name** or **Service Type**.
-- **Actions** (hover over a row to see action buttons):
-  - **Extra Info**: Display additional configuration information of a service in a dialog.
-  - **Service Details**: Display detailed status information of a service in a dialog. According to service's type, a service's status information could be displayed as a plain text, a key-value data list, a data table or a bar chart.
-
-
-### User management
-
-The user management page provides comprehensive tools for managing all users in the RAGFlow system.
-
-- **User List**: View all users in a table.
-- **Search Users**: Use the search bar to find users by email or nickname.
-- **Filter Users**: Click the filter icon to filter by **Status**.
-- Click the **"New User"** button to create a new user account in a dialog.
-- Activate or deactivate a user by using the switch toggle in **Enable** column, changes take effect immediately.
-- **Actions** (hover over a row to see action buttons):
-  - **View Details**: Navigate to the user detail page to see comprehensive user information.
-  - **Change Password**: Force reset the user's password.
-  - **Delete User**: Remove the user from the system with confirmation.
+- **服务列表**：在表格中查看所有服务。
+- **筛选**：使用筛选按钮按**服务类型**筛选服务。
+- **搜索**：使用搜索栏按**名称**或**服务类型**快速查找服务。
+- **操作**（将鼠标悬停在一行上以查看操作按钮）：
+  - **额外信息**：在对话框中显示服务的其他配置信息。
+  - **服务详情**：在对话框中显示服务的详细状态信息。根据服务的类型，服务的状态信息可以以纯文本、键值数据列表、数据表或条形图的形式显示。
 
 
-### User detail
+### 用户管理
 
-The user detail page displays a user's detailed information and all resources created or owned by the user, categorized by type (e.g. Dataset, Agent).
+用户管理页面为管理RAGFlow系统中的所有用户提供了全面的工具。
+
+- **用户列表**：在表格中查看所有用户。
+- **搜索用户**：使用搜索栏按电子邮件或昵称查找用户。
+- **筛选用户**：单击筛选图标以按**状态**筛选。
+- 单击**"新建用户"**按钮在对话框中创建新用户帐户。
+- 通过使用**启用**列中的开关切换来激活或停用用户，更改立即生效。
+- **操作**（将鼠标悬停在一行上以查看操作按钮）：
+  - **查看详情**：导航到用户详情页面以查看全面的用户信息。
+  - **更改密码**：强制重置用户的密码。
+  - **删除用户**：通过确认从系统中删除用户。
+
+
+### 用户详情
+
+用户详情页面显示用户的详细信息和用户创建或拥有的所有资源，按类型（例如数据集、智能体）分类。

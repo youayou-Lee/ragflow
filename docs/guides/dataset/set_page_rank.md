@@ -5,37 +5,37 @@ sidebar_custom_props: {
   categoryIcon: LucideStickyNote
 }
 ---
-# Set page rank
+# 设置页面排名
 
-Create a step-retrieval strategy using page rank.
+使用页面排名创建分步检索策略。
 
 ---
 
-## Scenario
+## 应用场景
 
-In an AI-powered chat, you can configure a chat assistant or an agent to respond using knowledge retrieved from multiple specified datasets (datasets), provided that they employ the same embedding model. In situations where you prefer information from certain dataset(s) to take precedence or to be retrieved first, you can use RAGFlow's page rank feature to increase the ranking of chunks from these datasets. For example, if you have configured a chat assistant to draw from two datasets, dataset A for 2024 news and dataset B for 2023 news, but wish to prioritize news from year 2024, this feature is particularly useful.
+在 AI 驱动的聊天中，您可以配置聊天助手或智能体使用从多个指定数据集检索的知识进行响应，前提是它们采用相同的嵌入模型。在您希望某些数据集的信息优先或首先检索的情况下，您可以使用 RAGFlow 的页面排名功能来提高这些数据集中分块的排名。例如，如果您配置了一个聊天助手从两个数据集中提取信息，数据集 A 用于 2024 年新闻，数据集 B 用于 2023 年新闻，但希望优先考虑 2024 年的新闻，此功能特别有用。
 
-:::info NOTE
-It is important to note that this 'page rank' feature operates at the level of the entire dataset rather than on individual files or documents.
+:::info 注意
+请注意，此"页面排名"功能在整个数据集级别运行，而不是在单个文件或文档上。
 :::
 
-## Configuration
+## 配置
 
-On the **Configuration** page of your dataset, drag the slider under **Page rank** to set the page rank value for your dataset. You are also allowed to input the intended page rank value in the field next to the slider.
+在数据集的 **配置** 页面上，拖动 **Page rank** 下的滑块以设置数据集的页面排名值。您也可以在滑块旁边的字段中输入所需的页面排名值。
 
-:::info NOTE
-The page rank value must be an integer. Range: [0,100]
+:::info 注意
+页面排名值必须是整数。范围：[0,100]
 
-- 0: Disabled (Default)
-- A specific value: enabled
+- 0：禁用（默认）
+- 特定值：启用
 :::
 
-:::tip NOTE
-If you set the page rank value to a non-integer, say 1.7, it will be rounded down to the nearest integer, which in this case is 1.
+:::tip 注意
+如果您将页面排名值设置为非整数，例如 1.7，它将向下舍入到最接近的整数，在这种情况下为 1。
 :::
 
-## Scoring mechanism
+## 评分机制
 
-If you configure a chat assistant's **similarity threshold** to 0.2, only chunks with a hybrid score greater than 0.2 x 100 = 20 will be retrieved and sent to the chat model for content generation. This initial filtering step is crucial for narrowing down relevant information.
+如果您将聊天助手的 **similarity threshold** 配置为 0.2，则仅检索混合评分大于 0.2 x 100 = 20 的分块并将其发送到聊天模型进行内容生成。此初始过滤步骤对于缩小相关信息的范围至关重要。
 
-If you have assigned a page rank of 1 to dataset A (2024 news) and 0 to dataset B (2023 news), the final hybrid scores of the retrieved chunks will be adjusted accordingly. A chunk retrieved from dataset A with an initial score of 50 will receive a boost of 1 x 100 = 100 points, resulting in a final score of 50 + 1 x 100 = 150. In this way, chunks retrieved from dataset A will always precede chunks from dataset B.
+如果您为数据集 A（2024 年新闻）分配了页面排名 1，为数据集 B（2023 年新闻）分配了页面排名 0，则检索到的分块的最终混合评分将相应调整。从数据集 A 检索到的初始评分为 50 的分块将获得 1 x 100 = 100 分的提升，最终评分为 50 + 1 x 100 = 150。这样，从数据集 A 检索到的分块将始终位于数据集 B 的分块之前。

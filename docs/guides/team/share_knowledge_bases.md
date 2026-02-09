@@ -5,16 +5,16 @@ sidebar_custom_props: {
   categoryIcon: LucideShare2
 }
 ---
-# Share dataset
+# 共享数据集
 
-Share a dataset with team members.
+与团队成员共享数据集。
 
 ---
 
-When ready, you may share your datasets with your team members so that they can upload and parse files in them. Please note that your datasets are not shared automatically; you must manually enable sharing by selecting the appropriate **Permissions** radio button:
+准备就绪后，您可以与团队成员共享您的数据集，以便他们可以在其中上传和解析文件。请注意，您的数据集不会自动共享；您必须通过选择适当的**权限**单选按钮来手动启用共享：
 
-1. Navigate to the dataset's **Configuration** page.
-2. Change **Permissions** from **Only me** to **Team**.
-3. Click **Save** to apply your changes.
+1. 导航到数据集的**配置**页面。
+2. 将**权限**从**仅我**更改为**团队**。
+3. 点击**保存**以应用您的更改。
 
-*Once completed, your team members will see your shared datasets.*
+*完成后，您的团队成员将看到您共享的数据集。*

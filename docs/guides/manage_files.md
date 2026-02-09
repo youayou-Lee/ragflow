@@ -5,88 +5,88 @@ sidebar_custom_props: {
   categoryIcon: LucideFolderDot
 }
 ---
-# Files
+# 文件管理
 
-RAGFlow's file management allows you to upload files individually or in bulk. You can then link an uploaded file to multiple target datasets. This guide showcases some basic usages of the file management feature.
+RAGFlow 的文件管理允许您单独或批量上传文件。然后您可以将上传的文件链接到多个目标数据集。本指南展示了文件管理功能的一些基本用法。
 
-:::info IMPORTANT
-Compared to uploading files directly to various datasets, uploading them to RAGFlow's file management and then linking them to different datasets is *not* an unnecessary step, particularly when you want to delete some parsed files or an entire dataset but retain the original files.
+:::info 重要
+与直接将文件上传到各个数据集相比，先将文件上传到 RAGFlow 的文件管理，然后将其链接到不同的数据集*不是*不必要的步骤，特别是当您想要删除一些已解析的文件或整个数据集但保留原始文件时。
 :::
 
-## Create folder
+## 创建文件夹
 
-RAGFlow's file management allows you to establish your file system with nested folder structures. To create a folder in the root directory of RAGFlow: 
+RAGFlow 的文件管理允许您使用嵌套文件夹结构建立文件系统。要在 RAGFlow 的根目录中创建文件夹：
 
 ![create new folder](https://github.com/infiniflow/ragflow/assets/93570324/3a37a5f4-43a6-426d-a62a-e5cd2ff7a533)
 
-:::caution NOTE
-Each dataset in RAGFlow has a corresponding folder under the **root/.knowledgebase** directory. You are not allowed to create a subfolder within it.
+:::caution 注意
+RAGFlow 中的每个数据集在 **root/.knowledgebase** 目录下都有一个对应的文件夹。您不允许在其中创建子文件夹。
 :::
 
-## Upload file
+## 上传文件
 
-RAGFlow's file management supports file uploads from your local machine, allowing both individual and bulk uploads: 
+RAGFlow 的文件管理支持从本地计算机上传文件，允许单独上传和批量上传：
 
 ![upload file](https://github.com/infiniflow/ragflow/assets/93570324/5d7ded14-ce2b-4703-8567-9356a978f45c)
 
 ![bulk upload](https://github.com/infiniflow/ragflow/assets/93570324/def0db55-824c-4236-b809-a98d8c8674e3)
 
-## Preview file
+## 预览文件
 
-RAGFlow's file management supports previewing files in the following formats:
+RAGFlow 的文件管理支持预览以下格式的文件：
 
-- Documents (PDF, DOCS)
-- Tables (XLSX)
-- Pictures (JPEG, JPG, PNG, TIF, GIF)
+- 文档（PDF、DOCS）
+- 表格（XLSX）
+- 图片（JPEG、JPG、PNG、TIF、GIF）
 
 ![preview](https://github.com/infiniflow/ragflow/assets/93570324/2e931362-8bbf-482c-ac86-b68b09d331bc)
 
-## Link file to datasets
+## 将文件链接到数据集
 
-RAGFlow's file management allows you to *link* an uploaded file to multiple datasets, creating a file reference in each target dataset. Therefore, deleting a file in your file management will AUTOMATICALLY REMOVE all related file references across the datasets.
+RAGFlow 的文件管理允许您将上传的文件*链接*到多个数据集，在每个目标数据集中创建文件引用。因此，删除文件管理中的文件将自动删除跨数据集的所有相关文件引用。
 
 ![link knowledgebase](https://github.com/infiniflow/ragflow/assets/93570324/6c6b8db4-3269-4e35-9434-6089887e3e3f)
 
-You can link your file to one dataset or multiple datasets at one time: 
+您可以将文件一次链接到一个数据集或多个数据集：
 
 ![link multiple kb](https://github.com/infiniflow/ragflow/assets/93570324/6c508803-fb1f-435d-b688-683066fd7fff)
 
-## Move file to a specific folder
+## 将文件移动到特定文件夹
 
 ![move files](https://github.com/user-attachments/assets/3a2db469-6811-4ea0-be80-403b61ffe257)
 
-## Search files or folders
+## 搜索文件或文件夹
 
-**File Management** only supports file name and folder name filtering in the current directory (files or folders in the child directory will not be retrieved).
+**文件管理**仅支持当前目录中的文件名和文件夹名过滤（不会检索子目录中的文件或文件夹）。
 
 ![search file](https://github.com/infiniflow/ragflow/assets/93570324/77ffc2e5-bd80-4ed1-841f-068e664efffe)
 
-## Rename file or folder
+## 重命名文件或文件夹
 
-RAGFlow's file management allows you to rename a file or folder:
+RAGFlow 的文件管理允许您重命名文件或文件夹：
 
 ![rename_file](https://github.com/infiniflow/ragflow/assets/93570324/5abb0704-d9e9-4b43-9ed4-5750ccee011f)
 
 
-## Delete files or folders
+## 删除文件或文件夹
 
-RAGFlow's file management allows you to delete files or folders individually or in bulk. 
+RAGFlow 的文件管理允许您单独或批量删除文件或文件夹。
 
-To delete a file or folder: 
+要删除文件或文件夹：
 
 ![delete file](https://github.com/infiniflow/ragflow/assets/93570324/85872728-125d-45e9-a0ee-21e9d4cedb8b)
 
-To bulk delete files or folders:
+要批量删除文件或文件夹：
 
 ![bulk delete](https://github.com/infiniflow/ragflow/assets/93570324/519b99ab-ec7f-4c8a-8cea-e0b6dcb3cb46)
 
-> - You are not allowed to delete the **root/.knowledgebase** folder. 
-> - Deleting files that have been linked to datasets will **AUTOMATICALLY REMOVE** all associated file references across the datasets.
+> - 您不允许删除 **root/.knowledgebase** 文件夹。
+> - 删除已链接到数据集的文件将**自动删除**跨数据集的所有关联文件引用。
 
-## Download uploaded file
+## 下载上传的文件
 
-RAGFlow's file management allows you to download an uploaded file:
+RAGFlow 的文件管理允许您下载上传的文件：
 
 ![download_file](https://github.com/infiniflow/ragflow/assets/93570324/cf3b297f-7d9b-4522-bf5f-4f45743e4ed5)
 
-> As of RAGFlow v0.23.1, bulk download is not supported, nor can you download an entire folder. 
+> 从 RAGFlow v0.23.1 开始，不支持批量下载，也不能下载整个文件夹。

@@ -5,49 +5,48 @@ sidebar_custom_props: {
   categoryIcon: SiGoogledrive
 }
 ---
-# Add Google Drive
+# 添加 Google Drive
 
-## 1. Create a Google Cloud Project
+## 1. 创建 Google Cloud 项目
 
-You can either create a dedicated project for RAGFlow or use an existing
-Google Cloud external project.
+您可以为 RAGFlow 创建一个专用项目，也可以使用现有的 Google Cloud 外部项目。
 
-**Steps:** 
-1. Open the project creation page\
-`https://console.cloud.google.com/projectcreate` 
+**步骤：**
+1. 打开项目创建页面\
+`https://console.cloud.google.com/projectcreate`
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image1.jpeg?raw=true)
-2. Select **External** as the Audience
+2. 选择 **External** 作为受众
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image2.png?raw=true)
-3. Click **Create**
+3. 点击 **Create**
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image3.jpeg?raw=true)
 
 ------------------------------------------------------------------------
 
-## 2. Configure OAuth Consent Screen
+## 2. 配置 OAuth 同意屏幕
 
-1.  Go to **APIs & Services → OAuth consent screen**
-2.  Ensure **User Type = External**
+1.  前往 **APIs & Services → OAuth consent screen**
+2.  确保 **User Type = External**
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image4.jpeg?raw=true)
-3.  Add your test users under **Test Users** by entering email addresses
+3.  通过输入电子邮件地址在 **Test Users** 下添加测试用户
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image5.jpeg?raw=true)
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image6.jpeg?raw=true)
 
 ------------------------------------------------------------------------
 
-## 3. Create OAuth Client Credentials
+## 3. 创建 OAuth 客户端凭据
 
-1.  Navigate to:\
+1.  导航至：\
     `https://console.cloud.google.com/auth/clients`
-2.  Create a **Web Application**
+2.  创建一个 **Web Application**
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image7.png?raw=true)
-3.  Enter a name for the client
-4.  Add the following **Authorized Redirect URIs**:
+3.  输入客户端名称
+4.  添加以下 **Authorized Redirect URIs**：
 
 ```
 http://localhost:9380/v1/connector/google-drive/oauth/web/callback
 ```
 
-- If using Docker deployment:
+- 如果使用 Docker 部署：
 
 **Authorized JavaScript origin:**
 ```
@@ -56,7 +55,8 @@ http://localhost:80
 
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image8.png?raw=true)
 
-- If running from source:
+- 如果从源代码运行：
+
 **Authorized JavaScript origin:**
 ```
 http://localhost:9222
@@ -64,17 +64,17 @@ http://localhost:9222
 
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image9.png?raw=true)
 
-5.  After saving, click **Download JSON**. This file will later be uploaded into RAGFlow.
+5.  保存后，点击 **Download JSON**。此文件稍后将上传到 RAGFlow。
 
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image10.png?raw=true)
 
 ------------------------------------------------------------------------
 
-## 4. Add Scopes
+## 4. 添加作用域
 
-1.  Open **Data Access → Add or remove scopes**
+1.  打开 **Data Access → Add or remove scopes**
 
-2.  Paste and add the following entries:
+2.  粘贴并添加以下条目：
 
 ```
 https://www.googleapis.com/auth/drive.readonly
@@ -84,25 +84,25 @@ https://www.googleapis.com/auth/admin.directory.user.readonly
 ```
 
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image11.jpeg?raw=true)
-3.  Update and Save changes
+3.  更新并保存更改
 
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image12.jpeg?raw=true)
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image13.jpeg?raw=true)
 
 ------------------------------------------------------------------------
 
-## 5. Enable Required APIs
-Navigate to the Google API Library:\
+## 5. 启用所需的 API
+导航到 Google API 库：\
 `https://console.cloud.google.com/apis/library`
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image14.png?raw=true)
 
-Enable the following APIs:
+启用以下 API：
 
-- Google Drive API 
-- Admin SDK API 
-- Google Sheets API 
+- Google Drive API
+- Admin SDK API
+- Google Sheets API
 - Google Docs API
-  
+
 
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image15.png?raw=true)
 
@@ -118,23 +118,23 @@ Enable the following APIs:
 
 ------------------------------------------------------------------------
 
-## 6. Add Google Drive As a Data Source in RAGFlow
+## 6. 在 RAGFlow 中添加 Google Drive 作为数据源
 
-1.  Go to **Data Sources** inside RAGFlow
-2.  Select **Google Drive**
-3.  Upload the previously downloaded JSON credentials
+1.  进入 RAGFlow 内的 **Data Sources**
+2.  选择 **Google Drive**
+3.  上传之前下载的 JSON 凭据
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image22.jpeg?raw=true)
-4.  Enter the shared Google Drive folder link (https://drive.google.com/drive), such as:
+4.  输入共享的 Google Drive 文件夹链接（https://drive.google.com/drive），例如：
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image23.png?raw=true)
 
-5.  Click **Authorize with Google**
-A browser window will appear. 
+5.  点击 **Authorize with Google**
+将出现一个浏览器窗口。
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image25.jpeg?raw=true)
-Click: - **Continue** - **Select All → Continue** - Authorization should
-succeed - Select **OK** to add the data source
+点击：- **Continue** - **Select All → Continue** - 授权应该成功 - 选择 **OK** 添加数据源
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image26.jpeg?raw=true)
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image27.jpeg?raw=true)
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image28.png?raw=true)
 ![placeholder-image](https://github.com/infiniflow/ragflow-docs/blob/040e4acd4c1eac6dc73dc44e934a6518de78d097/images/google_drive/image29.png?raw=true)
+
 
 

@@ -5,101 +5,101 @@ sidebar_custom_props: {
   categoryIcon: LucideTags
 }
 ---
-# Use tag set
+# 使用标签集
 
-Use a tag set to auto-tag chunks in your datasets.
+使用标签集为数据集中的数据块自动打标签。
 
 ---
 
-Retrieval accuracy is the touchstone for a production-ready RAG framework. In addition to retrieval-enhancing approaches like auto-keyword, auto-question, and knowledge graph, RAGFlow introduces an auto-tagging feature to address semantic gaps. The auto-tagging feature automatically maps tags in the user-defined tag sets to relevant chunks within your dataset based on similarity with each chunk. This automation mechanism allows you to apply an additional "layer" of domain-specific knowledge to existing datasets, which is particularly useful when dealing with a large number of chunks.
+检索准确性是生产就绪的 RAG 框架的试金石。除了自动关键词、自动问题和知识图谱等检索增强方法外，RAGFlow 还引入了自动标签功能来解决语义鸿沟问题。自动标签功能基于用户定义的标签集，根据与每个数据块的相似度，自动将标签集中的标签映射到数据集中的相关数据块。这种自动化机制允许您为现有数据集应用额外的"层"的领域特定知识，这在处理大量数据块时特别有用。
 
-To use this feature, ensure you have at least one properly configured tag set, specify the tag set(s) on the **Configuration** page of your dataset, and then re-parse your documents to initiate the auto-tagging process. During this process, each chunk in your dataset is compared with every entry in the specified tag set(s), and tags are automatically applied based on similarity.
+要使用此功能，请确保您至少有一个正确配置的标签集，在数据集的**配置**页面上指定标签集，然后重新解析文档以启动自动标签过程。在此过程中，数据集中的每个数据块将与指定标签集中的每个条目进行比较，并根据相似度自动应用标签。
 
-## Scenarios
+## 应用场景
 
-Auto-tagging applies in situations where chunks are so similar to each other that the intended chunks cannot be distinguished from the rest. For example, when you have a few chunks about iPhone and a majority about iPhone case or iPhone accessaries, it becomes difficult to retrieve those chunks about iPhone without additional information.
+自动标签适用于数据块彼此非常相似，无法将目标数据块与其他数据块区分开的情况。例如，当您有一些关于 iPhone 的数据块，而大多数数据块是关于 iPhone 手机壳或 iPhone 配件时，如果没有额外信息，就很难检索到关于 iPhone 的数据块。
 
-## 1. Create tag set
+## 1. 创建标签集
 
-You can consider a tag set as a closed set, and the tags to attach to the chunks in your dataset are *exclusively* from the specified tag set. You use a tag set to "inform" RAGFlow which chunks to tag and which tags to apply.
+您可以将标签集视为一个封闭集，附加到数据集中数据块的标签*仅*来自指定的标签集。您使用标签集来"通知" RAGFlow 要标记哪些数据块以及应用哪些标签。
 
-### Prepare a tag table file
+### 准备标签表文件
 
-A tag set can comprise one or multiple table files in XLSX, CSV, or TXT formats. Each table file in the tag set contains two columns, **Description** and **Tag**:
+标签集可以包含一个或多个 XLSX、CSV 或 TXT 格式的表格文件。标签集中的每个表格文件包含两列，**描述**和**标签**：
 
-- The first column provides descriptions of the tags listed in the second column. These descriptions can be example chunks or example queries. Similarity will be calculated between each entry in this column and every chunk in your dataset.
-- The **Tag** column includes tags to pair with the description entries. Multiple tags should be separated by a comma (,).
+- 第一列提供第二列中列出的标签的描述。这些描述可以是示例数据块或示例查询。将计算此列中的每个条目与数据集中每个数据块之间的相似度。
+- **标签**列包含与描述条目配对的标签。多个标签应使用逗号（,）分隔。
 
-:::tip NOTE
-As a rule of thumb, consider including the following entries in your tag table:
+:::tip 注意
+作为经验法则，请考虑在标签表中包含以下条目：
 
-- Descriptions of intended chunks, along with their corresponding tags.
-- User queries that fail to retrieve the correct responses using other methods, ensuring their tags match the intended chunks in your dataset.
+- 目标数据块的描述及其对应的标签。
+- 使用其他方法无法检索到正确响应的用户查询，确保其标签与数据集中的目标数据块匹配。
 :::
 
-### Create a tag set
+### 创建标签集
 
-:::danger IMPORTANT
-A tag set is *not* involved in document indexing or retrieval. Do not specify a tag set when configuring your chat assistant or agent.
+:::danger 重要
+标签集*不*参与文档索引或检索。在配置聊天助手或智能体时，请勿指定标签集。
 :::
 
-1. Click **+ Create dataset** to create a dataset.
-2. Navigate to the **Configuration** page of the created dataset, select **Built-in** in **Ingestion pipeline**, then choose **Tag** as the default chunking method from the **Built-in** drop-down menu.
-3. Go back to the **Files** page and upload and parse your table file in XLSX, CSV, or TXT formats.  
-   _A tag cloud appears under the **Tag view** section, indicating the tag set is created:_  
+1. 点击 **+ 创建数据集** 创建数据集。
+2. 导航到已创建数据集的**配置**页面，在**摄入流水线**中选择**内置**，然后从**内置**下拉菜单中选择**标签**作为默认分块方法。
+3. 返回**文件**页面，上传并解析 XLSX、CSV 或 TXT 格式的表格文件。
+   _**标签视图**部分下会出现一个标签云，表示标签集已创建：_
    ![Image](https://github.com/user-attachments/assets/abefbcbf-c130-4abe-95e1-267b0d2a0505)
-4. Click the **Table** tab to view the tag frequency table:  
+4. 点击**表格**选项卡查看标签频率表：
    ![Image](https://github.com/user-attachments/assets/af91d10c-5ea5-491f-ab21-3803d5ebf59f)
 
-## 2. Tag chunks
+## 2. 为数据块打标签
 
-Once a tag set is created, you can apply it to your dataset:
+创建标签集后，您可以将其应用于数据集：
 
-1. Navigate to the **Configuration** page of your dataset.
-2. Select the tag set from the **Tag sets** dropdown and click **Save** to confirm.
+1. 导航到数据集的**配置**页面。
+2. 从**标签集**下拉列表中选择标签集，然后点击**保存**确认。
 
-   :::tip NOTE
-   If the tag set is missing from the dropdown, check that it has been created or configured correctly.
+   :::tip 注意
+   如果标签集在下拉列表中缺失，请检查其是否已正确创建或配置。
    :::
 
-3. Re-parse your documents to start the auto-tagging process.  
-   _In an AI chat scenario using auto-tagged datasets, each query will be tagged using the corresponding tag set(s) and chunks with these tags will have a higher chance to be retrieved._
+3. 重新解析文档以启动自动标签过程。
+   _在使用自动标签数据集的 AI 聊天场景中，每个查询将使用相应的标签集进行标记，带有这些标签的数据块将有更高的机会被检索。_
 
-## 3. Update tag set
+## 3. 更新标签集
 
-Creating a tag set is *not* for once and for all. Oftentimes, you may find it necessary to update or delete existing tags or add new entries. 
+创建标签集*不是*一劳永逸的。通常，您可能会发现有必要更新或删除现有标签或添加新条目。
 
-- You can update the existing tag set in the tag frequency table.
-- To add new entries, you can add and parse new table files in XLSX, CSV, or TXT formats.
+- 您可以在标签频率表中更新现有标签集。
+- 要添加新条目，您可以添加并解析 XLSX、CSV 或 TXT 格式的新表格文件。
 
-### Update tag set in tag frequency table
+### 在标签频率表中更新标签集
 
-1. Navigate to the **Configuration** page in your tag set.
-2. Click the **Table** tab under **Tag view** to view the tag frequency table, where you can update tag names or delete tags.
+1. 导航到标签集的**配置**页面。
+2. 点击**标签视图**下的**表格**选项卡查看标签频率表，您可以在其中更新标签名称或删除标签。
 
-:::danger IMPORTANT
-When a tag set is updated, you must re-parse the documents in your dataset so that their tags can be updated accordingly.
+:::danger 重要
+当标签集更新时，您必须重新解析数据集中的文档，以便相应地更新其标签。
 :::
 
-### Add new table files
+### 添加新表格文件
 
-1. Navigate to the **Configuration** page in your tag set.
-2. Navigate to the **Dataset** page and upload and parse your table file in XLSX, CSV, or TXT formats.
+1. 导航到标签集的**配置**页面。
+2. 导航到**数据集**页面，上传并解析 XLSX、CSV 或 TXT 格式的表格文件。
 
-:::danger IMPORTANT
-If you add new table files to your tag set, it is at your own discretion whether to re-parse your documents in your datasets.
+:::danger 重要
+如果向标签集添加新表格文件，是否重新解析数据集中的文档由您自行决定。
 :::
 
-## Frequently asked questions
+## 常见问题
 
-### Can I reference more than one tag set?
+### 我可以引用多个标签集吗？
 
-Yes, you can. Usually one tag set suffices. When using multiple tag sets, ensure they are independent of each other; otherwise, consider merging your tag sets.
+可以。通常一个标签集就足够了。使用多个标签集时，请确保它们彼此独立；否则，请考虑合并您的标签集。
 
-### Difference between a tag set and a standard dataset?
+### 标签集和标准数据集有什么区别？
 
-A standard dataset is a dataset. It will be searched by RAGFlow's document engine and the retrieved chunks will be fed to the LLM. In contrast, a tag set is used solely to attach tags to chunks within your dataset. It does not directly participate in the retrieval process, and you should not choose a tag set when selecting datasets for your chat assistant or agent.
+标准数据集就是数据集。它将被 RAGFlow 的文档引擎搜索，检索到的数据块将提供给 LLM。相比之下，标签集仅用于将标签附加到数据集中的数据块。它不直接参与检索过程，在为聊天助手或智能体选择数据集时不应选择标签集。
 
-### Difference between auto-tag and auto-keyword?
+### 自动标签和自动关键词有什么区别？
 
-Both features enhance retrieval in RAGFlow. The auto-keyword feature relies on the LLM and consumes a significant number of tokens, whereas the auto-tag feature is based on vector similarity and predefined tag set(s). You can view the keywords applied in the auto-keyword feature as an open set, as they are generated by the LLM. In contrast, a tag set can be considered a user-defined close set, requiring upload tag set(s) in specified formats before use.
+这两个功能都增强了 RAGFlow 的检索。自动关键词功能依赖于 LLM 并消耗大量令牌，而自动标签功能基于向量相似度和预定义的标签集。您可以将自动关键词功能中应用的关键词视为一个开放集，因为它们是由 LLM 生成的。相比之下，标签集可以被视为用户定义的封闭集，在使用前需要上传指定格式的标签集。

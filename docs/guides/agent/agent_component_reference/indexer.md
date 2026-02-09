@@ -5,27 +5,27 @@ sidebar_custom_props: {
   categoryIcon: LucideListPlus
 }
 ---
-# Indexer component
+# 索引器组件
 
-A component that defines how chunks are indexed.
+一个定义如何索引块的组件。
 
 ---
 
-An **Indexer** component indexes chunks and configures their storage formats in the document engine.
+**索引器**组件索引块并配置它们在文档引擎中的存储格式。
 
-## Scenario
+## 场景
 
-An **Indexer** component is the mandatory ending component for all ingestion pipelines.
+**索引器**组件是所有摄入流水线的强制性结束组件。
 
-## Configurations
+## 配置
 
-### Search method
+### 搜索方法
 
-This setting configures how chunks are stored in the document engine: as full-text, embeddings, or both.
+此设置配置块在文档引擎中的存储方式:全文、嵌入或两者皆有。
 
-### Filename embedding weight
+### 文件名嵌入权重
 
-This setting defines the filename's contribution to the final embedding, which is a weighted combination of both the chunk content and the filename. Essentially, a higher value gives the filename more influence in the final *composite* embedding.
+此设置定义文件名对最终嵌入的贡献,它是块内容和文件名的加权组合。本质上,较高的值使文件名在最终*复合*嵌入中具有更大的影响力。
 
-- 0.1: Filename contributes 10% (chunk content 90%)
-- 0.5 (maximum): Filename contributes 50% (chunk content 90%)
+- 0.1: 文件名贡献 10%(块内容 90%)
+- 0.5(最大值): 文件名贡献 50%(块内容 90%)

@@ -5,6 +5,6 @@ sidebar_custom_props: {
   categoryIcon: LucideShare2
 }
 ---
-# Share chat assistant
+# 共享聊天助手
 
-Sharing chat assistant is currently exclusive to RAGFlow Enterprise, but will be made available in due course.
+共享聊天助手目前仅限于 RAGFlow 企业版，但将在适当的时候提供。

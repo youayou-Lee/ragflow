@@ -5,70 +5,70 @@ sidebar_custom_props: {
   categoryIcon: LucideVariable
 }
 ---
-# Set variables
+# 设置变量
 
-Set variables to be used together with the system prompt for your LLM.
+设置要与 LLM 的系统提示一起使用的变量。
 
 ---
 
-When configuring the system prompt for a chat model, variables play an important role in enhancing flexibility and reusability. With variables, you can dynamically adjust the system prompt to be sent to your model. In the context of RAGFlow, if you have defined variables in **Chat setting**, except for the system's reserved variable `{knowledge}`, you are required to pass in values for them from RAGFlow's [HTTP API](../../references/http_api_reference.md#converse-with-chat-assistant) or through its [Python SDK](../../references/python_api_reference.md#converse-with-chat-assistant).
+为聊天模型配置系统提示时,变量在增强灵活性和可重用性方面起着重要作用。使用变量,您可以动态调整要发送给模型的系统提示。在 RAGFlow 的上下文中,如果您在 **聊天设置** 中定义了变量,除了系统保留变量 `{knowledge}` 之外,您需要从 RAGFlow 的 [HTTP API](../../references/http_api_reference.md#converse-with-chat-assistant) 或通过其 [Python SDK](../../references/python_api_reference.md#converse-with-chat-assistant) 传递它们的值。
 
-:::danger IMPORTANT
-In RAGFlow, variables are closely linked with the system prompt. When you add a variable in the **Variable** section, include it in the system prompt. Conversely, when deleting a variable, ensure it is removed from the system prompt; otherwise, an error would occur.
+:::danger 重要
+在 RAGFlow 中,变量与系统提示密切相关。当您在 **变量** 部分添加变量时,请将其包含在系统提示中。反之,删除变量时,请确保将其从系统提示中删除;否则,将发生错误。
 :::
 
-## Where to set variables
+## 在哪里设置变量
 
 ![](https://raw.githubusercontent.com/infiniflow/ragflow-docs/main/images/chat_variables.jpg)
 
-## 1. Manage variables
+## 1. 管理变量
 
-In the **Variable** section, you add, remove, or update variables.
+在 **变量** 部分中,您可以添加、删除或更新变量。
 
-### `{knowledge}` - a reserved variable
+### `{knowledge}` - 保留变量
 
-`{knowledge}` is the system's reserved variable, representing the chunks retrieved from the dataset(s) specified by **Knowledge bases** under the **Assistant settings** tab. If your chat assistant is associated with certain datasets, you can keep it as is.
+`{knowledge}` 是系统的保留变量,表示从 **助手设置** 选项卡下的 **知识库** 指定的数据集中检索的块。如果您的聊天助手与某些数据集相关联,您可以保持原样。
 
-:::info NOTE
-It currently makes no difference whether  `{knowledge}` is set as optional or mandatory, but please note this design will be updated in due course.
+:::info 注意
+目前,`{knowledge}` 是设置为可选还是强制没有区别,但请注意这种设计将在适当的时候更新。
 :::
 
-From v0.17.0 onward, you can start an AI chat without specifying datasets. In this case, we recommend removing the `{knowledge}` variable to prevent unnecessary reference and keeping the **Empty response** field empty to avoid errors.
+从 v0.17.0 开始,您可以启动不指定数据集的 AI 聊天。在这种情况下,我们建议删除 `{knowledge}` 变量以避免不必要的引用,并保持 **空响应** 字段为空以避免错误。
 
-### Custom variables
+### 自定义变量
 
-Besides `{knowledge}`, you can also define your own variables to pair with the system prompt. To use these custom variables, you must pass in their values through RAGFlow's official APIs. The **Optional** toggle determines whether these variables are required in the corresponding APIs:
+除了 `{knowledge}` 之外,您还可以定义自己的变量以与系统提示配对。要使用这些自定义变量,必须通过 RAGFlow 的官方 API 传递它们的值。**可选** 切换确定这些变量在相应 API 中是否是必需的:
 
-- **Disabled** (Default): The variable is mandatory and must be provided.
-- **Enabled**: The variable is optional and can be omitted if not needed.
+- **禁用**(默认):变量是强制性的,必须提供。
+- **启用**:变量是可选的,如果不需要可以省略。
 
-## 2. Update system prompt
+## 2. 更新系统提示
 
-After you add or remove variables in the **Variable** section, ensure your changes are reflected in the system prompt to avoid inconsistencies or errors. Here's an example:
+在 **变量** 部分中添加或删除变量后,请确保您的更改反映在系统提示中以避免不一致或错误。以下是一个示例:
 
 ```
-You are an intelligent assistant. Please answer the question by summarizing chunks from the specified dataset(s)...
+您是一个智能助手。请通过总结指定数据集的块来回答问题...
 
-Your answers should follow a professional and {style} style.
+您的答案应遵循专业和 {style} 的风格。
 
 ...
 
-Here is the knowledge base:
+这是知识库:
 {knowledge}
-The above is the knowledge base.
+以上是知识库。
 ```
 
-:::tip NOTE
-If you have removed `{knowledge}`, ensure that you thoroughly review and update the entire system prompt to achieve optimal results.
+:::tip 注意
+如果您删除了 `{knowledge}`,请确保彻底审查并更新整个系统提示以获得最佳结果。
 :::
 
-## APIs
+## API
 
-The *only* way to pass in values for the custom variables defined in the **Chat Configuration** dialogue is to call RAGFlow's [HTTP API](../../references/http_api_reference.md#converse-with-chat-assistant) or through its [Python SDK](../../references/python_api_reference.md#converse-with-chat-assistant).
+传递在 **聊天配置** 对话框中定义的自定义变量值的*唯一*方法是调用 RAGFlow 的 [HTTP API](../../references/http_api_reference.md#converse-with-chat-assistant) 或通过其 [Python SDK](../../references/python_api_reference.md#converse-with-chat-assistant)。
 
 ### HTTP API
 
-See [Converse with chat assistant](../../references/http_api_reference.md#converse-with-chat-assistant). Here's an example:
+请参阅 [与聊天助手对话](../../references/http_api_reference.md#converse-with-chat-assistant)。以下是一个示例:
 
 ```json {9}
 curl --request POST \
@@ -85,7 +85,7 @@ curl --request POST \
 
 ### Python API
 
-See [Converse with chat assistant](../../references/python_api_reference.md#converse-with-chat-assistant). Here's an example:
+请参阅 [与聊天助手对话](../../references/python_api_reference.md#converse-with-chat-assistant)。以下是一个示例:
 
 ```python {18}
 from ragflow_sdk import RAGFlow
@@ -93,17 +93,17 @@ from ragflow_sdk import RAGFlow
 rag_object = RAGFlow(api_key="<YOUR_API_KEY>", base_url="http://<YOUR_BASE_URL>:9380")
 assistant = rag_object.list_chats(name="Miss R")
 assistant = assistant[0]
-session = assistant.create_session()    
+session = assistant.create_session()
 
 print("\n==================== Miss R =====================\n")
-print("Hello. What can I do for you?")
+print("您好。有什么我可以帮助您的吗?")
 
 while True:
-    question = input("\n==================== User =====================\n> ")
-    style = input("Please enter your preferred style (e.g., formal, informal, hilarious): ")
-    
+    question = input("\n==================== 用户 =====================\n> ")
+    style = input("请输入您喜欢的风格(例如:正式、非正式、幽默): ")
+
     print("\n==================== Miss R =====================\n")
-    
+
     cont = ""
     for ans in session.ask(question, stream=True, style=style):
         print(ans.content[len(cont):], end='', flush=True)
