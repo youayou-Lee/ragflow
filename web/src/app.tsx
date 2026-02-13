@@ -65,19 +65,20 @@ const AntLanguageMap = {
 //     logOnDifferentValues: true,
 //   });
 // }
-if (process.env.NODE_ENV === 'development') {
-  import('@welldone-software/why-did-you-render').then(
-    (whyDidYouRenderModule) => {
-      const whyDidYouRender = whyDidYouRenderModule.default;
-      whyDidYouRender(React, {
-        trackAllPureComponents: true,
-        trackExtraHooks: [],
-        logOnDifferentValues: true,
-        exclude: [/^RouterProvider$/],
-      });
-    },
-  );
-}
+// Disabled due to compatibility issues with React 18+ / react-router
+// if (process.env.NODE_ENV === 'development') {
+//   import('@welldone-software/why-did-you-render').then(
+//     (whyDidYouRenderModule) => {
+//       const whyDidYouRender = whyDidYouRenderModule.default;
+//       whyDidYouRender(React, {
+//         trackAllPureComponents: true,
+//         trackExtraHooks: [],
+//         logOnDifferentValues: true,
+//         exclude: [/^RouterProvider$/],
+//       });
+//     },
+//   );
+// }
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
