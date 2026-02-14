@@ -36,7 +36,7 @@ from timeit import default_timer as timer
 from typing import Optional
 
 from deepdoc.parser import PdfParser
-from rag.nlp import rag_tokenizer, add_positions
+from rag.nlp import rag_tokenizer, add_positions, tokenize
 from strenum import StrEnum
 
 
@@ -64,7 +64,7 @@ class Pdf(PdfParser):
         Parse PDF and extract blocks.
 
         Returns:
-            list: List of blocks with text and position info
+            list: List of blocks with text and position info (same format as naive parser)
         """
         start = timer()
         callback(msg="OCR started")
@@ -86,200 +86,155 @@ class Pdf(PdfParser):
 
         logging.debug("layouts: {}".format(timer() - start))
 
-        # Return blocks with their text and position info
+        # Return blocks in the same format as naive parser: (text_with_tag, ...)
+        # Format: "@@page\tx0\tx1\ttop\tbottom##text_content"
         blocks = []
         for box in self.boxes:
             line_tag = self._line_tag(box, zoomin)
-            blocks.append({"text": box["text"], "tag": line_tag, "x0": box.get("x0", 0), "top": box.get("top", 0)})
+            # Combine tag and text like other parsers do
+            text_with_tag = f"{line_tag}{box['text']}"
+            blocks.append(text_with_tag)
 
         return blocks
 
-    def get_positions_from_tag(self, tag: str):
-        """Extract position info from tag string."""
-        if not tag or not tag.startswith("@@"):
-            return []
-        try:
-            # Format: @@page\tleft\tright\ttop\tbottom##
-            parts = tag.rstrip("#").lstrip("@").split("\t")
-            if len(parts) >= 5:
-                return [(int(parts[0]), float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4]))]
-        except (ValueError, IndexError):
-            pass
-        return []
 
-
-def extract_header(blocks: list) -> tuple[str, list]:
+def extract_header_chunks(blocks: list, doc: dict, pdf_parser: Pdf, eng: bool = False) -> tuple[list, list]:
     """
     Extract header section from the beginning of blocks.
 
     Header is defined as all content before the first "问：" pattern.
 
     Args:
-        blocks: List of text blocks
+        blocks: List of text blocks with position tags
+        doc: Base document dict
+        pdf_parser: PDF parser instance for extracting positions
+        eng: Whether the text is English
 
     Returns:
-        tuple: (header_content, remaining_blocks)
+        tuple: (header_chunks, remaining_blocks)
     """
     header_parts = []
-    header_positions = []
 
     for i, block in enumerate(blocks):
-        text = block.get("text", "").strip()
-        if QUESTION_PATTERN.match(text):
-            # Found first question, return header and remaining blocks
-            return "\n".join(header_parts), blocks[i:], header_positions
+        # Remove tag to get pure text for pattern matching
+        pure_text = pdf_parser.remove_tag(block).strip()
 
-        header_parts.append(text)
-        if "tag" in block:
-            header_positions.append(block["tag"])
+        if QUESTION_PATTERN.match(pure_text):
+            # Found first question, return header and remaining blocks
+            if header_parts:
+                # Build header chunk using standard method
+                header_text = "\n".join(header_parts)
+                d = deepcopy(doc)
+                d["chunk_type"] = InterrogationChunkType.HEADER.value
+                d["image"], poss = pdf_parser.crop(header_text, need_position=True)
+                add_positions(d, poss)
+                tokenize(d, pdf_parser.remove_tag(header_text), eng)
+                return [d], blocks[i:]
+
+            return [], blocks[i:]
+
+        header_parts.append(block)
 
     # No question found, all content is header
-    return "\n".join(header_parts), [], header_positions
+    if header_parts:
+        header_text = "\n".join(header_parts)
+        d = deepcopy(doc)
+        d["chunk_type"] = InterrogationChunkType.HEADER.value
+        d["image"], poss = pdf_parser.crop(header_text, need_position=True)
+        add_positions(d, poss)
+        tokenize(d, pdf_parser.remove_tag(header_text), eng)
+        return [d], []
+
+    return [], []
 
 
-def split_qa_pairs(blocks: list) -> list[tuple[str, str, list]]:
+def split_qa_chunks(blocks: list, doc: dict, pdf_parser: Pdf, eng: bool = False) -> list:
     """
-    Split blocks into QA pairs.
+    Split blocks into QA pair chunks.
 
     Rules:
     1. Each "问：" starts a new QA pair
     2. Collect all content until next "问：" as the answer
-    3. Preserve position information for frontend highlighting
+    3. Use standard crop/remove_tag methods for position handling
 
     Args:
-        blocks: List of text blocks (should start with first question)
+        blocks: List of text blocks with position tags (should start with first question)
+        doc: Base document dict
+        pdf_parser: PDF parser instance for extracting positions
+        eng: Whether the text is English
 
     Returns:
-        list: List of (question, answer, positions) tuples
+        list: List of chunk dictionaries
     """
-    qa_pairs = []
-    current_q = None
+    res = []
+    current_q_parts = []
     current_a_parts = []
-    current_positions = []
+    qa_index = 0
 
     for block in blocks:
-        text = block.get("text", "").strip()
-        tag = block.get("tag", "")
+        pure_text = pdf_parser.remove_tag(block).strip()
 
-        if QUESTION_PATTERN.match(text):
+        if QUESTION_PATTERN.match(pure_text):
             # Save previous QA pair if exists
-            if current_q:
-                qa_pairs.append((current_q, "\n".join(current_a_parts), current_positions))
+            if current_q_parts or current_a_parts:
+                chunk = _build_qa_chunk(doc, pdf_parser, current_q_parts, current_a_parts, qa_index, eng)
+                if chunk:
+                    res.append(chunk)
+                    qa_index += 1
 
             # Start new QA pair
-            current_q = text
+            current_q_parts = [block]
             current_a_parts = []
-            current_positions = [tag] if tag else []
 
-        elif current_q:
+        elif current_q_parts:
             # This is part of the answer
-            if ANSWER_PATTERN.match(text):
-                # Remove "答：" prefix and add to answer
-                current_a_parts.append(text)
-            else:
-                current_a_parts.append(text)
-            if tag:
-                current_positions.append(tag)
+            current_a_parts.append(block)
 
     # Save last QA pair
-    if current_q:
-        qa_pairs.append((current_q, "\n".join(current_a_parts), current_positions))
+    if current_q_parts or current_a_parts:
+        chunk = _build_qa_chunk(doc, pdf_parser, current_q_parts, current_a_parts, qa_index, eng)
+        if chunk:
+            res.append(chunk)
 
-    return qa_pairs
+    return res
 
 
-def build_header_chunk(doc: dict, header_content: str, positions: list) -> dict:
+def _build_qa_chunk(doc: dict, pdf_parser: Pdf, q_parts: list, a_parts: list, qa_index: int, eng: bool) -> dict:
     """
-    Build a header chunk.
+    Build a QA pair chunk using standard position handling.
 
     Args:
         doc: Base document dict
-        header_content: Header text content
-        positions: Position tags
+        pdf_parser: PDF parser instance
+        q_parts: Question text blocks with tags
+        a_parts: Answer text blocks with tags
+        qa_index: Index of this QA pair
+        eng: Whether the text is English
 
     Returns:
         dict: Chunk dictionary
     """
     d = deepcopy(doc)
-    d["chunk_type"] = InterrogationChunkType.HEADER.value
-    d["content_with_weight"] = header_content
-    d["content_ltks"] = rag_tokenizer.tokenize(header_content)
-    d["content_sm_ltks"] = rag_tokenizer.fine_grained_tokenize(d["content_ltks"])
-
-    # Add position info
-    poss = _parse_position_tags(positions)
-    if poss:
-        add_positions(d, poss)
-
-    return d
-
-
-def _parse_position_tags(tags: list) -> list:
-    """
-    Parse position tags from @@...## format to position tuples.
-
-    The tag format is: @@{page}\t{x0}\t{x1}\t{top}\t{bottom}##
-    Where page is 1-based, and add_positions expects 0-based page numbers.
-
-    Returns:
-        list: List of (page_0based, left, right, top, bottom) tuples
-    """
-    poss = []
-    for tag in tags:
-        if tag and tag.startswith("@@"):
-            try:
-                # Remove @@ prefix and ## suffix
-                parts = tag.rstrip("#").lstrip("@").split("\t")
-                if len(parts) >= 5:
-                    # Convert 1-based page number to 0-based
-                    page_1based = parts[0]
-                    # Handle multi-page spans like "1-2"
-                    page_nums = [int(p) - 1 for p in page_1based.split("-")]
-                    # Use first page for position
-                    page_0based = page_nums[0] if page_nums else 0
-                    poss.append((page_0based, float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4])))
-            except (ValueError, IndexError):
-                pass
-    return poss
-
-
-def build_qa_chunk(doc: dict, question: str, answer: str, positions: list, qa_index: int, parent_id: Optional[str] = None, sub_index: Optional[int] = None) -> dict:
-    """
-    Build a QA pair chunk.
-
-    Args:
-        doc: Base document dict
-        question: Question text
-        answer: Answer text
-        positions: Position tags
-        qa_index: Index of this QA pair (0-based)
-        parent_id: Parent QA ID if this is a sub-chunk
-        sub_index: Sub-index if this is a sub-chunk
-
-    Returns:
-        dict: Chunk dictionary
-    """
-    d = deepcopy(doc)
-
-    if parent_id is not None:
-        d["chunk_type"] = InterrogationChunkType.QA_SUB.value
-        d["parent_qa_id"] = parent_id
-        d["sub_index"] = sub_index
-    else:
-        d["chunk_type"] = InterrogationChunkType.QA_PAIR.value
-
+    d["chunk_type"] = InterrogationChunkType.QA_PAIR.value
     d["qa_index"] = qa_index
 
-    # Combine question and answer
-    content = f"{question}\t{answer}"
-    d["content_with_weight"] = content
-    d["content_ltks"] = rag_tokenizer.tokenize(question + " " + answer)
-    d["content_sm_ltks"] = rag_tokenizer.fine_grained_tokenize(d["content_ltks"])
+    # Combine question and answer with tags for position extraction
+    all_parts = q_parts + a_parts
+    combined_text = "\n".join(all_parts)
 
-    # Add position info
-    poss = _parse_position_tags(positions)
-    if poss:
-        add_positions(d, poss)
+    # Extract pure text for content
+    q_text = pdf_parser.remove_tag("\n".join(q_parts))
+    a_text = pdf_parser.remove_tag("\n".join(a_parts))
+
+    # Format: question\tanswer (same as QA parser)
+    d["content_with_weight"] = f"{q_text}\t{a_text}"
+
+    # Use standard position extraction
+    d["image"], poss = pdf_parser.crop(combined_text, need_position=True)
+    add_positions(d, poss)
+
+    # Tokenize
+    tokenize(d, f"{q_text} {a_text}", eng)
 
     return d
 
@@ -304,7 +259,7 @@ def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", ca
     Returns:
         list: List of chunk dictionaries
     """
-    _ = lang.lower() == "english"  # Reserved for future i18n support
+    eng = lang.lower() == "english"
     res = []
 
     doc = {"docnm_kwd": filename, "title_tks": rag_tokenizer.tokenize(re.sub(r"\.[a-zA-Z]+$", "", filename))}
@@ -321,28 +276,15 @@ def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", ca
     callback(0.5, f"Extracted {len(blocks)} text blocks.")
 
     # Step 1: Extract header
-    header_content, remaining_blocks, header_positions = extract_header(blocks)
-
-    if header_content:
-        header_chunk = build_header_chunk(doc, header_content, header_positions)
-        res.append(header_chunk)
-        callback(0.6, "Header section extracted.")
+    header_chunks, remaining_blocks = extract_header_chunks(blocks, doc, pdf_parser, eng)
+    res.extend(header_chunks)
+    callback(0.6, "Header section extracted.")
 
     # Step 2: Split QA pairs
     if remaining_blocks:
-        qa_pairs = split_qa_pairs(remaining_blocks)
-        callback(0.8, f"Extracted {len(qa_pairs)} QA pairs.")
-
-        for idx, (question, answer, positions) in enumerate(qa_pairs):
-            # Check if answer is too long
-            if len(answer) > MAX_QA_LENGTH:
-                # For now, just create the chunk without splitting
-                # LLM-based splitting can be added later via interrogation_extractor
-                chunk_item = build_qa_chunk(doc, question, answer, positions, idx)
-                res.append(chunk_item)
-            else:
-                chunk_item = build_qa_chunk(doc, question, answer, positions, idx)
-                res.append(chunk_item)
+        qa_chunks = split_qa_chunks(remaining_blocks, doc, pdf_parser, eng)
+        res.extend(qa_chunks)
+        callback(0.8, f"Extracted {len(qa_chunks)} QA pairs.")
 
     callback(1.0, f"Completed. Total chunks: {len(res)}")
 
