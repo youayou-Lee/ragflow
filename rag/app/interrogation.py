@@ -207,19 +207,40 @@ def build_header_chunk(doc: dict, header_content: str, positions: list) -> dict:
     d["content_sm_ltks"] = rag_tokenizer.fine_grained_tokenize(d["content_ltks"])
 
     # Add position info
-    poss = []
-    for tag in positions:
-        if tag and tag.startswith("@@"):
-            try:
-                parts = tag.rstrip("#").lstrip("@").split("\t")
-                if len(parts) >= 5:
-                    poss.append((int(parts[0]), float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4])))
-            except (ValueError, IndexError):
-                pass
+    poss = _parse_position_tags(positions)
     if poss:
         add_positions(d, poss)
 
     return d
+
+
+def _parse_position_tags(tags: list) -> list:
+    """
+    Parse position tags from @@...## format to position tuples.
+
+    The tag format is: @@{page}\t{x0}\t{x1}\t{top}\t{bottom}##
+    Where page is 1-based, and add_positions expects 0-based page numbers.
+
+    Returns:
+        list: List of (page_0based, left, right, top, bottom) tuples
+    """
+    poss = []
+    for tag in tags:
+        if tag and tag.startswith("@@"):
+            try:
+                # Remove @@ prefix and ## suffix
+                parts = tag.rstrip("#").lstrip("@").split("\t")
+                if len(parts) >= 5:
+                    # Convert 1-based page number to 0-based
+                    page_1based = parts[0]
+                    # Handle multi-page spans like "1-2"
+                    page_nums = [int(p) - 1 for p in page_1based.split("-")]
+                    # Use first page for position
+                    page_0based = page_nums[0] if page_nums else 0
+                    poss.append((page_0based, float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4])))
+            except (ValueError, IndexError):
+                pass
+    return poss
 
 
 def build_qa_chunk(doc: dict, question: str, answer: str, positions: list, qa_index: int, parent_id: Optional[str] = None, sub_index: Optional[int] = None) -> dict:
@@ -256,15 +277,7 @@ def build_qa_chunk(doc: dict, question: str, answer: str, positions: list, qa_in
     d["content_sm_ltks"] = rag_tokenizer.fine_grained_tokenize(d["content_ltks"])
 
     # Add position info
-    poss = []
-    for tag in positions:
-        if tag and tag.startswith("@@"):
-            try:
-                parts = tag.rstrip("#").lstrip("@").split("\t")
-                if len(parts) >= 5:
-                    poss.append((int(parts[0]), float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4])))
-            except (ValueError, IndexError):
-                pass
+    poss = _parse_position_tags(positions)
     if poss:
         add_positions(d, poss)
 
