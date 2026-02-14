@@ -106,6 +106,7 @@ class ParserType(StrEnum):
     EMAIL = "email"
     KG = "knowledge_graph"
     TAG = "tag"
+    INTERROGATION = "interrogation"
 
 
 class FileSource(StrEnum):

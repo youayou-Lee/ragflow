@@ -622,6 +622,17 @@ Example: A 1 KB message with 1024-dim embedding uses ~9 KB. The 5 MB default lim
 <p>In a Tag column, <b>comma</b> is used to separate tags.</p>
 <i>Lines of texts that fail to follow the above rules will be ignored.</i>
 `,
+      interrogation: `<p>Only <b>PDF</b> file is supported.</p><p>
+      This parser is designed for Chinese interrogation/transcript documents (讯问笔录/询问笔录).
+      </p><p>
+      It automatically identifies:
+      <ul>
+        <li><b>Header section</b> - Basic info (time, location, interrogators, suspect info)</li>
+        <li><b>QA Pairs</b> - Question and answer pairs from the transcript</li>
+      </ul>
+      </p><p>
+      The parser protects QA boundaries during chunking and preserves position information for frontend highlighting.
+      </p>`,
       useRaptor: 'RAPTOR',
       useRaptorTip:
         'RAPTOR can be used for multi-hop question-answering tasks. Navigate to the Files page, click Generate > RAPTOR to enable it. See https://ragflow.io/docs/dev/enable_raptor for details.',
