@@ -127,6 +127,7 @@ const DEFAULT_PARSERS = [
   { value: 'audio', label: 'Audio' },
   { value: 'email', label: 'Email' },
   { value: 'tag', label: 'Tag' },
+  { value: 'interrogation', label: 'Interrogation' },
 ];
 
 export const useSelectParserList = (): Array<{
