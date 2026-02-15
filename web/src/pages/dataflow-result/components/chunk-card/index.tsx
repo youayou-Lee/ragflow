@@ -1,5 +1,6 @@
 import Image from '@/components/image';
 import { useTheme } from '@/components/theme-provider';
+import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -8,7 +9,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
-import { IChunk } from '@/interfaces/database/knowledge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { IChunk, IChunkMetadata } from '@/interfaces/database/knowledge';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
@@ -26,6 +32,93 @@ interface IProps {
   clickChunkCard: (chunkId: string) => void;
   textMode: ChunkTextMode;
 }
+
+// Component to display metadata for interrogation chunks
+const MetadataDisplay = ({ metadata, chunkType }: { metadata?: IChunkMetadata; chunkType?: string }) => {
+  if (!metadata || Object.keys(metadata).length === 0) return null;
+
+  const renderHeaderMetadata = () => {
+    const items: { label: string; value?: string | string[] }[] = [
+      { label: '时间', value: metadata.interrogation_time },
+      { label: '地点', value: metadata.location },
+      { label: '被讯问人', value: metadata.suspect_name },
+      { label: '性别', value: metadata.suspect_gender },
+      { label: '案件类型', value: metadata.case_type },
+    ];
+
+    const validItems = items.filter(item => item.value);
+    if (validItems.length === 0) return null;
+
+    return (
+      <div className="flex flex-wrap gap-2 mt-2">
+        {validItems.map((item, idx) => (
+          <Badge key={idx} variant="outline" className="text-xs">
+            <span className="text-muted-foreground mr-1">{item.label}:</span>
+            <span>{Array.isArray(item.value) ? item.value.join(', ') : item.value}</span>
+          </Badge>
+        ))}
+      </div>
+    );
+  };
+
+  const renderQAMetadata = () => {
+    const tags = metadata.tags || [];
+    const entities = metadata.entities || {};
+    const topic = metadata.topic;
+    const keyFacts = metadata.key_facts || [];
+
+    const allEntities: string[] = [
+      ...(entities.persons || []),
+      ...(entities.orgs || []),
+      ...(entities.locations || []),
+    ].filter(Boolean);
+
+    if (tags.length === 0 && allEntities.length === 0 && !topic) return null;
+
+    return (
+      <div className="flex flex-wrap gap-2 mt-2">
+        {topic && (
+          <Badge variant="secondary" className="text-xs">
+            {topic}
+          </Badge>
+        )}
+        {tags.map((tag, idx) => (
+          <Badge key={`tag-${idx}`} variant="outline" className="text-xs">
+            {tag}
+          </Badge>
+        ))}
+        {allEntities.slice(0, 5).map((entity, idx) => (
+          <Badge key={`entity-${idx}`} variant="destructive" className="text-xs">
+            {entity}
+          </Badge>
+        ))}
+        {allEntities.length > 5 && (
+          <Badge variant="outline" className="text-xs">
+            +{allEntities.length - 5} 更多
+          </Badge>
+        )}
+        {keyFacts.length > 0 && (
+          <Tooltip>
+            <TooltipTrigger>
+              <Badge variant="default" className="text-xs cursor-help">
+                {keyFacts.length} 个关键事实
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="max-w-xs">
+              <ul className="list-disc list-inside text-sm">
+                {keyFacts.map((fact, idx) => (
+                  <li key={idx}>{fact}</li>
+                ))}
+              </ul>
+            </TooltipContent>
+          </Tooltip>
+        )}
+      </div>
+    );
+  };
+
+  return chunkType === 'header' ? renderHeaderMetadata() : renderQAMetadata();
+};
 
 const ChunkCard = ({
   item,
@@ -120,6 +213,9 @@ const ChunkCard = ({
           />
         </div>
       </div>
+
+      {/* Display metadata for interrogation chunks */}
+      <MetadataDisplay metadata={item.metadata} chunkType={item.chunk_type} />
     </Card>
   );
 };

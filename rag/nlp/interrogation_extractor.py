@@ -24,7 +24,7 @@ interrogation record chunks using LLM.
 import json
 import logging
 import re
-from typing import Optional
+from typing import Optional, Tuple
 
 # Prompts for metadata extraction
 HEADER_EXTRACTION_PROMPT = """你是法律文档分析助手。从以下讯问笔录头部信息中提取结构化数据：
@@ -281,6 +281,130 @@ def enhance_chunk_with_metadata(chunk: dict, llm_client) -> dict:
         # Also try to infer event order
         qa_index = chunk.get("qa_index", 0)
         order_info = infer_event_order(llm_client, question, answer, qa_index)
+        if order_info:
+            if metadata:
+                metadata["order_info"] = order_info
+            else:
+                metadata = {"order_info": order_info}
+
+    if metadata:
+        chunk["metadata"] = metadata
+
+    return chunk
+
+
+async def async_extract_header_metadata(chat_mdl, header_content: str) -> Optional[dict]:
+    """
+    Async version: Extract metadata from header section using LLM.
+
+    Args:
+        chat_mdl: LLM model instance with async_chat method
+        header_content: Header text content
+
+    Returns:
+        dict or None: Extracted metadata
+    """
+    if not header_content or not chat_mdl:
+        return None
+
+    try:
+        prompt = HEADER_EXTRACTION_PROMPT.format(header_content=header_content)
+        msg = [{"role": "user", "content": prompt}]
+        response = await chat_mdl.async_chat("", msg, {"temperature": 0.1})
+        if isinstance(response, tuple):
+            response = response[0]
+        return parse_llm_json_response(response)
+    except Exception as e:
+        logging.error(f"Error extracting header metadata: {e}")
+        return None
+
+
+async def async_extract_qa_metadata(chat_mdl, question: str, answer: str) -> Optional[dict]:
+    """
+    Async version: Extract metadata from QA pair using LLM.
+
+    Args:
+        chat_mdl: LLM model instance with async_chat method
+        question: Question text
+        answer: Answer text
+
+    Returns:
+        dict or None: Extracted metadata
+    """
+    if not chat_mdl:
+        return None
+
+    try:
+        prompt = QA_EXTRACTION_PROMPT.format(question=question, answer=answer)
+        msg = [{"role": "user", "content": prompt}]
+        response = await chat_mdl.async_chat("", msg, {"temperature": 0.1})
+        if isinstance(response, tuple):
+            response = response[0]
+        return parse_llm_json_response(response)
+    except Exception as e:
+        logging.error(f"Error extracting QA metadata: {e}")
+        return None
+
+
+async def async_infer_event_order(chat_mdl, question: str, answer: str, qa_index: int) -> Optional[dict]:
+    """
+    Async version: Infer the temporal order of events mentioned in a QA pair.
+
+    Args:
+        chat_mdl: LLM model instance with async_chat method
+        question: Question text
+        answer: Answer text
+        qa_index: Index of this QA pair in the document
+
+    Returns:
+        dict or None: Order inference result
+    """
+    if not chat_mdl:
+        return None
+
+    try:
+        prompt = ORDER_INFERENCE_PROMPT.format(question=question, answer=answer, qa_index=qa_index)
+        msg = [{"role": "user", "content": prompt}]
+        response = await chat_mdl.async_chat("", msg, {"temperature": 0.1})
+        if isinstance(response, tuple):
+            response = response[0]
+        return parse_llm_json_response(response)
+    except Exception as e:
+        logging.error(f"Error inferring event order: {e}")
+        return None
+
+
+async def async_enhance_chunk_with_metadata(chunk: dict, chat_mdl) -> dict:
+    """
+    Async version: Enhance a chunk with LLM-extracted metadata.
+
+    Args:
+        chunk: Chunk dictionary
+        chat_mdl: LLM model instance with async_chat method
+
+    Returns:
+        dict: Enhanced chunk with metadata field
+    """
+    chunk_type = chunk.get("chunk_type")
+    content = chunk.get("content_with_weight", "")
+
+    if not content or not chat_mdl:
+        return chunk
+
+    metadata = None
+
+    if chunk_type == "header":
+        metadata = await async_extract_header_metadata(chat_mdl, content)
+    elif chunk_type == "qa_pair":
+        # Parse question and answer from content
+        parts = content.split("\t", 1)
+        question = parts[0] if parts else ""
+        answer = parts[1] if len(parts) > 1 else ""
+        metadata = await async_extract_qa_metadata(chat_mdl, question, answer)
+
+        # Also try to infer event order
+        qa_index = chunk.get("qa_index", 0)
+        order_info = await async_infer_event_order(chat_mdl, question, answer, qa_index)
         if order_info:
             if metadata:
                 metadata["order_info"] = order_info

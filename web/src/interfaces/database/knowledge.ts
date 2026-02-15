@@ -134,6 +134,44 @@ export interface IChunk {
   tag_kwd?: string[];
   positions: number[][];
   tag_feas?: Record<string, number>;
+  // Interrogation parser specific fields
+  chunk_type?: string; // "header" or "qa_pair"
+  qa_index?: number; // Index of QA pair
+  metadata?: IChunkMetadata; // LLM-extracted metadata
+}
+
+export interface IChunkMetadata {
+  // Header metadata
+  interrogation_time?: string;
+  location?: string;
+  interrogators?: string[];
+  recorder?: string;
+  suspect_name?: string;
+  suspect_gender?: string;
+  suspect_birth?: string;
+  suspect_id?: string;
+  suspect_address?: string;
+  case_type?: string;
+  // QA pair metadata
+  entities?: {
+    persons?: string[];
+    orgs?: string[];
+    locations?: string[];
+    dates?: string[];
+    amounts?: number[];
+    phones?: string[];
+    id_numbers?: string[];
+  };
+  tags?: string[];
+  topic?: string;
+  key_facts?: string[];
+  order_info?: {
+    mentioned_events?: Array<{
+      event: string;
+      has_explicit_date: boolean;
+      inferred_order: string;
+    }>;
+  };
 }
 
 export interface ITestingChunk {
