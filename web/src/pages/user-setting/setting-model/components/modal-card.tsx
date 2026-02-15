@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { useSetModalState, useTranslate } from '@/hooks/common-hooks';
 import { LlmItem } from '@/hooks/use-llm-request';
 import { getRealModelName } from '@/utils/llm-util';
-import { EditOutlined, SettingOutlined } from '@ant-design/icons';
+import { EditOutlined, SettingOutlined, SwapOutlined } from '@ant-design/icons';
 import { ChevronsDown, ChevronsUp, Trash2 } from 'lucide-react';
 import { FC } from 'react';
 import { isLocalLlmFactory } from '../../utils';
@@ -20,6 +20,7 @@ interface IModelCardProps {
   item: LlmItem;
   clickApiKey: (llmFactory: string) => void;
   handleEditModel: (model: any, factory: LlmItem) => void;
+  onShowFallback?: (factory: string, tags: string[]) => void;
 }
 
 type TagType =
@@ -55,6 +56,7 @@ export const ModelProviderCard: FC<IModelCardProps> = ({
   item,
   clickApiKey,
   handleEditModel,
+  onShowFallback,
 }) => {
   const { visible, switchVisible } = useSetModalState();
   const { t } = useTranslate('setting');
@@ -96,6 +98,21 @@ export const ModelProviderCard: FC<IModelCardProps> = ({
               {isLocalLlmFactory(item.name) ? t('addTheModel') : 'API-Key'}
             </span>
           </Button>
+
+          {onShowFallback && (
+            <Button
+              variant={'ghost'}
+              onClick={(e) => {
+                e.stopPropagation();
+                const tags = (item.tags || '').split(',').map((t) => t.trim()).filter(Boolean);
+                onShowFallback(item.name, tags);
+              }}
+              className="px-3 py-1 text-sm rounded-md transition-colors flex items-center space-x-1 border border-border-default"
+            >
+              <SwapOutlined />
+              <span>{t('fallback.button')}</span>
+            </Button>
+          )}
 
           <Button
             variant={'ghost'}

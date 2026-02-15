@@ -450,3 +450,119 @@ async def list_app():
         return get_json_result(data=res)
     except Exception as e:
         return server_error_response(e)
+
+
+@manager.route("/set_fallback_config", methods=["POST"])  # noqa: F821
+@login_required
+@validate_request("llm_factory", "model_type")
+async def set_fallback_config():
+    """Set fallback configuration for a factory and model type."""
+    from api.db.services.fallback_service import (
+        FallbackConfig, FallbackModels, parse_fallback_config
+    )
+
+    req = await get_request_json()
+    factory = req["llm_factory"]
+    model_type = req["model_type"]
+    fallback_models = req.get("fallback_models", [])
+    fallback_factories = req.get("fallback_factories", [])
+
+    try:
+        # Get existing records for this factory and model type
+        existing_records = TenantLLMService.query(
+            tenant_id=current_user.id,
+            llm_factory=factory,
+            model_type=model_type,
+        )
+
+        if not existing_records:
+            return get_data_error_result(
+                message=f"No API key configured for {factory} ({model_type})"
+            )
+
+        # Update all models for this factory/model_type with new fallback config
+        for record in existing_records:
+            if not record.api_key:
+                continue
+
+            # Parse existing config
+            parsed = parse_fallback_config(record.api_key)
+
+            # Update fallback for this model type
+            new_fallback = FallbackModels(
+                models=fallback_models,
+                factories=fallback_factories,
+            )
+            parsed.set_fallback(model_type, new_fallback)
+
+            # Update the record
+            TenantLLMService.filter_update(
+                [TenantLLM.tenant_id == current_user.id,
+                 TenantLLM.llm_factory == factory,
+                 TenantLLM.llm_name == record.llm_name],
+                {"api_key": parsed.to_json_str()}
+            )
+
+        return get_json_result(data=True)
+    except Exception as e:
+        return server_error_response(e)
+
+
+@manager.route("/get_fallback_config", methods=["GET"])  # noqa: F821
+@login_required
+async def get_fallback_config():
+    """Get fallback configuration for a factory and optional model type."""
+    from api.db.services.fallback_service import parse_fallback_config
+
+    factory = request.args.get("llm_factory")
+    model_type = request.args.get("model_type")
+
+    if not factory:
+        return get_data_error_result(message="llm_factory is required")
+
+    try:
+        # Query records, optionally filtered by model_type
+        query_params = {
+            "tenant_id": current_user.id,
+            "llm_factory": factory,
+        }
+        if model_type:
+            query_params["model_type"] = model_type
+
+        records = TenantLLMService.query(**query_params)
+
+        if not records:
+            empty_result = {"fallback_models": [], "fallback_factories": []}
+            if model_type:
+                return get_json_result(data=empty_result)
+            # Return empty config for all types
+            return get_json_result(data={"fallback_by_type": {}})
+
+        # Parse fallback config from first record with api_key
+        for record in records:
+            if record.api_key:
+                parsed = parse_fallback_config(record.api_key)
+
+                if model_type:
+                    # Return fallback for specific type
+                    fb = parsed.get_fallback(model_type)
+                    return get_json_result(data={
+                        "fallback_models": fb.models,
+                        "fallback_factories": fb.factories,
+                    })
+                else:
+                    # Return fallback for all types
+                    fallback_by_type = {}
+                    for mt, fb in parsed.fallback_by_type.items():
+                        fallback_by_type[mt] = {
+                            "models": fb.models,
+                            "factories": fb.factories,
+                        }
+                    return get_json_result(data={"fallback_by_type": fallback_by_type})
+
+        empty_result = {"fallback_models": [], "fallback_factories": []}
+        if model_type:
+            return get_json_result(data=empty_result)
+        return get_json_result(data={"fallback_by_type": {}})
+    except Exception as e:
+        return server_error_response(e)

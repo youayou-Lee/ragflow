@@ -50,6 +50,35 @@ class LLMErrorCode(StrEnum):
     ERROR_GENERIC = "GENERIC_ERROR"
 
 
+# Recoverable errors that should trigger fallback
+RECOVERABLE_ERRORS = {
+    LLMErrorCode.ERROR_RATE_LIMIT,
+    LLMErrorCode.ERROR_SERVER,
+    LLMErrorCode.ERROR_TIMEOUT,
+    LLMErrorCode.ERROR_CONNECTION,
+    LLMErrorCode.ERROR_QUOTA,
+}
+
+
+def is_recoverable_error(error_code: str) -> bool:
+    """
+    Check if an error is recoverable and should trigger fallback.
+
+    Recoverable errors:
+    - Rate limit (429)
+    - Server error (5xx)
+    - Timeout
+    - Connection error
+    - Quota exceeded
+
+    Non-recoverable errors (should not trigger fallback):
+    - Authentication error (wrong API key)
+    - Content filter (prompt blocked)
+    - Model error (model not found)
+    """
+    return error_code in RECOVERABLE_ERRORS
+
+
 class ReActMode(StrEnum):
     FUNCTION_CALL = "function_call"
     REACT = "react"

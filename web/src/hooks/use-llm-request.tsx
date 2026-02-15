@@ -13,7 +13,13 @@ import {
   IAddLlmRequestBody,
   IDeleteLlmRequestBody,
 } from '@/interfaces/request/llm';
-import userService from '@/services/user-service';
+import userService, {
+  FallbackConfig,
+  AllFallbackConfig,
+  SetFallbackConfigParams,
+  setFallbackConfig,
+  getFallbackConfig,
+} from '@/services/user-service';
 import { getLLMIconName, getRealModelName } from '@/utils/llm-util';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { DefaultOptionType } from 'antd/es/select';
@@ -33,6 +39,7 @@ export const enum LLMApiAction {
   DeleteLlm = 'deleteLlm',
   EnableLlm = 'enableLlm',
   DeleteFactory = 'deleteFactory',
+  FallbackConfig = 'fallbackConfig',
 }
 
 export const useFetchLlmList = (modelType?: LlmModelType) => {
@@ -438,4 +445,53 @@ export const useDeleteFactory = () => {
   });
 
   return { data, loading, deleteFactory: mutateAsync };
+};
+
+// Fallback configuration hooks
+export const useSetFallbackConfig = () => {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
+  const {
+    data,
+    isPending: loading,
+    mutateAsync,
+  } = useMutation({
+    mutationKey: ['setFallbackConfig'],
+    mutationFn: async (params: SetFallbackConfigParams) => {
+      const { data } = await setFallbackConfig(params);
+      if (data.code === 0) {
+        queryClient.invalidateQueries({
+          queryKey: [LLMApiAction.FallbackConfig, params.llm_factory],
+        });
+        queryClient.invalidateQueries({ queryKey: [LLMApiAction.MyLlmList] });
+        queryClient.invalidateQueries({
+          queryKey: [LLMApiAction.MyLlmListDetailed],
+        });
+        message.success(t('message.modified'));
+      }
+      return data;
+    },
+  });
+
+  return { data, loading, setFallback: mutateAsync };
+};
+
+export const useGetFallbackConfig = (
+  llmFactory: string,
+): ResponseGetType<AllFallbackConfig> => {
+  const { data, isFetching: loading } = useQuery<AllFallbackConfig>({
+    queryKey: [LLMApiAction.FallbackConfig, llmFactory],
+    initialData: { fallback_by_type: {} },
+    enabled: !!llmFactory,
+    gcTime: 0,
+    queryFn: async () => {
+      const { data } = await getFallbackConfig(llmFactory);
+      return (
+        data?.data ?? { fallback_by_type: {} }
+      );
+    },
+  });
+
+  return { data, loading };
 };

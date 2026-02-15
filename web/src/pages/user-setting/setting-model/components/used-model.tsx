@@ -5,9 +5,11 @@ import { ModelProviderCard } from './modal-card';
 export const UsedModel = ({
   handleAddModel,
   handleEditModel,
+  onShowFallback,
 }: {
   handleAddModel: (factory: string) => void;
   handleEditModel: (model: any, factory: LlmItem) => void;
+  onShowFallback?: (factory: string, tags: string[]) => void;
 }) => {
   const { myLlmList: llmList } = useSelectLlmList();
   return (
@@ -22,6 +24,7 @@ export const UsedModel = ({
             item={llm}
             clickApiKey={handleAddModel}
             handleEditModel={handleEditModel}
+            onShowFallback={onShowFallback}
           />
         );
       })}

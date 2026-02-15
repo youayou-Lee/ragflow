@@ -25,6 +25,8 @@ const {
   createSystemToken,
   getSystemConfig,
   setLangfuseConfig,
+  set_fallback_config,
+  get_fallback_config,
 } = api;
 
 const methods = {
@@ -124,6 +126,14 @@ const methods = {
     url: setLangfuseConfig,
     method: 'delete',
   },
+  setFallbackConfig: {
+    url: set_fallback_config,
+    method: 'post',
+  },
+  getFallbackConfig: {
+    url: get_fallback_config,
+    method: 'get',
+  },
 } as const;
 
 const userService = registerServer<keyof typeof methods>(methods, request);
@@ -150,5 +160,37 @@ export const listTenant = () => request.get(api.listTenant);
 
 export const agreeTenant = (tenantId: string) =>
   request.put(api.agreeTenant(tenantId));
+
+// Fallback configuration interfaces and functions
+export interface FallbackConfig {
+  fallback_models: string[];
+  fallback_factories: string[];
+}
+
+export interface FallbackByType {
+  [modelType: string]: {
+    models: string[];
+    factories: string[];
+  };
+}
+
+export interface AllFallbackConfig {
+  fallback_by_type: FallbackByType;
+}
+
+export interface SetFallbackConfigParams {
+  llm_factory: string;
+  model_type: string;
+  fallback_models?: string[];
+  fallback_factories?: string[];
+}
+
+export const setFallbackConfig = (params: SetFallbackConfigParams) =>
+  request.post(api.set_fallback_config, { data: params });
+
+export const getFallbackConfig = (llm_factory: string, model_type?: string) =>
+  request.get(api.get_fallback_config, {
+    params: { llm_factory, ...(model_type && { model_type }) }
+  });
 
 export default userService;

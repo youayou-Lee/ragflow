@@ -33,6 +33,8 @@ export default {
   delete_llm: `${api_host}/llm/delete_llm`,
   enable_llm: `${api_host}/llm/enable_llm`,
   deleteFactory: `${api_host}/llm/delete_factory`,
+  set_fallback_config: `${api_host}/llm/set_fallback_config`,
+  get_fallback_config: `${api_host}/llm/get_fallback_config`,
 
   // data source
   dataSourceSet: `${api_host}/connector/set`,

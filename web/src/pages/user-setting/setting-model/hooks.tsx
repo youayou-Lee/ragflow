@@ -816,3 +816,27 @@ export const useVerifySettings = ({
     onApiKeyVerifying,
   };
 };
+
+export const useSubmitFallbackConfig = () => {
+  const {
+    visible: fallbackVisible,
+    hideModal: hideFallbackModal,
+    showModal: showFallbackModal,
+  } = useSetModalState();
+  const [selectedFactory, setSelectedFactory] = useState<string>('');
+  const [selectedFactoryTags, setSelectedFactoryTags] = useState<string[]>([]);
+
+  const onShowFallbackModal = useCallback((factory: string, tags: string[] = []) => {
+    setSelectedFactory(factory);
+    setSelectedFactoryTags(tags);
+    showFallbackModal();
+  }, [showFallbackModal]);
+
+  return {
+    fallbackVisible,
+    hideFallbackModal,
+    showFallbackModal: onShowFallbackModal,
+    selectedFactory,
+    selectedFactoryTags,
+  };
+};

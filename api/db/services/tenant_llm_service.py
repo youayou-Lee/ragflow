@@ -374,6 +374,176 @@ class TenantLLMService(CommonService):
             return llm.model_type
         return None
 
+    @classmethod
+    @DB.connection_context()
+    def get_factory_primary_model(cls, tenant_id: str, factory: str, llm_type: str) -> dict | None:
+        """
+        Get the first available model for a factory.
+        Used for cross-factory fallback.
+
+        Args:
+            tenant_id: The tenant ID
+            factory: The LLM factory name
+            llm_type: The model type (chat, embedding, etc.)
+
+        Returns:
+            Dictionary with llm_name, api_key, api_base or None if not found
+        """
+        objs = cls.query(
+            tenant_id=tenant_id,
+            llm_factory=factory,
+            model_type=llm_type,
+        )
+
+        # Filter to only return models with valid API keys
+        for obj in objs:
+            if obj.api_key:
+                return {
+                    "llm_name": obj.llm_name,
+                    "api_key": obj.api_key,
+                    "api_base": obj.api_base,
+                }
+
+        return None
+
+
+class FallbackExecutor:
+    """
+    Executes LLM calls with fallback support.
+    Priority: original model -> same factory models -> cross factory models
+    """
+
+    def __init__(
+        self,
+        tenant_id: str,
+        llm_type: str,
+        llm_name: str,
+        fallback_config,
+        lang: str = "Chinese",
+        **kwargs
+    ):
+        from api.db.services.fallback_service import FallbackConfig
+        self.tenant_id = tenant_id
+        self.llm_type = llm_type
+        self.original_llm_name = llm_name
+        self.fallback_config = fallback_config
+        self.lang = lang
+        self.kwargs = kwargs
+        self._last_error: Exception | None = None
+
+    def execute(self, messages: list, gen_conf: dict = None) -> str:
+        """
+        Execute chat with fallback logic.
+        Try order: original model -> fallback models -> cross-factory models
+        """
+        gen_conf = gen_conf or {}
+
+        # Try original model first
+        try:
+            return self._call_model(messages, gen_conf)
+        except Exception as e:
+            if not self._should_fallback(e):
+                raise
+            self._last_error = e
+            logging.warning(f"Primary model {self.original_llm_name} failed: {e}")
+
+        # Try same-factory fallback models
+        if self.fallback_config.has_fallback():
+            for model_name in self.fallback_config.fallback.models:
+                try:
+                    logging.info(f"Fallback to same-factory model: {model_name}")
+                    return self._call_model_with_name(model_name, messages, gen_conf)
+                except Exception as e:
+                    if not self._should_fallback(e):
+                        raise
+                    self._last_error = e
+                    logging.warning(f"Fallback model {model_name} failed: {e}")
+
+            # Try cross-factory fallbacks
+            for factory in self.fallback_config.fallback.factories:
+                try:
+                    logging.info(f"Fallback to cross-factory: {factory}")
+                    return self._call_model_with_factory(
+                        factory, messages, gen_conf
+                    )
+                except Exception as e:
+                    if not self._should_fallback(e):
+                        raise
+                    self._last_error = e
+                    logging.warning(f"Cross-factory {factory} failed: {e}")
+
+        # All fallbacks failed, raise last error
+        if self._last_error:
+            raise self._last_error
+        raise Exception("All fallback attempts failed")
+
+    def _should_fallback(self, error: Exception) -> bool:
+        """Check if error should trigger fallback"""
+        error_str = str(error).lower()
+
+        # Check for non-recoverable errors
+        non_recoverable_keywords = ["401", "authentication", "unauthorized", "invalid api key", "content filter"]
+        for keyword in non_recoverable_keywords:
+            if keyword in error_str:
+                return False
+
+        # Check for recoverable errors
+        recoverable_keywords = ["429", "rate limit", "timeout", "connection", "server error", "503", "502", "500", "quota"]
+        for keyword in recoverable_keywords:
+            if keyword in error_str:
+                return True
+
+        return False
+
+    def _call_model(self, messages: list, gen_conf: dict) -> str:
+        """Call the original model"""
+        mdl = TenantLLMService.model_instance(
+            self.tenant_id,
+            self.llm_type,
+            self.original_llm_name,
+            self.lang,
+            **self.kwargs
+        )
+        result = mdl.chat(None, messages, gen_conf)
+        if result.find("**ERROR**") >= 0:
+            raise Exception(result)
+        return result
+
+    def _call_model_with_name(self, model_name: str, messages: list, gen_conf: dict) -> str:
+        """Call a specific model (same factory)"""
+        mdl = TenantLLMService.model_instance(
+            self.tenant_id,
+            self.llm_type,
+            model_name,
+            self.lang,
+            **self.kwargs
+        )
+        result = mdl.chat(None, messages, gen_conf)
+        if result.find("**ERROR**") >= 0:
+            raise Exception(result)
+        return result
+
+    def _call_model_with_factory(self, factory: str, messages: list, gen_conf: dict) -> str:
+        """Call primary model from another factory"""
+        # Get the primary model for this factory
+        factory_config = TenantLLMService.get_factory_primary_model(
+            self.tenant_id, factory, self.llm_type
+        )
+        if not factory_config:
+            raise Exception(f"No configured model found for factory: {factory}")
+
+        mdl = TenantLLMService.model_instance(
+            self.tenant_id,
+            self.llm_type,
+            factory_config["llm_name"],
+            self.lang,
+            **self.kwargs
+        )
+        result = mdl.chat(None, messages, gen_conf)
+        if result.find("**ERROR**") >= 0:
+            raise Exception(result)
+        return result
+
 
 class LLM4Tenant:
     def __init__(self, tenant_id, llm_type, llm_name=None, lang="Chinese", **kwargs):

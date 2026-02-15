@@ -1333,6 +1333,21 @@ Example: Virtual Hosted Style`,
       },
       showToc: 'Show TOC',
       hideToc: 'Hide TOC',
+      fallback: {
+        title: 'Fallback Configuration',
+        button: 'Fallback',
+        models: 'Fallback Models (Same Factory)',
+        modelsPlaceholder: 'Select models to fallback to within same factory',
+        modelsDesc:
+          'When rate limited, try these models from the same factory first',
+        factories: 'Fallback Factories (Cross-Factory)',
+        factoriesPlaceholder: 'Select other factories to fallback to',
+        factoriesDesc:
+          'When all same-factory models fail, try the primary model from these factories',
+        order: 'Fallback Order',
+        savedSuccessfully: 'Fallback configuration saved successfully',
+        saveFailed: 'Failed to save fallback configuration',
+      },
     },
     message: {
       registered: 'Registered!',

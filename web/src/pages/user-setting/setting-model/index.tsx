@@ -10,6 +10,7 @@ import {
   useSubmitApiKey,
   useSubmitAzure,
   useSubmitBedrock,
+  useSubmitFallbackConfig,
   useSubmitFishAudio,
   useSubmitGoogle,
   useSubmitMinerU,
@@ -25,6 +26,7 @@ import {
 import ApiKeyModal from './modal/api-key-modal';
 import AzureOpenAIModal from './modal/azure-openai-modal';
 import BedrockModal from './modal/bedrock-modal';
+import FallbackConfigModal from './modal/fallback-config-modal';
 import FishAudioModal from './modal/fish-audio-modal';
 import GoogleModal from './modal/google-modal';
 import MinerUModal from './modal/mineru-modal';
@@ -138,6 +140,14 @@ const ModelProviders = () => {
     onPaddleOCROk,
     paddleocrLoading,
   } = useSubmitPaddleOCR();
+
+  const {
+    fallbackVisible,
+    hideFallbackModal,
+    showFallbackModal,
+    selectedFactory,
+    selectedFactoryTags,
+  } = useSubmitFallbackConfig();
 
   const ModalMap = useMemo(
     () => ({
@@ -286,6 +296,7 @@ const ModelProviders = () => {
         <UsedModel
           handleAddModel={handleAddModel}
           handleEditModel={handleEditModel}
+          onShowFallback={showFallbackModal}
         />
       </section>
       <section className="flex flex-col w-2/5 overflow-auto scrollbar-auto">
@@ -391,6 +402,12 @@ const ModelProviders = () => {
         loading={paddleocrLoading}
         onVerify={onApiKeyVerifying}
       ></PaddleOCRModal>
+      <FallbackConfigModal
+        visible={fallbackVisible}
+        hideModal={hideFallbackModal}
+        llmFactory={selectedFactory}
+        factoryTags={selectedFactoryTags}
+      ></FallbackConfigModal>
     </div>
   );
 };
