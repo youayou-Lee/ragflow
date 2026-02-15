@@ -98,11 +98,11 @@ ruff format
 ### 前端开发
 ```bash
 cd web
-npm install
-npm run dev        # 开发服务器
-npm run build      # 生产构建
-npm run lint       # ESLint
-npm run test       # Jest 测试
+bun install
+bun run dev        # 开发服务器
+bun run build      # 生产构建
+bun run lint       # ESLint
+bun run test       # Jest 测试
 ```
 
 ### Docker 开发
@@ -142,5 +142,6 @@ RAGFlow 支持在 Elasticsearch（默认）和 Infinity 之间切换：
 - Python 3.10-3.12
 - Node.js >=18.20.4
 - Docker & Docker Compose
-- uv 包管理器
+- uv 包管理器（Python）
+- bun 包管理器（前端）
 - 16GB+ 内存，50GB+ 磁盘空间
