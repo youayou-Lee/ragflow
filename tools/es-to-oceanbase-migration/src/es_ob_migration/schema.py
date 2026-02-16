@@ -59,6 +59,12 @@ RAGFLOW_COLUMNS = {
     "position_int": {"ob_type": "ARRAY(ARRAY(Integer))", "nullable": True, "is_array": True},
     "page_num_int": {"ob_type": "ARRAY(Integer)", "nullable": True, "is_array": True},
     "top_int": {"ob_type": "ARRAY(Integer)", "nullable": True, "is_array": True},
+
+    # Criminal case RAG extension fields
+    "block_refs": {"ob_type": "JSON", "nullable": True, "is_json": True},  # [{page_index, block_id}]
+    "bbox_union": {"ob_type": "ARRAY(Integer)", "nullable": True, "is_array": True},  # [x1, y1, x2, y2]
+    "page_range": {"ob_type": "ARRAY(Integer)", "nullable": True, "is_array": True},  # [start_page, end_page]
+    "chunk_type": {"ob_type": "String(32)", "nullable": True},  # qa_pair | section | paragraph | evidence_item
     
     # Knowledge graph fields
     "knowledge_graph_kwd": {"ob_type": "String(256)", "nullable": True, "index": True},
@@ -87,12 +93,13 @@ RAGFLOW_COLUMNS = {
 
 # Array column names for special handling
 ARRAY_COLUMNS = [
-    "important_kwd", "question_kwd", "tag_kwd", "source_id", 
-    "entities_kwd", "position_int", "page_num_int", "top_int"
+    "important_kwd", "question_kwd", "tag_kwd", "source_id",
+    "entities_kwd", "position_int", "page_num_int", "top_int",
+    "bbox_union", "page_range"
 ]
 
 # JSON column names
-JSON_COLUMNS = ["tag_feas", "metadata", "extra"]
+JSON_COLUMNS = ["tag_feas", "metadata", "extra", "block_refs"]
 
 # Fulltext search columns (for reference)
 FTS_COLUMNS_ORIGIN = ["docnm_kwd", "content_with_weight", "important_tks", "question_tks"]

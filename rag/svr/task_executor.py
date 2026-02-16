@@ -68,7 +68,7 @@ from api.db.services.file2document_service import File2DocumentService
 from common.versions import get_ragflow_version
 from api.db.db_models import close_connection
 from rag.app import laws, paper, presentation, manual, qa, table, book, resume, picture, naive, one, audio, email, tag, interrogation
-from rag.nlp import search, rag_tokenizer, add_positions
+from rag.nlp import search, rag_tokenizer, add_positions, add_bbox_union, add_page_range
 from rag.nlp.interrogation_extractor import async_enhance_chunk_with_metadata
 from rag.raptor import RecursiveAbstractiveProcessing4TreeOrganizedRetrieval as Raptor
 from common.token_utils import num_tokens_from_string, truncate
@@ -302,6 +302,10 @@ async def build_chunks(task, progress_callback):
             d["id"] = xxhash.xxh64((chunk["content_with_weight"] + str(d["doc_id"])).encode("utf-8", "surrogatepass")).hexdigest()
             d["create_time"] = str(datetime.now()).replace("T", " ")[:19]
             d["create_timestamp_flt"] = datetime.now().timestamp()
+
+            # Add criminal case RAG extension fields
+            add_bbox_union(d)
+            add_page_range(d)
 
             if d.get("img_id"):
                 docs.append(d)

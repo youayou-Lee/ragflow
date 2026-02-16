@@ -844,6 +844,67 @@ def add_positions(d, poss):
     d["top_int"] = top_int
 
 
+def add_bbox_union(d):
+    """
+    Calculate and add bbox_union field from position_int.
+
+    bbox_union is [x1, y1, x2, y2] encompassing all positions.
+    This is useful for highlighting the full extent of a chunk.
+    """
+    position_int = d.get("position_int", [])
+    if not position_int:
+        return
+
+    # position_int format: [(page, left, right, top, bottom), ...]
+    x1 = min(pos[1] for pos in position_int)
+    y1 = min(pos[3] for pos in position_int)  # top is y1 in PDF coords
+    x2 = max(pos[2] for pos in position_int)
+    y2 = max(pos[4] for pos in position_int)  # bottom is y2 in PDF coords
+
+    d["bbox_union"] = [int(x1), int(y1), int(x2), int(y2)]
+
+
+def add_page_range(d):
+    """
+    Calculate and add page_range field from page_num_int.
+
+    page_range is [start_page, end_page] indicating the span across pages.
+    """
+    page_num_int = d.get("page_num_int", [])
+    if not page_num_int:
+        return
+
+    d["page_range"] = [min(page_num_int), max(page_num_int)]
+
+
+def add_block_refs(d, block_ids=None):
+    """
+    Add block_refs field for tracing back to original parsed blocks.
+
+    Args:
+        d: Chunk dictionary with position_int field
+        block_ids: Optional list of block IDs. If not provided, generates
+                   sequential IDs based on position count.
+
+    block_refs format: [{page_index: int, block_id: str}, ...]
+    """
+    position_int = d.get("position_int", [])
+    if not position_int:
+        return
+
+    block_refs = []
+    for i, pos in enumerate(position_int):
+        page_index = pos[0]  # page number (1-indexed)
+        if block_ids and i < len(block_ids):
+            block_id = block_ids[i]
+        else:
+            # Generate block ID from position
+            block_id = f"p{page_index}_{i}"
+        block_refs.append({"page_index": page_index, "block_id": block_id})
+
+    d["block_refs"] = block_refs
+
+
 def remove_contents_table(sections, eng=False):
     i = 0
     while i < len(sections):
