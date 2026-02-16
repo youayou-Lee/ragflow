@@ -10,14 +10,14 @@
 
 ## 2. 起诉意见书 Chunker (PR-2)
 
-- [ ] 2.1 创建 `rag/app/indictment.py`（参考 `rag/app/interrogation.py`）
-- [ ] 2.2 定义 section 触发词列表
-- [ ] 2.3 实现 chunk() 方法：按触发词切分 section，段落切分（超过800字分割，参考 interrogation.py MAX_QA_LENGTH=2000）
-- [ ] 2.4 可选实现 evidence_item 提取
-- [ ] 2.5 计算 bbox_union 和 block_refs
-- [ ] 2.6 在 `rag/svr/task_executor.py` 中注册新 chunker
-- [ ] 2.7 编写单元测试 `test/testcases/test_indictment_chunker.py`
-- [ ] 2.8 验收：给定样本起诉书，验证 section 切分覆盖关键段落
+- [x] 2.1 创建 `rag/app/indictment.py`（参考 `rag/app/interrogation.py`）
+- [x] 2.2 定义 section 触发词列表
+- [x] 2.3 实现 chunk() 方法：按触发词切分 section，段落切分（超过800字分割，参考 interrogation.py MAX_QA_LENGTH=2000）
+- [x] 2.4 可选实现 evidence_item 提取
+- [x] 2.5 计算 bbox_union 和 block_refs
+- [x] 2.6 在 `rag/svr/task_executor.py` 中注册新 chunker
+- [x] 2.7 编写单元测试 `test/unit/test_indictment_chunker.py`
+- [x] 2.8 验收：给定样本起诉书，验证 section 切分覆盖关键段落
 
 ## 3. Answer Gate 校验器 (PR-3)
 
