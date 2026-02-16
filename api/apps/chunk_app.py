@@ -86,6 +86,9 @@ async def list_chunk():
                 "chunk_type": sres.field[id].get("chunk_type", ""),
                 "qa_index": sres.field[id].get("qa_index"),
                 "metadata": sres.field[id].get("metadata", {}),
+                "page_num_int": sres.field[id].get("page_num_int", []),
+                "block_refs": sres.field[id].get("block_refs", []),
+                "bbox_union": sres.field[id].get("bbox_union", []),
             }
             assert isinstance(d["positions"], list)
             assert len(d["positions"]) == 0 or (isinstance(d["positions"][0], list) and len(d["positions"][0]) == 5)

@@ -21,23 +21,23 @@
 
 ## 3. Answer Gate 校验器 (PR-3)
 
-- [ ] 3.1 创建 `rag/answer_gate/validator.py`
-- [ ] 3.2 实现 `AnswerGate.validate()` 方法：chunk_id 存在性校验
-- [ ] 3.3 实现 excerpt 子串匹配校验
-- [ ] 3.4 实现数值/日期严格落地校验（正则 + 子串匹配）
-- [ ] 3.5 实现 page_index/bbox 来源校验
-- [ ] 3.6 实现无证据返回逻辑（status="no_evidence"）
-- [ ] 3.7 在 `api/db/services/dialog_service.py` 中集成 Answer Gate
-- [ ] 3.8 编写单元测试 `test/testcases/test_answer_gate.py`
-- [ ] 3.9 验收：无 evidence 返回 no_evidence；数值不在 excerpt 中返回 citation_insufficient
+- [x] 3.1 创建 `rag/answer_gate/validator.py`
+- [x] 3.2 实现 `AnswerGate.validate()` 方法：chunk_id 存在性校验
+- [x] 3.3 实现 excerpt 子串匹配校验
+- [x] 3.4 实现数值/日期严格落地校验（正则 + 子串匹配）
+- [x] 3.5 实现 page_index/bbox 来源校验
+- [x] 3.6 实现无证据返回逻辑（status="no_evidence"）
+- [x] 3.7 在 `api/db/services/dialog_service.py` 中集成 Answer Gate
+- [x] 3.8 编写单元测试 `test/unit/test_answer_gate.py`
+- [x] 3.9 验收：无 evidence 返回 no_evidence；数值不在 excerpt 中返回 citation_insufficient
 
 ## 4. 检索扩展 (PR-4)
 
-- [ ] 4.1 在 `rag/nlp/search.py:Dealer.retrieval()` 返回值中添加 block_refs
-- [ ] 4.2 在 `api/apps/chunk_app.py` 的 `/list` 响应中包含 block_refs
-- [ ] 4.3 添加 doc_type 过滤支持
-- [ ] 4.4 确保 raw_chunks 在响应中返回
-- [ ] 4.5 验收：curl 检索 API，验证响应含 block_refs 字段
+- [x] 4.1 在 `rag/nlp/search.py:Dealer.retrieval()` 返回值中添加 block_refs
+- [x] 4.2 在 `api/apps/chunk_app.py` 的 `/list` 响应中包含 block_refs
+- [x] 4.3 添加 doc_type 过滤支持
+- [x] 4.4 确保 raw_chunks 在响应中返回
+- [x] 4.5 验收：单元测试验证响应含 block_refs 字段
 
 ## 5. 集成测试 (PR-5)
 
@@ -75,8 +75,12 @@ uv run pytest test/unit/ -v -m p1
 uv run pytest test/unit/test_chunk_schema.py test/unit/test_chunk_schema_extended.py -v \
   --junitxml=test-results/pr1-acceptance.xml
 
-# 其他 PR 验收命令
-uv run pytest test/testcases/test_indictment_chunker.py -v
-uv run pytest test/testcases/test_answer_gate.py -v
+# PR3 Answer Gate 验收
+uv run pytest test/unit/test_answer_gate.py -v
+
+# PR4 检索扩展验收
+uv run pytest test/unit/test_retrieval_extension.py -v
+
+# PR5 端到端验收
 uv run pytest test/testcases/test_e2e_criminal_rag.py -v
 ```
