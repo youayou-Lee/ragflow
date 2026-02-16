@@ -14,14 +14,21 @@
 #  limitations under the License.
 #
 import os
+from pathlib import Path
 
 import pytest
+from dotenv import load_dotenv
+
+# Load .env.test from project root
+_env_test_path = Path(__file__).parent.parent.parent / ".env.test"
+if _env_test_path.exists():
+    load_dotenv(_env_test_path)
 
 HOST_ADDRESS = os.getenv("HOST_ADDRESS", "http://127.0.0.1:9380")
 VERSION = "v1"
 ZHIPU_AI_API_KEY = os.getenv("ZHIPU_AI_API_KEY")
 if ZHIPU_AI_API_KEY is None:
-    pytest.exit("Error: Environment variable ZHIPU_AI_API_KEY must be set")
+    pytest.exit("Error: Environment variable ZHIPU_AI_API_KEY must be set (check .env.test)")
 
 EMAIL = "qa@infiniflow.org"
 # password is "123"

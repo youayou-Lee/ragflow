@@ -45,6 +45,10 @@ from common.token_utils import num_tokens_from_string
 from rag.utils.tavily_conn import Tavily
 from common.string_utils import remove_redundant_spaces
 from common import settings
+from rag.answer_gate import AnswerGate, ValidationStatus
+
+# Answer Gate configuration
+ANSWER_GATE_ENABLED = getattr(settings, "ANSER_GATE_ENABLED", False)
 
 
 class DialogService(CommonService):
@@ -545,6 +549,26 @@ async def async_chat(dialog, messages, stream=True, **kwargs):
             langfuse_output = {"time_elapsed:": re.sub(r"\n", "  \n", langfuse_output), "created_at": time.time()}
             langfuse_generation.update(output=langfuse_output)
             langfuse_generation.end()
+
+        # Answer Gate validation (PR-3)
+        if ANSWER_GATE_ENABLED and refs and refs.get("chunks"):
+            try:
+                gate = AnswerGate()
+                result = gate.validate(
+                    answer=answer,
+                    evidences=[{
+                        "chunk_id": c.get("chunk_id"),
+                        "excerpt": c.get("content_with_weight", "")[:500] if c.get("content_with_weight") else "",
+                        "page_index": c.get("page_num_int", [None])[0] if c.get("page_num_int") else None,
+                    } for c in refs["chunks"]],
+                    raw_chunks=refs["chunks"],
+                )
+                if result.status == ValidationStatus.NO_EVIDENCE:
+                    logging.warning("Answer Gate: no_evidence for answer")
+                elif result.status == ValidationStatus.CITATION_INSUFFICIENT:
+                    logging.warning(f"Answer Gate: citation_insufficient - {result.validation_errors}")
+            except Exception as e:
+                logging.warning(f"Answer Gate validation failed: {e}")
 
         return {"answer": think + answer, "reference": refs, "prompt": re.sub(r"\n", "  \n", prompt), "created_at": time.time()}
 
