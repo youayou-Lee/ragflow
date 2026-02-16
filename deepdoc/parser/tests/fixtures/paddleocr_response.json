@@ -1,0 +1,1696 @@
+{
+  "logId": "003dc566-cd7c-4913-b5c9-46be48dfceed",
+  "result": {
+    "layoutParsingResults": [
+      {
+        "prunedResult": {
+          "page_count": 2,
+          "width": 1196,
+          "height": 1680,
+          "model_settings": {
+            "use_doc_preprocessor": false,
+            "use_layout_detection": true,
+            "use_chart_recognition": false,
+            "use_seal_recognition": false,
+            "use_ocr_for_image_block": false,
+            "format_block_content": false,
+            "merge_layout_blocks": true,
+            "markdown_ignore_labels": [
+              "number",
+              "footnote",
+              "header",
+              "header_image",
+              "footer",
+              "footer_image",
+              "aside_text"
+            ],
+            "return_layout_polygon_points": true
+          },
+          "parsing_res_list": [
+            {
+              "block_label": "header",
+              "block_content": "PCS4418202312110000003260255708",
+              "block_bbox": [
+                786,
+                59,
+                1156,
+                84
+              ],
+              "block_id": 0,
+              "block_order": null,
+              "group_id": 0,
+              "block_polygon_points": [
+                [
+                  786.0,
+                  59.0
+                ],
+                [
+                  1156.0,
+                  59.0
+                ],
+                [
+                  1156.0,
+                  84.0
+                ],
+                [
+                  786.0,
+                  84.0
+                ]
+              ]
+            },
+            {
+              "block_label": "header",
+              "block_content": "00 011",
+              "block_bbox": [
+                1010,
+                112,
+                1129,
+                150
+              ],
+              "block_id": 1,
+              "block_order": null,
+              "group_id": 1,
+              "block_polygon_points": [
+                [
+                  1010.0,
+                  112.0
+                ],
+                [
+                  1129.0,
+                  112.0
+                ],
+                [
+                  1129.0,
+                  150.0
+                ],
+                [
+                  1010.0,
+                  150.0
+                ]
+              ]
+            },
+            {
+              "block_label": "doc_title",
+              "block_content": "清远市公安局清新分局",
+              "block_bbox": [
+                459,
+                177,
+                738,
+                211
+              ],
+              "block_id": 2,
+              "block_order": 1,
+              "group_id": 2,
+              "block_polygon_points": [
+                [
+                  459.0,
+                  177.0
+                ],
+                [
+                  738.0,
+                  177.0
+                ],
+                [
+                  738.0,
+                  211.0
+                ],
+                [
+                  459.0,
+                  211.0
+                ]
+              ]
+            },
+            {
+              "block_label": "doc_title",
+              "block_content": "起诉意见书",
+              "block_bbox": [
+                488,
+                228,
+                710,
+                276
+              ],
+              "block_id": 3,
+              "block_order": 2,
+              "group_id": 3,
+              "block_polygon_points": [
+                [
+                  488.0,
+                  228.0
+                ],
+                [
+                  710.0,
+                  228.0
+                ],
+                [
+                  710.0,
+                  276.0
+                ],
+                [
+                  488.0,
+                  276.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "清公清新诉字（2023）00541号",
+              "block_bbox": [
+                623,
+                282,
+                1042,
+                316
+              ],
+              "block_id": 4,
+              "block_order": 3,
+              "group_id": 4,
+              "block_polygon_points": [
+                [
+                  623.0,
+                  282.0
+                ],
+                [
+                  1042.0,
+                  282.0
+                ],
+                [
+                  1042.0,
+                  316.0
+                ],
+                [
+                  623.0,
+                  316.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "犯罪嫌疑人曾庆成，男，1983年06月06日出生，出生地广东省广宁县江屯镇，身份证号码441223198306062314，汉族，初中文化程度，广东省广宁县江屯镇人，户籍地广东省广宁县江屯镇水月村委会，现住址广东省清远市清新区清和大道113号401。政治面貌：群众，因涉嫌危险驾驶罪于2023年06月15日被我局取保候审。",
+              "block_bbox": [
+                151,
+                391,
+                1038,
+                588
+              ],
+              "block_id": 5,
+              "block_order": 4,
+              "group_id": 5,
+              "block_polygon_points": [
+                [
+                  151.0,
+                  391.0
+                ],
+                [
+                  1038.0,
+                  391.0
+                ],
+                [
+                  1038.0,
+                  588.0
+                ],
+                [
+                  151.0,
+                  588.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "犯罪嫌疑人曾庆成涉嫌危险驾驶一案，由我局在工作中发现，犯罪嫌疑人曾庆成于2023年06月15日被抓获，我局经过审查，于2023年06月15日立案进行侦查，犯罪嫌疑人曾庆成涉嫌危险驾驶一案，现已侦查终结。",
+              "block_bbox": [
+                151,
+                595,
+                1033,
+                713
+              ],
+              "block_id": 6,
+              "block_order": 5,
+              "group_id": 6,
+              "block_polygon_points": [
+                [
+                  151.0,
+                  595.0
+                ],
+                [
+                  1033.0,
+                  595.0
+                ],
+                [
+                  1033.0,
+                  713.0
+                ],
+                [
+                  151.0,
+                  713.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "经依法侦查查明：",
+              "block_bbox": [
+                221,
+                759,
+                433,
+                790
+              ],
+              "block_id": 7,
+              "block_order": 6,
+              "group_id": 7,
+              "block_polygon_points": [
+                [
+                  221.0,
+                  759.0
+                ],
+                [
+                  433.0,
+                  759.0
+                ],
+                [
+                  433.0,
+                  790.0
+                ],
+                [
+                  221.0,
+                  790.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "2023年06月15日00时许，曾庆成饮酒后驾驶悬挂粤RH0472号牌的普通二轮摩托车（车架尾号：HA1729）沿清远市清新区太和镇侨苑路由北往南方向行驶，行至清远市清新区太和镇府前路与侨苑路交汇处路段时，被清远市公安局清新分局交通警察大队执勤民警查获，民警对曾庆成进行酒精呼气式测试时测试结果为：191mg/100ml，民警发现曾庆成有饮酒后驾驶机动车的嫌疑后，民警随即将曾庆成带至清远市第二人民医院进行血样提取，经广东中能司法鉴定所对曾庆成血样进行乙醇定量分析，从曾庆成血液中检测出乙醇浓度为202mg/100ml，符合驾驶人员血液中酒量大于或者等于80mg/100ml的醉酒驾驶国家标准。",
+              "block_bbox": [
+                99,
+                798,
+                1038,
+                1159
+              ],
+              "block_id": 8,
+              "block_order": 7,
+              "group_id": 8,
+              "block_polygon_points": [
+                [
+                  99.0,
+                  798.0
+                ],
+                [
+                  1038.0,
+                  798.0
+                ],
+                [
+                  1038.0,
+                  1159.0
+                ],
+                [
+                  99.0,
+                  1159.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "认定上述犯罪事实的证据如下：",
+              "block_bbox": [
+                208,
+                1166,
+                582,
+                1198
+              ],
+              "block_id": 9,
+              "block_order": 8,
+              "group_id": 9,
+              "block_polygon_points": [
+                [
+                  208.0,
+                  1166.0
+                ],
+                [
+                  582.0,
+                  1166.0
+                ],
+                [
+                  582.0,
+                  1198.0
+                ],
+                [
+                  208.0,
+                  1198.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "1、犯罪嫌疑人曾庆成的供述材料；",
+              "block_bbox": [
+                208,
+                1206,
+                622,
+                1238
+              ],
+              "block_id": 10,
+              "block_order": 9,
+              "group_id": 10,
+              "block_polygon_points": [
+                [
+                  208.0,
+                  1206.0
+                ],
+                [
+                  622.0,
+                  1206.0
+                ],
+                [
+                  622.0,
+                  1238.0
+                ],
+                [
+                  208.0,
+                  1238.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "2、司法鉴定检验报告书；",
+              "block_bbox": [
+                206,
+                1247,
+                513,
+                1278
+              ],
+              "block_id": 11,
+              "block_order": 10,
+              "group_id": 11,
+              "block_polygon_points": [
+                [
+                  206.0,
+                  1247.0
+                ],
+                [
+                  513.0,
+                  1247.0
+                ],
+                [
+                  513.0,
+                  1278.0
+                ],
+                [
+                  206.0,
+                  1278.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "4、户籍证明；",
+              "block_bbox": [
+                208,
+                1329,
+                376,
+                1359
+              ],
+              "block_id": 12,
+              "block_order": 11,
+              "group_id": 12,
+              "block_polygon_points": [
+                [
+                  208.0,
+                  1329.0
+                ],
+                [
+                  376.0,
+                  1329.0
+                ],
+                [
+                  376.0,
+                  1359.0
+                ],
+                [
+                  208.0,
+                  1359.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "3、查获经过；",
+              "block_bbox": [
+                207,
+                1288,
+                376,
+                1318
+              ],
+              "block_id": 13,
+              "block_order": 12,
+              "group_id": 13,
+              "block_polygon_points": [
+                [
+                  207.0,
+                  1288.0
+                ],
+                [
+                  376.0,
+                  1288.0
+                ],
+                [
+                  376.0,
+                  1318.0
+                ],
+                [
+                  207.0,
+                  1318.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "5、其他有关材料。",
+              "block_bbox": [
+                208,
+                1370,
+                433,
+                1400
+              ],
+              "block_id": 14,
+              "block_order": 13,
+              "group_id": 14,
+              "block_polygon_points": [
+                [
+                  208.0,
+                  1370.0
+                ],
+                [
+                  433.0,
+                  1370.0
+                ],
+                [
+                  433.0,
+                  1400.0
+                ],
+                [
+                  208.0,
+                  1400.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "上述犯罪事实清楚，证据确实、充分，足以认定。",
+              "block_bbox": [
+                208,
+                1409,
+                800,
+                1443
+              ],
+              "block_id": 15,
+              "block_order": 14,
+              "group_id": 15,
+              "block_polygon_points": [
+                [
+                  208.0,
+                  1409.0
+                ],
+                [
+                  800.0,
+                  1409.0
+                ],
+                [
+                  800.0,
+                  1443.0
+                ],
+                [
+                  208.0,
+                  1443.0
+                ]
+              ]
+            },
+            {
+              "block_label": "number",
+              "block_content": "1",
+              "block_bbox": [
+                1020,
+                1580,
+                1035,
+                1603
+              ],
+              "block_id": 16,
+              "block_order": null,
+              "group_id": 16,
+              "block_polygon_points": [
+                [
+                  1020.0,
+                  1580.0
+                ],
+                [
+                  1034.0,
+                  1580.0
+                ],
+                [
+                  1034.0,
+                  1602.0
+                ],
+                [
+                  1020.0,
+                  1602.0
+                ]
+              ]
+            }
+          ],
+          "layout_det_res": {
+            "boxes": [
+              {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.8266946077346802,
+                "coordinate": [
+                  786,
+                  59,
+                  1156,
+                  84
+                ],
+                "order": null,
+                "polygon_points": [
+                  [
+                    786.0,
+                    59.0
+                  ],
+                  [
+                    1156.0,
+                    59.0
+                  ],
+                  [
+                    1156.0,
+                    84.0
+                  ],
+                  [
+                    786.0,
+                    84.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.47816166281700134,
+                "coordinate": [
+                  1010,
+                  112,
+                  1129,
+                  150
+                ],
+                "order": null,
+                "polygon_points": [
+                  [
+                    1010.0,
+                    112.0
+                  ],
+                  [
+                    1129.0,
+                    112.0
+                  ],
+                  [
+                    1129.0,
+                    150.0
+                  ],
+                  [
+                    1010.0,
+                    150.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 6,
+                "label": "doc_title",
+                "score": 0.790458619594574,
+                "coordinate": [
+                  459,
+                  177,
+                  738,
+                  211
+                ],
+                "order": 1,
+                "polygon_points": [
+                  [
+                    459.0,
+                    177.0
+                  ],
+                  [
+                    738.0,
+                    177.0
+                  ],
+                  [
+                    738.0,
+                    211.0
+                  ],
+                  [
+                    459.0,
+                    211.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 6,
+                "label": "doc_title",
+                "score": 0.829882800579071,
+                "coordinate": [
+                  488,
+                  228,
+                  710,
+                  276
+                ],
+                "order": 2,
+                "polygon_points": [
+                  [
+                    488.0,
+                    228.0
+                  ],
+                  [
+                    710.0,
+                    228.0
+                  ],
+                  [
+                    710.0,
+                    276.0
+                  ],
+                  [
+                    488.0,
+                    276.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.7163882851600647,
+                "coordinate": [
+                  623,
+                  282,
+                  1042,
+                  316
+                ],
+                "order": 3,
+                "polygon_points": [
+                  [
+                    623.0,
+                    282.0
+                  ],
+                  [
+                    1042.0,
+                    282.0
+                  ],
+                  [
+                    1042.0,
+                    316.0
+                  ],
+                  [
+                    623.0,
+                    316.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.9469096064567566,
+                "coordinate": [
+                  151,
+                  391,
+                  1038,
+                  588
+                ],
+                "order": 4,
+                "polygon_points": [
+                  [
+                    151.0,
+                    391.0
+                  ],
+                  [
+                    1038.0,
+                    391.0
+                  ],
+                  [
+                    1038.0,
+                    588.0
+                  ],
+                  [
+                    151.0,
+                    588.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.9303113222122192,
+                "coordinate": [
+                  151,
+                  595,
+                  1033,
+                  713
+                ],
+                "order": 5,
+                "polygon_points": [
+                  [
+                    151.0,
+                    595.0
+                  ],
+                  [
+                    1033.0,
+                    595.0
+                  ],
+                  [
+                    1033.0,
+                    713.0
+                  ],
+                  [
+                    151.0,
+                    713.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6766040921211243,
+                "coordinate": [
+                  221,
+                  759,
+                  433,
+                  790
+                ],
+                "order": 6,
+                "polygon_points": [
+                  [
+                    221.0,
+                    759.0
+                  ],
+                  [
+                    433.0,
+                    759.0
+                  ],
+                  [
+                    433.0,
+                    790.0
+                  ],
+                  [
+                    221.0,
+                    790.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.945766031742096,
+                "coordinate": [
+                  99,
+                  798,
+                  1038,
+                  1159
+                ],
+                "order": 7,
+                "polygon_points": [
+                  [
+                    99.0,
+                    798.0
+                  ],
+                  [
+                    1038.0,
+                    798.0
+                  ],
+                  [
+                    1038.0,
+                    1159.0
+                  ],
+                  [
+                    99.0,
+                    1159.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8395544290542603,
+                "coordinate": [
+                  208,
+                  1166,
+                  582,
+                  1198
+                ],
+                "order": 8,
+                "polygon_points": [
+                  [
+                    208.0,
+                    1166.0
+                  ],
+                  [
+                    582.0,
+                    1166.0
+                  ],
+                  [
+                    582.0,
+                    1198.0
+                  ],
+                  [
+                    208.0,
+                    1198.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8451384902000427,
+                "coordinate": [
+                  208,
+                  1206,
+                  622,
+                  1238
+                ],
+                "order": 9,
+                "polygon_points": [
+                  [
+                    208.0,
+                    1206.0
+                  ],
+                  [
+                    622.0,
+                    1206.0
+                  ],
+                  [
+                    622.0,
+                    1238.0
+                  ],
+                  [
+                    208.0,
+                    1238.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8354798555374146,
+                "coordinate": [
+                  206,
+                  1247,
+                  513,
+                  1278
+                ],
+                "order": 10,
+                "polygon_points": [
+                  [
+                    206.0,
+                    1247.0
+                  ],
+                  [
+                    513.0,
+                    1247.0
+                  ],
+                  [
+                    513.0,
+                    1278.0
+                  ],
+                  [
+                    206.0,
+                    1278.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8249532580375671,
+                "coordinate": [
+                  208,
+                  1329,
+                  376,
+                  1359
+                ],
+                "order": 11,
+                "polygon_points": [
+                  [
+                    208.0,
+                    1329.0
+                  ],
+                  [
+                    376.0,
+                    1329.0
+                  ],
+                  [
+                    376.0,
+                    1359.0
+                  ],
+                  [
+                    208.0,
+                    1359.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8181730508804321,
+                "coordinate": [
+                  207,
+                  1288,
+                  376,
+                  1318
+                ],
+                "order": 12,
+                "polygon_points": [
+                  [
+                    207.0,
+                    1288.0
+                  ],
+                  [
+                    376.0,
+                    1288.0
+                  ],
+                  [
+                    376.0,
+                    1318.0
+                  ],
+                  [
+                    207.0,
+                    1318.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8155754804611206,
+                "coordinate": [
+                  208,
+                  1370,
+                  433,
+                  1400
+                ],
+                "order": 13,
+                "polygon_points": [
+                  [
+                    208.0,
+                    1370.0
+                  ],
+                  [
+                    433.0,
+                    1370.0
+                  ],
+                  [
+                    433.0,
+                    1400.0
+                  ],
+                  [
+                    208.0,
+                    1400.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8254863619804382,
+                "coordinate": [
+                  208,
+                  1409,
+                  800,
+                  1443
+                ],
+                "order": 14,
+                "polygon_points": [
+                  [
+                    208.0,
+                    1409.0
+                  ],
+                  [
+                    800.0,
+                    1409.0
+                  ],
+                  [
+                    800.0,
+                    1443.0
+                  ],
+                  [
+                    208.0,
+                    1443.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.6322537064552307,
+                "coordinate": [
+                  1020,
+                  1580,
+                  1035,
+                  1603
+                ],
+                "order": 15,
+                "polygon_points": [
+                  [
+                    1020.0,
+                    1580.0
+                  ],
+                  [
+                    1034.0,
+                    1580.0
+                  ],
+                  [
+                    1034.0,
+                    1602.0
+                  ],
+                  [
+                    1020.0,
+                    1602.0
+                  ]
+                ]
+              }
+            ]
+          }
+        },
+        "markdown": {
+          "text": "# 清远市公安局清新分局\n\n# 起诉意见书\n\n清公清新诉字（2023）00541号\n\n犯罪嫌疑人曾庆成，男，1983年06月06日出生，出生地广东省广宁县江屯镇，身份证号码441223198306062314，汉族，初中文化程度，广东省广宁县江屯镇人，户籍地广东省广宁县江屯镇水月村委会，现住址广东省清远市清新区清和大道113号401。政治面貌：群众，因涉嫌危险驾驶罪于2023年06月15日被我局取保候审。\n\n犯罪嫌疑人曾庆成涉嫌危险驾驶一案，由我局在工作中发现，犯罪嫌疑人曾庆成于2023年06月15日被抓获，我局经过审查，于2023年06月15日立案进行侦查，犯罪嫌疑人曾庆成涉嫌危险驾驶一案，现已侦查终结。\n\n经依法侦查查明：\n\n2023年06月15日00时许，曾庆成饮酒后驾驶悬挂粤RH0472号牌的普通二轮摩托车（车架尾号：HA1729）沿清远市清新区太和镇侨苑路由北往南方向行驶，行至清远市清新区太和镇府前路与侨苑路交汇处路段时，被清远市公安局清新分局交通警察大队执勤民警查获，民警对曾庆成进行酒精呼气式测试时测试结果为：191mg/100ml，民警发现曾庆成有饮酒后驾驶机动车的嫌疑后，民警随即将曾庆成带至清远市第二人民医院进行血样提取，经广东中能司法鉴定所对曾庆成血样进行乙醇定量分析，从曾庆成血液中检测出乙醇浓度为202mg/100ml，符合驾驶人员血液中酒量大于或者等于80mg/100ml的醉酒驾驶国家标准。\n\n认定上述犯罪事实的证据如下：\n\n1、犯罪嫌疑人曾庆成的供述材料；\n\n2、司法鉴定检验报告书；\n\n4、户籍证明；\n\n3、查获经过；\n\n5、其他有关材料。\n\n上述犯罪事实清楚，证据确实、充分，足以认定。",
+          "images": {}
+        },
+        "outputImages": {
+          "layout_det_res": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//003dc566-cd7c-4913-b5c9-46be48dfceed/layout_det_res_0.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T04%3A03%3A45Z%2F-1%2F%2F277da53c1eef8fc9240a9740d3733df18ed69ad80ddc4cfa04555ae3c75b3c7f"
+        },
+        "inputImage": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//003dc566-cd7c-4913-b5c9-46be48dfceed/input_img_0.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T04%3A03%3A45Z%2F-1%2F%2Fccb34c89f15c3a910fb08d75b4f19e547e2fce1dd05049e662af1f7ba1bfb608"
+      },
+      {
+        "prunedResult": {
+          "page_count": 2,
+          "width": 1194,
+          "height": 1680,
+          "model_settings": {
+            "use_doc_preprocessor": false,
+            "use_layout_detection": true,
+            "use_chart_recognition": false,
+            "use_seal_recognition": false,
+            "use_ocr_for_image_block": false,
+            "format_block_content": false,
+            "merge_layout_blocks": true,
+            "markdown_ignore_labels": [
+              "number",
+              "footnote",
+              "header",
+              "header_image",
+              "footer",
+              "footer_image",
+              "aside_text"
+            ],
+            "return_layout_polygon_points": true
+          },
+          "parsing_res_list": [
+            {
+              "block_label": "header",
+              "block_content": "00-012",
+              "block_bbox": [
+                1040,
+                51,
+                1159,
+                88
+              ],
+              "block_id": 0,
+              "block_order": null,
+              "group_id": 0,
+              "block_polygon_points": [
+                [
+                  1040.0,
+                  51.0
+                ],
+                [
+                  1159.0,
+                  51.0
+                ],
+                [
+                  1159.0,
+                  88.0
+                ],
+                [
+                  1040.0,
+                  88.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "犯罪嫌疑人曾庆成到案后能自愿如实供述自己的罪行，认罪认罚。综上所述，犯罪嫌疑人曾庆成的行为触犯了《中华人民共和国刑法》",
+              "block_bbox": [
+                200,
+                135,
+                1017,
+                210
+              ],
+              "block_id": 1,
+              "block_order": 1,
+              "group_id": 1,
+              "block_polygon_points": [
+                [
+                  200.0,
+                  135.0
+                ],
+                [
+                  1017.0,
+                  135.0
+                ],
+                [
+                  1017.0,
+                  210.0
+                ],
+                [
+                  200.0,
+                  210.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "第一百三十三条之一之规定，涉嫌危险驾驶罪。依照《中华人民共和国刑事诉讼法》第一百六十二条之规定，现将此案移送审查起诉。",
+              "block_bbox": [
+                109,
+                217,
+                1026,
+                292
+              ],
+              "block_id": 2,
+              "block_order": 2,
+              "group_id": 2,
+              "block_polygon_points": [
+                [
+                  109.0,
+                  217.0
+                ],
+                [
+                  1026.0,
+                  217.0
+                ],
+                [
+                  1026.0,
+                  292.0
+                ],
+                [
+                  109.0,
+                  292.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "此致",
+              "block_bbox": [
+                284,
+                301,
+                343,
+                330
+              ],
+              "block_id": 3,
+              "block_order": 3,
+              "group_id": 3,
+              "block_polygon_points": [
+                [
+                  284.0,
+                  301.0
+                ],
+                [
+                  342.0,
+                  301.0
+                ],
+                [
+                  342.0,
+                  329.0
+                ],
+                [
+                  284.0,
+                  329.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "清远市清新区人民检察院",
+              "block_bbox": [
+                202,
+                341,
+                507,
+                372
+              ],
+              "block_id": 4,
+              "block_order": 4,
+              "group_id": 4,
+              "block_polygon_points": [
+                [
+                  202.0,
+                  341.0
+                ],
+                [
+                  507.0,
+                  341.0
+                ],
+                [
+                  507.0,
+                  372.0
+                ],
+                [
+                  202.0,
+                  372.0
+                ]
+              ]
+            },
+            {
+              "block_label": "seal",
+              "block_content": "",
+              "block_bbox": [
+                208,
+                382,
+                447,
+                609
+              ],
+              "block_id": 5,
+              "block_order": 5,
+              "group_id": 5,
+              "block_polygon_points": [
+                [
+                  208.0,
+                  382.0
+                ],
+                [
+                  447.0,
+                  382.0
+                ],
+                [
+                  447.0,
+                  609.0
+                ],
+                [
+                  208.0,
+                  609.0
+                ]
+              ]
+            },
+            {
+              "block_label": "text",
+              "block_content": "清远市公安局清新分局",
+              "block_bbox": [
+                173,
+                463,
+                447,
+                495
+              ],
+              "block_id": 6,
+              "block_order": 6,
+              "group_id": 6,
+              "block_polygon_points": [
+                [
+                  173,
+                  463
+                ],
+                [
+                  173,
+                  494
+                ],
+                [
+                  286,
+                  494
+                ],
+                [
+                  358,
+                  494
+                ],
+                [
+                  429,
+                  494
+                ],
+                [
+                  446,
+                  486
+                ],
+                [
+                  446,
+                  471
+                ],
+                [
+                  429,
+                  463
+                ]
+              ]
+            },
+            {
+              "block_label": "number",
+              "block_content": "2",
+              "block_bbox": [
+                1006,
+                1581,
+                1023,
+                1604
+              ],
+              "block_id": 7,
+              "block_order": null,
+              "group_id": 7,
+              "block_polygon_points": [
+                [
+                  1006.0,
+                  1581.0
+                ],
+                [
+                  1022.0,
+                  1581.0
+                ],
+                [
+                  1022.0,
+                  1603.0
+                ],
+                [
+                  1006.0,
+                  1603.0
+                ]
+              ]
+            }
+          ],
+          "layout_det_res": {
+            "boxes": [
+              {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.7708406448364258,
+                "coordinate": [
+                  1040,
+                  51,
+                  1159,
+                  88
+                ],
+                "order": null,
+                "polygon_points": [
+                  [
+                    1040.0,
+                    51.0
+                  ],
+                  [
+                    1159.0,
+                    51.0
+                  ],
+                  [
+                    1159.0,
+                    88.0
+                  ],
+                  [
+                    1040.0,
+                    88.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5361884832382202,
+                "coordinate": [
+                  200,
+                  135,
+                  1017,
+                  210
+                ],
+                "order": 1,
+                "polygon_points": [
+                  [
+                    200.0,
+                    135.0
+                  ],
+                  [
+                    1017.0,
+                    135.0
+                  ],
+                  [
+                    1017.0,
+                    210.0
+                  ],
+                  [
+                    200.0,
+                    210.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.3114659786224365,
+                "coordinate": [
+                  200,
+                  176,
+                  1016,
+                  211
+                ],
+                "order": 2,
+                "polygon_points": [
+                  [
+                    200,
+                    176
+                  ],
+                  [
+                    200,
+                    210
+                  ],
+                  [
+                    1015,
+                    210
+                  ],
+                  [
+                    1015,
+                    176
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6087082028388977,
+                "coordinate": [
+                  109,
+                  217,
+                  1026,
+                  292
+                ],
+                "order": 3,
+                "polygon_points": [
+                  [
+                    109.0,
+                    217.0
+                  ],
+                  [
+                    1026.0,
+                    217.0
+                  ],
+                  [
+                    1026.0,
+                    292.0
+                  ],
+                  [
+                    109.0,
+                    292.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6666691899299622,
+                "coordinate": [
+                  284,
+                  301,
+                  343,
+                  330
+                ],
+                "order": 4,
+                "polygon_points": [
+                  [
+                    284.0,
+                    301.0
+                  ],
+                  [
+                    342.0,
+                    301.0
+                  ],
+                  [
+                    342.0,
+                    329.0
+                  ],
+                  [
+                    284.0,
+                    329.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.7300741672515869,
+                "coordinate": [
+                  202,
+                  341,
+                  507,
+                  372
+                ],
+                "order": 5,
+                "polygon_points": [
+                  [
+                    202.0,
+                    341.0
+                  ],
+                  [
+                    507.0,
+                    341.0
+                  ],
+                  [
+                    507.0,
+                    372.0
+                  ],
+                  [
+                    202.0,
+                    372.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 20,
+                "label": "seal",
+                "score": 0.9370312094688416,
+                "coordinate": [
+                  208,
+                  382,
+                  447,
+                  609
+                ],
+                "order": 6,
+                "polygon_points": [
+                  [
+                    208.0,
+                    382.0
+                  ],
+                  [
+                    447.0,
+                    382.0
+                  ],
+                  [
+                    447.0,
+                    609.0
+                  ],
+                  [
+                    208.0,
+                    609.0
+                  ]
+                ]
+              },
+              {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6800538301467896,
+                "coordinate": [
+                  173,
+                  463,
+                  447,
+                  495
+                ],
+                "order": 7,
+                "polygon_points": [
+                  [
+                    173,
+                    463
+                  ],
+                  [
+                    173,
+                    494
+                  ],
+                  [
+                    286,
+                    494
+                  ],
+                  [
+                    358,
+                    494
+                  ],
+                  [
+                    429,
+                    494
+                  ],
+                  [
+                    446,
+                    486
+                  ],
+                  [
+                    446,
+                    471
+                  ],
+                  [
+                    429,
+                    463
+                  ]
+                ]
+              },
+              {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.6643567681312561,
+                "coordinate": [
+                  1006,
+                  1581,
+                  1023,
+                  1604
+                ],
+                "order": 8,
+                "polygon_points": [
+                  [
+                    1006.0,
+                    1581.0
+                  ],
+                  [
+                    1022.0,
+                    1581.0
+                  ],
+                  [
+                    1022.0,
+                    1603.0
+                  ],
+                  [
+                    1006.0,
+                    1603.0
+                  ]
+                ]
+              }
+            ]
+          }
+        },
+        "markdown": {
+          "text": "犯罪嫌疑人曾庆成到案后能自愿如实供述自己的罪行，认罪认罚。综上所述，犯罪嫌疑人曾庆成的行为触犯了《中华人民共和国刑法》\n\n第一百三十三条之一之规定，涉嫌危险驾驶罪。依照《中华人民共和国刑事诉讼法》第一百六十二条之规定，现将此案移送审查起诉。\n\n此致\n\n清远市清新区人民检察院\n\n<div style=\"text-align: center;\"><img src=\"imgs/img_in_seal_box_208_382_447_609.jpg\" alt=\"Image\" width=\"20%\" /></div>\n\n\n清远市公安局清新分局",
+          "images": {
+            "imgs/img_in_seal_box_208_382_447_609.jpg": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//003dc566-cd7c-4913-b5c9-46be48dfceed/markdown_1/imgs/img_in_seal_box_208_382_447_609.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T04%3A03%3A45Z%2F-1%2F%2F4e43dc56c983d941a61005019d0431c72c0bf7b6061ee0ef39d99098f8e6effd"
+          }
+        },
+        "outputImages": {
+          "layout_det_res": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//003dc566-cd7c-4913-b5c9-46be48dfceed/layout_det_res_1.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T04%3A03%3A45Z%2F-1%2F%2F0999be38f7a77be25b5f5275d5cfb88301f72b5373c3a9d9fa231d2ada9e18dc"
+        },
+        "inputImage": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//003dc566-cd7c-4913-b5c9-46be48dfceed/input_img_1.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T04%3A03%3A45Z%2F-1%2F%2Fa707f6b2d42020288c04a597512cfb248947fd3521d978b18645b7d9911805fd"
+      }
+    ],
+    "dataInfo": {
+      "numPages": 2,
+      "pages": [
+        {
+          "width": 1196,
+          "height": 1680
+        },
+        {
+          "width": 1194,
+          "height": 1680
+        }
+      ],
+      "type": "pdf"
+    },
+    "preprocessedImages": [
+      "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//003dc566-cd7c-4913-b5c9-46be48dfceed/preprocessed_img_0.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T04%3A03%3A45Z%2F-1%2F%2F2d748d38ae58979fd849e3108ed7ccc66a86e1da3023734acc1fe59387630f7f",
+      "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//003dc566-cd7c-4913-b5c9-46be48dfceed/preprocessed_img_1.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T04%3A03%3A45Z%2F-1%2F%2Fdc80141e2818f2606d631df702cc97d994d73febee3528d7921a963294ea2501"
+    ]
+  },
+  "errorCode": 0,
+  "errorMsg": "Success"
+}

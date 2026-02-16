@@ -1,0 +1,7197 @@
+{
+  "layoutParsingResults": [
+    {
+      "prunedResult": {
+        "page_count": 8,
+        "width": 1194,
+        "height": 1678,
+        "model_settings": {
+          "use_doc_preprocessor": true,
+          "use_layout_detection": true,
+          "use_chart_recognition": false,
+          "use_seal_recognition": false,
+          "use_ocr_for_image_block": false,
+          "format_block_content": false,
+          "merge_layout_blocks": true,
+          "markdown_ignore_labels": [
+            "number",
+            "footnote",
+            "header",
+            "header_image",
+            "footer",
+            "footer_image",
+            "aside_text"
+          ],
+          "return_layout_polygon_points": true
+        },
+        "parsing_res_list": [
+          {
+            "block_label": "number",
+            "block_content": "307",
+            "block_bbox": [
+              1123,
+              6,
+              1194,
+              56
+            ],
+            "block_id": 0,
+            "block_order": null,
+            "group_id": 0,
+            "block_polygon_points": [
+              [
+                1123.0,
+                6.0
+              ],
+              [
+                1194.0,
+                6.0
+              ],
+              [
+                1194.0,
+                56.0
+              ],
+              [
+                1123.0,
+                56.0
+              ]
+            ]
+          },
+          {
+            "block_label": "doc_title",
+            "block_content": "讯问笔录",
+            "block_bbox": [
+              402,
+              197,
+              773,
+              257
+            ],
+            "block_id": 1,
+            "block_order": 1,
+            "group_id": 1,
+            "block_polygon_points": [
+              [
+                402.0,
+                197.0
+              ],
+              [
+                773.0,
+                197.0
+              ],
+              [
+                773.0,
+                257.0
+              ],
+              [
+                402.0,
+                257.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "时间 $ \\underline{\\text{2023}} $年 $ \\underline{1} $月 $ \\underline{28} $日 $ \\underline{19} $时 $ \\underline{11} $分至 $ \\underline{2023} $年 $ \\underline{01} $月 $ \\underline{28} $日 $ \\underline{21} $时 $ \\underline{17} $分",
+            "block_bbox": [
+              79,
+              326,
+              1019,
+              372
+            ],
+            "block_id": 2,
+            "block_order": 2,
+            "group_id": 2,
+            "block_polygon_points": [
+              [
+                79.0,
+                326.0
+              ],
+              [
+                1019.0,
+                326.0
+              ],
+              [
+                1019.0,
+                372.0
+              ],
+              [
+                79.0,
+                372.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "地点___ 清远市公安局松岗派出所办案区讯问室 R021000 讯 03-2",
+            "block_bbox": [
+              6,
+              394,
+              1101,
+              438
+            ],
+            "block_id": 3,
+            "block_order": 3,
+            "group_id": 3,
+            "block_polygon_points": [
+              [
+                6.0,
+                394.0
+              ],
+              [
+                1101.0,
+                394.0
+              ],
+              [
+                1101.0,
+                438.0
+              ],
+              [
+                6.0,
+                438.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "讯问人（签名） $ \\underline{\\text{张明}} $、 $ \\underline{\\text{梁建波}} $作单位 $ \\underline{\\text{清远市公安局松岗派出所}} $\n记录人（签名） $ \\underline{\\text{张明}} $工作单位 $ \\underline{\\text{清远市公安局松岗派出所}} $\n被讯问人 $ \\underline{\\text{陈明飞}} $性别 $ \\underline{\\text{男}} $年龄 $ \\underline{\\text{46}} $出生日期 $ \\underline{\\text{1976年09月01日}} $\n身份证件种类及号码 $ \\underline{\\text{441811197609016414}} $□否□人大代表 $ \\underline{\\text{否}} $\n现住址 $ \\underline{\\text{广东省清远市清城区朝阳花苑E1梯902}} $",
+            "block_bbox": [
+              42,
+              408,
+              1100,
+              770
+            ],
+            "block_id": 4,
+            "block_order": 4,
+            "group_id": 4,
+            "block_polygon_points": [
+              [
+                78,
+                451
+              ],
+              [
+                78,
+                769
+              ],
+              [
+                1099,
+                761
+              ],
+              [
+                1094,
+                425
+              ],
+              [
+                162,
+                434
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "联系方式 13750173434",
+            "block_bbox": [
+              3,
+              791,
+              1102,
+              837
+            ],
+            "block_id": 5,
+            "block_order": 5,
+            "group_id": 5,
+            "block_polygon_points": [
+              [
+                3,
+                791
+              ],
+              [
+                3,
+                836
+              ],
+              [
+                1101,
+                829
+              ],
+              [
+                1096,
+                791
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "户籍所在地 $ \\underline{\\text{广东省清远市清新区龙颈镇龙北村委会下鹤山村27号}} $\n问：我们是清远市公安局松岗派出所民警（出示警察证件），现依法对你进行讯问，你应当如实回答，对本案无关的问题你有拒绝回答的权力，你有陈述权和申辩权，你清楚没有？",
+            "block_bbox": [
+              46,
+              863,
+              1101,
+              1103
+            ],
+            "block_id": 6,
+            "block_order": 6,
+            "group_id": 6,
+            "block_polygon_points": [
+              [
+                76,
+                863
+              ],
+              [
+                58,
+                1001
+              ],
+              [
+                64,
+                1102
+              ],
+              [
+                1100,
+                1102
+              ],
+              [
+                1100,
+                863
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我清楚了。",
+            "block_bbox": [
+              75,
+              1127,
+              290,
+              1167
+            ],
+            "block_id": 7,
+            "block_order": 7,
+            "group_id": 7,
+            "block_polygon_points": [
+              [
+                75.0,
+                1127.0
+              ],
+              [
+                290.0,
+                1127.0
+              ],
+              [
+                290.0,
+                1167.0
+              ],
+              [
+                75.0,
+                1167.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你是否需要申请办案人员或者公安机关负责人回避？",
+            "block_bbox": [
+              2,
+              1195,
+              1089,
+              1237
+            ],
+            "block_id": 8,
+            "block_order": 8,
+            "group_id": 8,
+            "block_polygon_points": [
+              [
+                2.0,
+                1195.0
+              ],
+              [
+                1089.0,
+                1195.0
+              ],
+              [
+                1089.0,
+                1237.0
+              ],
+              [
+                2.0,
+                1237.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我不需要的。",
+            "block_bbox": [
+              74,
+              1261,
+              322,
+              1300
+            ],
+            "block_id": 9,
+            "block_order": 9,
+            "group_id": 9,
+            "block_polygon_points": [
+              [
+                74.0,
+                1261.0
+              ],
+              [
+                322.0,
+                1261.0
+              ],
+              [
+                322.0,
+                1300.0
+              ],
+              [
+                74.0,
+                1300.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你的个人情况？",
+            "block_bbox": [
+              2,
+              1327,
+              358,
+              1369
+            ],
+            "block_id": 10,
+            "block_order": 10,
+            "group_id": 10,
+            "block_polygon_points": [
+              [
+                2.0,
+                1327.0
+              ],
+              [
+                358.0,
+                1327.0
+              ],
+              [
+                358.0,
+                1369.0
+              ],
+              [
+                2.0,
+                1369.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我叫陈明飞，汉族，1976年09月01日出生，文化程度初中，身份证号码441811197609016414，户籍所在地广东省清新县龙颈镇龙北村委会下鹤山村27号，现住址：广东省清远市清城区朝阳花苑E1梯902，联系",
+            "block_bbox": [
+              3,
+              1391,
+              1104,
+              1576
+            ],
+            "block_id": 11,
+            "block_order": 11,
+            "group_id": 11,
+            "block_polygon_points": [
+              [
+                3.0,
+                1391.0
+              ],
+              [
+                1104.0,
+                1391.0
+              ],
+              [
+                1104.0,
+                1576.0
+              ],
+              [
+                3.0,
+                1576.0
+              ]
+            ]
+          },
+          {
+            "block_label": "number",
+            "block_content": "第 1 页 共 8 页",
+            "block_bbox": [
+              816,
+              1581,
+              1060,
+              1618
+            ],
+            "block_id": 12,
+            "block_order": null,
+            "group_id": 12,
+            "block_polygon_points": [
+              [
+                816.0,
+                1581.0
+              ],
+              [
+                1060.0,
+                1581.0
+              ],
+              [
+                1060.0,
+                1618.0
+              ],
+              [
+                816.0,
+                1618.0
+              ]
+            ]
+          },
+          {
+            "block_label": "footer_image",
+            "block_content": "",
+            "block_bbox": [
+              443,
+              1611,
+              670,
+              1678
+            ],
+            "block_id": 13,
+            "block_order": null,
+            "group_id": 13,
+            "block_polygon_points": [
+              [
+                443.0,
+                1611.0
+              ],
+              [
+                670.0,
+                1611.0
+              ],
+              [
+                670.0,
+                1678.0
+              ],
+              [
+                443.0,
+                1678.0
+              ]
+            ]
+          }
+        ],
+        "doc_preprocessor_res": {
+          "model_settings": {
+            "use_doc_orientation_classify": true,
+            "use_doc_unwarping": true
+          },
+          "angle": 0
+        },
+        "layout_det_res": {
+          "boxes": [
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.5582088232040405,
+              "coordinate": [
+                1123,
+                6,
+                1194,
+                56
+              ],
+              "order": 1,
+              "polygon_points": [
+                [
+                  1123.0,
+                  6.0
+                ],
+                [
+                  1194.0,
+                  6.0
+                ],
+                [
+                  1194.0,
+                  56.0
+                ],
+                [
+                  1123.0,
+                  56.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 6,
+              "label": "doc_title",
+              "score": 0.5852011442184448,
+              "coordinate": [
+                402,
+                197,
+                773,
+                257
+              ],
+              "order": 2,
+              "polygon_points": [
+                [
+                  402.0,
+                  197.0
+                ],
+                [
+                  773.0,
+                  197.0
+                ],
+                [
+                  773.0,
+                  257.0
+                ],
+                [
+                  402.0,
+                  257.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7670910954475403,
+              "coordinate": [
+                79,
+                326,
+                1019,
+                372
+              ],
+              "order": 3,
+              "polygon_points": [
+                [
+                  79.0,
+                  326.0
+                ],
+                [
+                  1019.0,
+                  326.0
+                ],
+                [
+                  1019.0,
+                  372.0
+                ],
+                [
+                  79.0,
+                  372.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7023528218269348,
+              "coordinate": [
+                6,
+                394,
+                1101,
+                438
+              ],
+              "order": 4,
+              "polygon_points": [
+                [
+                  6.0,
+                  394.0
+                ],
+                [
+                  1101.0,
+                  394.0
+                ],
+                [
+                  1101.0,
+                  438.0
+                ],
+                [
+                  6.0,
+                  438.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.4084829092025757,
+              "coordinate": [
+                81,
+                440,
+                1100,
+                507
+              ],
+              "order": 5,
+              "polygon_points": [
+                [
+                  81.0,
+                  440.0
+                ],
+                [
+                  1100.0,
+                  440.0
+                ],
+                [
+                  1100.0,
+                  507.0
+                ],
+                [
+                  81.0,
+                  507.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.3244676887989044,
+              "coordinate": [
+                42,
+                408,
+                1100,
+                770
+              ],
+              "order": 6,
+              "polygon_points": [
+                [
+                  78,
+                  451
+                ],
+                [
+                  78,
+                  769
+                ],
+                [
+                  1099,
+                  761
+                ],
+                [
+                  1094,
+                  425
+                ],
+                [
+                  162,
+                  434
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.43189266324043274,
+              "coordinate": [
+                81,
+                517,
+                1101,
+                570
+              ],
+              "order": 7,
+              "polygon_points": [
+                [
+                  81,
+                  526
+                ],
+                [
+                  81,
+                  569
+                ],
+                [
+                  1100,
+                  569
+                ],
+                [
+                  1100,
+                  517
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5228309631347656,
+              "coordinate": [
+                79,
+                594,
+                1100,
+                635
+              ],
+              "order": 8,
+              "polygon_points": [
+                [
+                  79.0,
+                  594.0
+                ],
+                [
+                  1100.0,
+                  594.0
+                ],
+                [
+                  1100.0,
+                  635.0
+                ],
+                [
+                  79.0,
+                  635.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.49581894278526306,
+              "coordinate": [
+                83,
+                660,
+                1093,
+                702
+              ],
+              "order": 9,
+              "polygon_points": [
+                [
+                  83.0,
+                  660.0
+                ],
+                [
+                  1093.0,
+                  660.0
+                ],
+                [
+                  1093.0,
+                  702.0
+                ],
+                [
+                  83.0,
+                  702.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.4032997786998749,
+              "coordinate": [
+                81,
+                726,
+                1062,
+                768
+              ],
+              "order": 10,
+              "polygon_points": [
+                [
+                  81.0,
+                  726.0
+                ],
+                [
+                  1062.0,
+                  726.0
+                ],
+                [
+                  1062.0,
+                  768.0
+                ],
+                [
+                  81.0,
+                  768.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.3930751085281372,
+              "coordinate": [
+                5,
+                795,
+                419,
+                836
+              ],
+              "order": 11,
+              "polygon_points": [
+                [
+                  5.0,
+                  795.0
+                ],
+                [
+                  419.0,
+                  795.0
+                ],
+                [
+                  419.0,
+                  836.0
+                ],
+                [
+                  5.0,
+                  836.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.36905425786972046,
+              "coordinate": [
+                3,
+                791,
+                1102,
+                837
+              ],
+              "order": 12,
+              "polygon_points": [
+                [
+                  3,
+                  791
+                ],
+                [
+                  3,
+                  836
+                ],
+                [
+                  1101,
+                  829
+                ],
+                [
+                  1096,
+                  791
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.3896538317203522,
+              "coordinate": [
+                74,
+                862,
+                1065,
+                901
+              ],
+              "order": 13,
+              "polygon_points": [
+                [
+                  74.0,
+                  862.0
+                ],
+                [
+                  1065.0,
+                  862.0
+                ],
+                [
+                  1065.0,
+                  901.0
+                ],
+                [
+                  74.0,
+                  901.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7732758522033691,
+              "coordinate": [
+                46,
+                863,
+                1101,
+                1103
+              ],
+              "order": 14,
+              "polygon_points": [
+                [
+                  76,
+                  863
+                ],
+                [
+                  58,
+                  1001
+                ],
+                [
+                  64,
+                  1102
+                ],
+                [
+                  1100,
+                  1102
+                ],
+                [
+                  1100,
+                  863
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5245658159255981,
+              "coordinate": [
+                75,
+                1127,
+                290,
+                1167
+              ],
+              "order": 15,
+              "polygon_points": [
+                [
+                  75.0,
+                  1127.0
+                ],
+                [
+                  290.0,
+                  1127.0
+                ],
+                [
+                  290.0,
+                  1167.0
+                ],
+                [
+                  75.0,
+                  1167.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.6562135815620422,
+              "coordinate": [
+                2,
+                1195,
+                1089,
+                1237
+              ],
+              "order": 16,
+              "polygon_points": [
+                [
+                  2.0,
+                  1195.0
+                ],
+                [
+                  1089.0,
+                  1195.0
+                ],
+                [
+                  1089.0,
+                  1237.0
+                ],
+                [
+                  2.0,
+                  1237.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5167613625526428,
+              "coordinate": [
+                74,
+                1261,
+                322,
+                1300
+              ],
+              "order": 17,
+              "polygon_points": [
+                [
+                  74.0,
+                  1261.0
+                ],
+                [
+                  322.0,
+                  1261.0
+                ],
+                [
+                  322.0,
+                  1300.0
+                ],
+                [
+                  74.0,
+                  1300.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7256907820701599,
+              "coordinate": [
+                2,
+                1327,
+                358,
+                1369
+              ],
+              "order": 18,
+              "polygon_points": [
+                [
+                  2.0,
+                  1327.0
+                ],
+                [
+                  358.0,
+                  1327.0
+                ],
+                [
+                  358.0,
+                  1369.0
+                ],
+                [
+                  2.0,
+                  1369.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8686380386352539,
+              "coordinate": [
+                3,
+                1391,
+                1104,
+                1576
+              ],
+              "order": 19,
+              "polygon_points": [
+                [
+                  3.0,
+                  1391.0
+                ],
+                [
+                  1104.0,
+                  1391.0
+                ],
+                [
+                  1104.0,
+                  1576.0
+                ],
+                [
+                  3.0,
+                  1576.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.853376030921936,
+              "coordinate": [
+                816,
+                1581,
+                1060,
+                1618
+              ],
+              "order": 20,
+              "polygon_points": [
+                [
+                  816.0,
+                  1581.0
+                ],
+                [
+                  1060.0,
+                  1581.0
+                ],
+                [
+                  1060.0,
+                  1618.0
+                ],
+                [
+                  816.0,
+                  1618.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 9,
+              "label": "footer_image",
+              "score": 0.6579634547233582,
+              "coordinate": [
+                443,
+                1611,
+                670,
+                1678
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  443.0,
+                  1611.0
+                ],
+                [
+                  670.0,
+                  1611.0
+                ],
+                [
+                  670.0,
+                  1678.0
+                ],
+                [
+                  443.0,
+                  1678.0
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "markdown": {
+        "text": "# 讯问笔录\n\n时间 $ \\underline{\\text{2023}} $年 $ \\underline{1} $月 $ \\underline{28} $日 $ \\underline{19} $时 $ \\underline{11} $分至 $ \\underline{2023} $年 $ \\underline{01} $月 $ \\underline{28} $日 $ \\underline{21} $时 $ \\underline{17} $分\n\n地点___ 清远市公安局松岗派出所办案区讯问室 R021000 讯 03-2\n\n讯问人（签名） $ \\underline{\\text{张明}} $、 $ \\underline{\\text{梁建波}} $作单位 $ \\underline{\\text{清远市公安局松岗派出所}} $\n\n记录人（签名） $ \\underline{\\text{张明}} $工作单位 $ \\underline{\\text{清远市公安局松岗派出所}} $\n\n被讯问人 $ \\underline{\\text{陈明飞}} $性别 $ \\underline{\\text{男}} $年龄 $ \\underline{\\text{46}} $出生日期 $ \\underline{\\text{1976年09月01日}} $\n\n身份证件种类及号码 $ \\underline{\\text{441811197609016414}} $□否□人大代表 $ \\underline{\\text{否}} $\n\n现住址 $ \\underline{\\text{广东省清远市清城区朝阳花苑E1梯902}} $\n\n联系方式 13750173434\n\n户籍所在地 $ \\underline{\\text{广东省清远市清新区龙颈镇龙北村委会下鹤山村27号}} $\n\n问：我们是清远市公安局松岗派出所民警（出示警察证件），现依法对你进行讯问，你应当如实回答，对本案无关的问题你有拒绝回答的权力，你有陈述权和申辩权，你清楚没有？\n\n答：我清楚了。\n\n问：你是否需要申请办案人员或者公安机关负责人回避？\n\n答：我不需要的。\n\n问：你的个人情况？\n\n答：我叫陈明飞，汉族，1976年09月01日出生，文化程度初中，身份证号码441811197609016414，户籍所在地广东省清新县龙颈镇龙北村委会下鹤山村27号，现住址：广东省清远市清城区朝阳花苑E1梯902，联系",
+        "images": {
+          "imgs/img_in_footer_image_box_443_1611_670_1678.jpg": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//7cb84d74-a6b4-4472-8f4a-f2c74fe63c9a/markdown_0/imgs/img_in_footer_image_box_443_1611_670_1678.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T16%3A29%3A02Z%2F-1%2F%2F6c811f3d58369ce94661b15b705d75121a963ef52d417a12aca67b1b5f660a4d"
+        }
+      }
+    },
+    {
+      "prunedResult": {
+        "page_count": 8,
+        "width": 1196,
+        "height": 1678,
+        "model_settings": {
+          "use_doc_preprocessor": true,
+          "use_layout_detection": true,
+          "use_chart_recognition": false,
+          "use_seal_recognition": false,
+          "use_ocr_for_image_block": false,
+          "format_block_content": false,
+          "merge_layout_blocks": true,
+          "markdown_ignore_labels": [
+            "number",
+            "footnote",
+            "header",
+            "header_image",
+            "footer",
+            "footer_image",
+            "aside_text"
+          ],
+          "return_layout_polygon_points": true
+        },
+        "parsing_res_list": [
+          {
+            "block_label": "number",
+            "block_content": "508",
+            "block_bbox": [
+              1107,
+              0,
+              1185,
+              31
+            ],
+            "block_id": 0,
+            "block_order": null,
+            "group_id": 0,
+            "block_polygon_points": [
+              [
+                1107.0,
+                0.0
+              ],
+              [
+                1185.0,
+                0.0
+              ],
+              [
+                1185.0,
+                31.0
+              ],
+              [
+                1107.0,
+                31.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "电话：13750173434。",
+            "block_bbox": [
+              80,
+              91,
+              375,
+              133
+            ],
+            "block_id": 1,
+            "block_order": 1,
+            "group_id": 1,
+            "block_polygon_points": [
+              [
+                80.0,
+                91.0
+              ],
+              [
+                375.0,
+                91.0
+              ],
+              [
+                375.0,
+                133.0
+              ],
+              [
+                80.0,
+                133.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你的家庭情况？",
+            "block_bbox": [
+              80,
+              159,
+              365,
+              203
+            ],
+            "block_id": 2,
+            "block_order": 2,
+            "group_id": 2,
+            "block_polygon_points": [
+              [
+                80.0,
+                159.0
+              ],
+              [
+                365.0,
+                159.0
+              ],
+              [
+                365.0,
+                203.0
+              ],
+              [
+                80.0,
+                203.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我婚姻已经离异，儿子：陈家聪，电话忘记了。",
+            "block_bbox": [
+              79,
+              228,
+              796,
+              272
+            ],
+            "block_id": 3,
+            "block_order": 3,
+            "group_id": 3,
+            "block_polygon_points": [
+              [
+                79.0,
+                228.0
+              ],
+              [
+                796.0,
+                228.0
+              ],
+              [
+                796.0,
+                272.0
+              ],
+              [
+                79.0,
+                272.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你的个人简历？",
+            "block_bbox": [
+              81,
+              297,
+              364,
+              338
+            ],
+            "block_id": 4,
+            "block_order": 4,
+            "group_id": 4,
+            "block_polygon_points": [
+              [
+                81.0,
+                297.0
+              ],
+              [
+                364.0,
+                297.0
+              ],
+              [
+                364.0,
+                338.0
+              ],
+              [
+                81.0,
+                338.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：本人从小在原籍地长大，适龄入学读书，初二没毕业就外出工作，现今帮私人老板开车没有固定工作地点。",
+            "block_bbox": [
+              2,
+              363,
+              1094,
+              474
+            ],
+            "block_id": 5,
+            "block_order": 5,
+            "group_id": 5,
+            "block_polygon_points": [
+              [
+                2.0,
+                363.0
+              ],
+              [
+                1094.0,
+                363.0
+              ],
+              [
+                1094.0,
+                474.0
+              ],
+              [
+                2.0,
+                474.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你是否是人大代表或政协委员、中共党员？",
+            "block_bbox": [
+              78,
+              496,
+              737,
+              538
+            ],
+            "block_id": 6,
+            "block_order": 6,
+            "group_id": 6,
+            "block_polygon_points": [
+              [
+                78.0,
+                496.0
+              ],
+              [
+                737.0,
+                496.0
+              ],
+              [
+                737.0,
+                538.0
+              ],
+              [
+                78.0,
+                538.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：不是。",
+            "block_bbox": [
+              78,
+              563,
+              232,
+              603
+            ],
+            "block_id": 7,
+            "block_order": 7,
+            "group_id": 7,
+            "block_polygon_points": [
+              [
+                78.0,
+                563.0
+              ],
+              [
+                232.0,
+                563.0
+              ],
+              [
+                232.0,
+                603.0
+              ],
+              [
+                78.0,
+                603.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你以前是否受过刑事处罚、行政处罚或者被劳动教养、收容教育、强制戒毒、收容教养等情况？",
+            "block_bbox": [
+              75,
+              632,
+              1094,
+              742
+            ],
+            "block_id": 8,
+            "block_order": 8,
+            "group_id": 8,
+            "block_polygon_points": [
+              [
+                75.0,
+                632.0
+              ],
+              [
+                1094.0,
+                632.0
+              ],
+              [
+                1094.0,
+                742.0
+              ],
+              [
+                75.0,
+                742.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：没有的。",
+            "block_bbox": [
+              7,
+              764,
+              1083,
+              812
+            ],
+            "block_id": 9,
+            "block_order": 9,
+            "group_id": 9,
+            "block_polygon_points": [
+              [
+                7,
+                764
+              ],
+              [
+                7,
+                811
+              ],
+              [
+                1082,
+                803
+              ],
+              [
+                1077,
+                764
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：根据《中华人民共和国刑事诉讼法》，你有权委托律师作为辩护人。\n因经济困难或者有其他原因没有委托辩护人的，可以向法律援助机构提出申请，你听明白了吗？是否需要聘请律师？",
+            "block_bbox": [
+              3,
+              835,
+              1094,
+              1013
+            ],
+            "block_id": 10,
+            "block_order": 10,
+            "group_id": 10,
+            "block_polygon_points": [
+              [
+                3,
+                835
+              ],
+              [
+                3,
+                1012
+              ],
+              [
+                1093,
+                1012
+              ],
+              [
+                1088,
+                835
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我不需要聘请律师的。",
+            "block_bbox": [
+              75,
+              1035,
+              448,
+              1078
+            ],
+            "block_id": 11,
+            "block_order": 11,
+            "group_id": 11,
+            "block_polygon_points": [
+              [
+                75.0,
+                1035.0
+              ],
+              [
+                448.0,
+                1035.0
+              ],
+              [
+                448.0,
+                1078.0
+              ],
+              [
+                75.0,
+                1078.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：这是《犯罪嫌疑人诉讼权利义务告知书》请你收阅？",
+            "block_bbox": [
+              76,
+              1103,
+              862,
+              1148
+            ],
+            "block_id": 12,
+            "block_order": 12,
+            "group_id": 12,
+            "block_polygon_points": [
+              [
+                76.0,
+                1103.0
+              ],
+              [
+                861.3298950195312,
+                1110.0029296875
+              ],
+              [
+                861.0,
+                1147.0
+              ],
+              [
+                75.67010498046875,
+                1139.9970703125
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我已经收阅，并清楚知悉自己的权利义务，我也在告知书上签名以及 $ \\underline{\\text{按捺指纹}} $。",
+            "block_bbox": [
+              1,
+              1170,
+              1094,
+              1281
+            ],
+            "block_id": 13,
+            "block_order": 13,
+            "group_id": 13,
+            "block_polygon_points": [
+              [
+                1.0,
+                1170.0
+              ],
+              [
+                1094.0,
+                1170.0
+              ],
+              [
+                1094.0,
+                1281.0
+              ],
+              [
+                1.0,
+                1281.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：根据相关法律规定，如实供述自己的罪行，可以从轻或者减轻对你的处罚，你听明白了吗？",
+            "block_bbox": [
+              2,
+              1302,
+              1093,
+              1419
+            ],
+            "block_id": 14,
+            "block_order": 14,
+            "group_id": 14,
+            "block_polygon_points": [
+              [
+                2,
+                1302
+              ],
+              [
+                8,
+                1418
+              ],
+              [
+                1092,
+                1418
+              ],
+              [
+                1092,
+                1311
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我清楚了。",
+            "block_bbox": [
+              72,
+              1439,
+              289,
+              1482
+            ],
+            "block_id": 15,
+            "block_order": 15,
+            "group_id": 15,
+            "block_polygon_points": [
+              [
+                72.0,
+                1439.0
+              ],
+              [
+                289.0,
+                1439.0
+              ],
+              [
+                289.0,
+                1482.0
+              ],
+              [
+                72.0,
+                1482.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：这是《清城公安分局认罪认罚从宽制度告知书》，请你收阅？",
+            "block_bbox": [
+              73,
+              1508,
+              993,
+              1560
+            ],
+            "block_id": 16,
+            "block_order": 16,
+            "group_id": 16,
+            "block_polygon_points": [
+              [
+                73.0,
+                1508.0
+              ],
+              [
+                992.374267578125,
+                1516.003173828125
+              ],
+              [
+                992.0,
+                1559.0
+              ],
+              [
+                72.625732421875,
+                1550.996826171875
+              ]
+            ]
+          },
+          {
+            "block_label": "footer_image",
+            "block_content": "",
+            "block_bbox": [
+              489,
+              1587,
+              737,
+              1677
+            ],
+            "block_id": 17,
+            "block_order": null,
+            "group_id": 17,
+            "block_polygon_points": [
+              [
+                489.0,
+                1587.0
+              ],
+              [
+                737.0,
+                1587.0
+              ],
+              [
+                737.0,
+                1677.0
+              ],
+              [
+                489.0,
+                1677.0
+              ]
+            ]
+          },
+          {
+            "block_label": "number",
+            "block_content": "第 2 页 共 8 页",
+            "block_bbox": [
+              812,
+              1585,
+              1054,
+              1626
+            ],
+            "block_id": 18,
+            "block_order": null,
+            "group_id": 18,
+            "block_polygon_points": [
+              [
+                812.0,
+                1585.0
+              ],
+              [
+                1054.0,
+                1585.0
+              ],
+              [
+                1054.0,
+                1626.0
+              ],
+              [
+                812.0,
+                1626.0
+              ]
+            ]
+          }
+        ],
+        "doc_preprocessor_res": {
+          "model_settings": {
+            "use_doc_orientation_classify": true,
+            "use_doc_unwarping": true
+          },
+          "angle": 0
+        },
+        "layout_det_res": {
+          "boxes": [
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.4662701189517975,
+              "coordinate": [
+                1107,
+                0,
+                1185,
+                31
+              ],
+              "order": 1,
+              "polygon_points": [
+                [
+                  1107.0,
+                  0.0
+                ],
+                [
+                  1185.0,
+                  0.0
+                ],
+                [
+                  1185.0,
+                  31.0
+                ],
+                [
+                  1107.0,
+                  31.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7374768853187561,
+              "coordinate": [
+                80,
+                91,
+                375,
+                133
+              ],
+              "order": 2,
+              "polygon_points": [
+                [
+                  80.0,
+                  91.0
+                ],
+                [
+                  375.0,
+                  91.0
+                ],
+                [
+                  375.0,
+                  133.0
+                ],
+                [
+                  80.0,
+                  133.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8132873177528381,
+              "coordinate": [
+                80,
+                159,
+                365,
+                203
+              ],
+              "order": 3,
+              "polygon_points": [
+                [
+                  80.0,
+                  159.0
+                ],
+                [
+                  365.0,
+                  159.0
+                ],
+                [
+                  365.0,
+                  203.0
+                ],
+                [
+                  80.0,
+                  203.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8222578763961792,
+              "coordinate": [
+                79,
+                228,
+                796,
+                272
+              ],
+              "order": 4,
+              "polygon_points": [
+                [
+                  79.0,
+                  228.0
+                ],
+                [
+                  796.0,
+                  228.0
+                ],
+                [
+                  796.0,
+                  272.0
+                ],
+                [
+                  79.0,
+                  272.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7717911005020142,
+              "coordinate": [
+                81,
+                297,
+                364,
+                338
+              ],
+              "order": 5,
+              "polygon_points": [
+                [
+                  81.0,
+                  297.0
+                ],
+                [
+                  364.0,
+                  297.0
+                ],
+                [
+                  364.0,
+                  338.0
+                ],
+                [
+                  81.0,
+                  338.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.6788321137428284,
+              "coordinate": [
+                2,
+                363,
+                1094,
+                474
+              ],
+              "order": 6,
+              "polygon_points": [
+                [
+                  2.0,
+                  363.0
+                ],
+                [
+                  1094.0,
+                  363.0
+                ],
+                [
+                  1094.0,
+                  474.0
+                ],
+                [
+                  2.0,
+                  474.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8007371425628662,
+              "coordinate": [
+                78,
+                496,
+                737,
+                538
+              ],
+              "order": 7,
+              "polygon_points": [
+                [
+                  78.0,
+                  496.0
+                ],
+                [
+                  737.0,
+                  496.0
+                ],
+                [
+                  737.0,
+                  538.0
+                ],
+                [
+                  78.0,
+                  538.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5129224061965942,
+              "coordinate": [
+                78,
+                563,
+                232,
+                603
+              ],
+              "order": 8,
+              "polygon_points": [
+                [
+                  78.0,
+                  563.0
+                ],
+                [
+                  232.0,
+                  563.0
+                ],
+                [
+                  232.0,
+                  603.0
+                ],
+                [
+                  78.0,
+                  603.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8862206339836121,
+              "coordinate": [
+                75,
+                632,
+                1094,
+                742
+              ],
+              "order": 9,
+              "polygon_points": [
+                [
+                  75.0,
+                  632.0
+                ],
+                [
+                  1094.0,
+                  632.0
+                ],
+                [
+                  1094.0,
+                  742.0
+                ],
+                [
+                  75.0,
+                  742.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.45639145374298096,
+              "coordinate": [
+                7,
+                767,
+                263,
+                812
+              ],
+              "order": 10,
+              "polygon_points": [
+                [
+                  7.0,
+                  767.0
+                ],
+                [
+                  263.0,
+                  767.0
+                ],
+                [
+                  263.0,
+                  812.0
+                ],
+                [
+                  7.0,
+                  812.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.3090474307537079,
+              "coordinate": [
+                7,
+                764,
+                1083,
+                812
+              ],
+              "order": 11,
+              "polygon_points": [
+                [
+                  7,
+                  764
+                ],
+                [
+                  7,
+                  811
+                ],
+                [
+                  1082,
+                  803
+                ],
+                [
+                  1077,
+                  764
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.3037424087524414,
+              "coordinate": [
+                25,
+                836,
+                1080,
+                877
+              ],
+              "order": 12,
+              "polygon_points": [
+                [
+                  25.0,
+                  836.0
+                ],
+                [
+                  1080.0,
+                  836.0
+                ],
+                [
+                  1080.0,
+                  877.0
+                ],
+                [
+                  25.0,
+                  877.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.6629806756973267,
+              "coordinate": [
+                3,
+                835,
+                1094,
+                1013
+              ],
+              "order": 13,
+              "polygon_points": [
+                [
+                  3,
+                  835
+                ],
+                [
+                  3,
+                  1012
+                ],
+                [
+                  1093,
+                  1012
+                ],
+                [
+                  1088,
+                  835
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.6164631843566895,
+              "coordinate": [
+                75,
+                1035,
+                448,
+                1078
+              ],
+              "order": 14,
+              "polygon_points": [
+                [
+                  75.0,
+                  1035.0
+                ],
+                [
+                  448.0,
+                  1035.0
+                ],
+                [
+                  448.0,
+                  1078.0
+                ],
+                [
+                  75.0,
+                  1078.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7763251662254333,
+              "coordinate": [
+                76,
+                1103,
+                862,
+                1148
+              ],
+              "order": 15,
+              "polygon_points": [
+                [
+                  76.0,
+                  1103.0
+                ],
+                [
+                  861.3298950195312,
+                  1110.0029296875
+                ],
+                [
+                  861.0,
+                  1147.0
+                ],
+                [
+                  75.67010498046875,
+                  1139.9970703125
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8500489592552185,
+              "coordinate": [
+                1,
+                1170,
+                1094,
+                1281
+              ],
+              "order": 16,
+              "polygon_points": [
+                [
+                  1.0,
+                  1170.0
+                ],
+                [
+                  1094.0,
+                  1170.0
+                ],
+                [
+                  1094.0,
+                  1281.0
+                ],
+                [
+                  1.0,
+                  1281.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5577667355537415,
+              "coordinate": [
+                43,
+                1302,
+                1083,
+                1351
+              ],
+              "order": 17,
+              "polygon_points": [
+                [
+                  43.0,
+                  1302.0
+                ],
+                [
+                  1082.337890625,
+                  1311.0029296875
+                ],
+                [
+                  1081.9244384765625,
+                  1358.739501953125
+                ],
+                [
+                  42.5865478515625,
+                  1349.736572265625
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.3222894072532654,
+              "coordinate": [
+                2,
+                1302,
+                1093,
+                1419
+              ],
+              "order": 18,
+              "polygon_points": [
+                [
+                  2,
+                  1302
+                ],
+                [
+                  8,
+                  1418
+                ],
+                [
+                  1092,
+                  1418
+                ],
+                [
+                  1092,
+                  1311
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5458801984786987,
+              "coordinate": [
+                2,
+                1370,
+                390,
+                1414
+              ],
+              "order": 19,
+              "polygon_points": [
+                [
+                  2,
+                  1370
+                ],
+                [
+                  2,
+                  1406
+                ],
+                [
+                  140,
+                  1413
+                ],
+                [
+                  151,
+                  1413
+                ],
+                [
+                  158,
+                  1413
+                ],
+                [
+                  163,
+                  1413
+                ],
+                [
+                  170,
+                  1413
+                ],
+                [
+                  389,
+                  1413
+                ],
+                [
+                  389,
+                  1370
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7403314113616943,
+              "coordinate": [
+                72,
+                1439,
+                289,
+                1482
+              ],
+              "order": 20,
+              "polygon_points": [
+                [
+                  72.0,
+                  1439.0
+                ],
+                [
+                  289.0,
+                  1439.0
+                ],
+                [
+                  289.0,
+                  1482.0
+                ],
+                [
+                  72.0,
+                  1482.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7741497755050659,
+              "coordinate": [
+                73,
+                1508,
+                993,
+                1560
+              ],
+              "order": 21,
+              "polygon_points": [
+                [
+                  73.0,
+                  1508.0
+                ],
+                [
+                  992.374267578125,
+                  1516.003173828125
+                ],
+                [
+                  992.0,
+                  1559.0
+                ],
+                [
+                  72.625732421875,
+                  1550.996826171875
+                ]
+              ]
+            },
+            {
+              "cls_id": 9,
+              "label": "footer_image",
+              "score": 0.6409201622009277,
+              "coordinate": [
+                489,
+                1587,
+                737,
+                1677
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  489.0,
+                  1587.0
+                ],
+                [
+                  737.0,
+                  1587.0
+                ],
+                [
+                  737.0,
+                  1677.0
+                ],
+                [
+                  489.0,
+                  1677.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.8733475208282471,
+              "coordinate": [
+                812,
+                1585,
+                1054,
+                1626
+              ],
+              "order": 22,
+              "polygon_points": [
+                [
+                  812.0,
+                  1585.0
+                ],
+                [
+                  1054.0,
+                  1585.0
+                ],
+                [
+                  1054.0,
+                  1626.0
+                ],
+                [
+                  812.0,
+                  1626.0
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "markdown": {
+        "text": "电话：13750173434。\n\n问：你的家庭情况？\n\n答：我婚姻已经离异，儿子：陈家聪，电话忘记了。\n\n问：你的个人简历？\n\n答：本人从小在原籍地长大，适龄入学读书，初二没毕业就外出工作，现今帮私人老板开车没有固定工作地点。\n\n问：你是否是人大代表或政协委员、中共党员？\n\n答：不是。\n\n问：你以前是否受过刑事处罚、行政处罚或者被劳动教养、收容教育、强制戒毒、收容教养等情况？\n\n答：没有的。\n\n问：根据《中华人民共和国刑事诉讼法》，你有权委托律师作为辩护人。\n\n因经济困难或者有其他原因没有委托辩护人的，可以向法律援助机构提出申请，你听明白了吗？是否需要聘请律师？\n\n答：我不需要聘请律师的。\n\n问：这是《犯罪嫌疑人诉讼权利义务告知书》请你收阅？\n\n答：我已经收阅，并清楚知悉自己的权利义务，我也在告知书上签名以及 $ \\underline{\\text{按捺指纹}} $。\n\n问：根据相关法律规定，如实供述自己的罪行，可以从轻或者减轻对你的处罚，你听明白了吗？\n\n答：我清楚了。\n\n问：这是《清城公安分局认罪认罚从宽制度告知书》，请你收阅？",
+        "images": {
+          "imgs/img_in_footer_image_box_489_1587_737_1677.jpg": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//7cb84d74-a6b4-4472-8f4a-f2c74fe63c9a/markdown_1/imgs/img_in_footer_image_box_489_1587_737_1677.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T16%3A29%3A02Z%2F-1%2F%2F8da0c99bc472d5686ccb5053db437c05a72e69d698dd75847f9c518d8cee4df7"
+        }
+      }
+    },
+    {
+      "prunedResult": {
+        "page_count": 8,
+        "width": 1196,
+        "height": 1674,
+        "model_settings": {
+          "use_doc_preprocessor": true,
+          "use_layout_detection": true,
+          "use_chart_recognition": false,
+          "use_seal_recognition": false,
+          "use_ocr_for_image_block": false,
+          "format_block_content": false,
+          "merge_layout_blocks": true,
+          "markdown_ignore_labels": [
+            "number",
+            "footnote",
+            "header",
+            "header_image",
+            "footer",
+            "footer_image",
+            "aside_text"
+          ],
+          "return_layout_polygon_points": true
+        },
+        "parsing_res_list": [
+          {
+            "block_label": "header",
+            "block_content": "505",
+            "block_bbox": [
+              1125,
+              0,
+              1196,
+              23
+            ],
+            "block_id": 0,
+            "block_order": null,
+            "group_id": 0,
+            "block_polygon_points": [
+              [
+                1125.0,
+                0.0
+              ],
+              [
+                1195.0,
+                0.0
+              ],
+              [
+                1195.0,
+                22.0
+              ],
+              [
+                1125.0,
+                22.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我已经收阅。",
+            "block_bbox": [
+              85,
+              96,
+              338,
+              137
+            ],
+            "block_id": 1,
+            "block_order": 1,
+            "group_id": 1,
+            "block_polygon_points": [
+              [
+                85.0,
+                96.0
+              ],
+              [
+                338.0,
+                96.0
+              ],
+              [
+                338.0,
+                137.0
+              ],
+              [
+                85.0,
+                137.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你是否认罪认罚并同意启动认罪认罚程序？",
+            "block_bbox": [
+              86,
+              165,
+              750,
+              207
+            ],
+            "block_id": 2,
+            "block_order": 2,
+            "group_id": 2,
+            "block_polygon_points": [
+              [
+                86.0,
+                165.0
+              ],
+              [
+                750.0,
+                165.0
+              ],
+              [
+                750.0,
+                207.0
+              ],
+              [
+                86.0,
+                207.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我觉得自己没有犯法的，我不需要认罪认罚。",
+            "block_bbox": [
+              85,
+              233,
+              776,
+              276
+            ],
+            "block_id": 3,
+            "block_order": 3,
+            "group_id": 3,
+            "block_polygon_points": [
+              [
+                85.0,
+                233.0
+              ],
+              [
+                776.0,
+                233.0
+              ],
+              [
+                776.0,
+                276.0
+              ],
+              [
+                85.0,
+                276.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：说说你的传唤经过？",
+            "block_bbox": [
+              87,
+              303,
+              437,
+              344
+            ],
+            "block_id": 4,
+            "block_order": 4,
+            "group_id": 4,
+            "block_polygon_points": [
+              [
+                87.0,
+                303.0
+              ],
+              [
+                437.0,
+                303.0
+              ],
+              [
+                437.0,
+                344.0
+              ],
+              [
+                87.0,
+                344.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：2023年1月28日17时许，公安机关的民警来到我家位于广东省清远市清城区朝阳花园B栋902号房，随后公安机关的民警出示证件和相关证明以涉嫌诈骗传唤我到清远市公安局松岗派出所接受调查。",
+            "block_bbox": [
+              77,
+              368,
+              1107,
+              542
+            ],
+            "block_id": 5,
+            "block_order": 5,
+            "group_id": 5,
+            "block_polygon_points": [
+              [
+                75.71727752685547,
+                376.010009765625
+              ],
+              [
+                1106.0,
+                368.0
+              ],
+              [
+                1107.28271484375,
+                532.9900512695312
+              ],
+              [
+                77.0,
+                541.0000610351562
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你有否诈骗的犯罪行为？",
+            "block_bbox": [
+              84,
+              567,
+              499,
+              607
+            ],
+            "block_id": 6,
+            "block_order": 6,
+            "group_id": 6,
+            "block_polygon_points": [
+              [
+                84.0,
+                567.0
+              ],
+              [
+                499.0,
+                567.0
+              ],
+              [
+                499.0,
+                607.0
+              ],
+              [
+                84.0,
+                607.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我没有，我只是收取了成龙飞的42000元用于办理成龙飞的孩子以及外甥入读清城区锦兴小学，但是我没有帮助成龙飞办理成功学位，我就答应退款给成龙飞了，我一共退款了18000元给成龙飞，还欠24000元没有退还给成龙飞。",
+            "block_bbox": [
+              76,
+              634,
+              1106,
+              878
+            ],
+            "block_id": 7,
+            "block_order": 7,
+            "group_id": 7,
+            "block_polygon_points": [
+              [
+                76.0,
+                634.0
+              ],
+              [
+                1106.0,
+                634.0
+              ],
+              [
+                1106.0,
+                878.0
+              ],
+              [
+                76.0,
+                878.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：说说你帮助成龙飞办理锦兴小学学位的经过？",
+            "block_bbox": [
+              83,
+              904,
+              778,
+              944
+            ],
+            "block_id": 8,
+            "block_order": 8,
+            "group_id": 8,
+            "block_polygon_points": [
+              [
+                83.0,
+                904.0
+              ],
+              [
+                778.0,
+                904.0
+              ],
+              [
+                778.0,
+                944.0
+              ],
+              [
+                83.0,
+                944.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我认识陈泳文、“傻全”，陈泳文是我同村的，“傻全”是吃宵夜的时候认识的，当时吃宵夜聊天时候得知了“傻全”可以帮忙办理小孩入读小学的学位，办理学位的费用是成功办理小孩入读小学之后才收钱，办理学位途中的任何费用都不需要给。之后到了2014年时候，陈泳文就跟我说到自己的外甥在清新区没有房子想入读清新区的小学，想问问我能否帮忙找人办理小孩学位。我就想到“傻全”跟我说过可以帮忙办理小孩的学位，我就跟陈泳文说了“傻全”办理学位的费用是成功办理小孩入读小学之后才收钱，办理学位途中的任何费用都不需要给，之后陈泳文就将他外甥的出生证明复印件、防疫证复印件给我，我就将这些证明的复印件给到“傻全”。",
+            "block_bbox": [
+              72,
+              969,
+              1108,
+              1553
+            ],
+            "block_id": 9,
+            "block_order": 9,
+            "group_id": 9,
+            "block_polygon_points": [
+              [
+                72.0,
+                969.0
+              ],
+              [
+                1108.0,
+                969.0
+              ],
+              [
+                1108.0,
+                1553.0
+              ],
+              [
+                72.0,
+                1553.0
+              ]
+            ]
+          },
+          {
+            "block_label": "number",
+            "block_content": "第 3 页 共 8 页",
+            "block_bbox": [
+              823,
+              1568,
+              1065,
+              1607
+            ],
+            "block_id": 10,
+            "block_order": null,
+            "group_id": 10,
+            "block_polygon_points": [
+              [
+                823.0,
+                1568.0
+              ],
+              [
+                1065.0,
+                1568.0
+              ],
+              [
+                1065.0,
+                1607.0
+              ],
+              [
+                823.0,
+                1607.0
+              ]
+            ]
+          },
+          {
+            "block_label": "footer_image",
+            "block_content": "",
+            "block_bbox": [
+              441,
+              1608,
+              653,
+              1674
+            ],
+            "block_id": 11,
+            "block_order": null,
+            "group_id": 11,
+            "block_polygon_points": [
+              [
+                441.0,
+                1608.0
+              ],
+              [
+                653.0,
+                1608.0
+              ],
+              [
+                653.0,
+                1674.0
+              ],
+              [
+                441.0,
+                1674.0
+              ]
+            ]
+          }
+        ],
+        "doc_preprocessor_res": {
+          "model_settings": {
+            "use_doc_orientation_classify": true,
+            "use_doc_unwarping": true
+          },
+          "angle": 0
+        },
+        "layout_det_res": {
+          "boxes": [
+            {
+              "cls_id": 12,
+              "label": "header",
+              "score": 0.3899804651737213,
+              "coordinate": [
+                1125,
+                0,
+                1196,
+                23
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  1125.0,
+                  0.0
+                ],
+                [
+                  1195.0,
+                  0.0
+                ],
+                [
+                  1195.0,
+                  22.0
+                ],
+                [
+                  1125.0,
+                  22.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.787066638469696,
+              "coordinate": [
+                85,
+                96,
+                338,
+                137
+              ],
+              "order": 1,
+              "polygon_points": [
+                [
+                  85.0,
+                  96.0
+                ],
+                [
+                  338.0,
+                  96.0
+                ],
+                [
+                  338.0,
+                  137.0
+                ],
+                [
+                  85.0,
+                  137.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8303089737892151,
+              "coordinate": [
+                86,
+                165,
+                750,
+                207
+              ],
+              "order": 2,
+              "polygon_points": [
+                [
+                  86.0,
+                  165.0
+                ],
+                [
+                  750.0,
+                  165.0
+                ],
+                [
+                  750.0,
+                  207.0
+                ],
+                [
+                  86.0,
+                  207.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8206911087036133,
+              "coordinate": [
+                85,
+                233,
+                776,
+                276
+              ],
+              "order": 3,
+              "polygon_points": [
+                [
+                  85.0,
+                  233.0
+                ],
+                [
+                  776.0,
+                  233.0
+                ],
+                [
+                  776.0,
+                  276.0
+                ],
+                [
+                  85.0,
+                  276.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7989419102668762,
+              "coordinate": [
+                87,
+                303,
+                437,
+                344
+              ],
+              "order": 4,
+              "polygon_points": [
+                [
+                  87.0,
+                  303.0
+                ],
+                [
+                  437.0,
+                  303.0
+                ],
+                [
+                  437.0,
+                  344.0
+                ],
+                [
+                  87.0,
+                  344.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.9034200310707092,
+              "coordinate": [
+                77,
+                368,
+                1107,
+                542
+              ],
+              "order": 5,
+              "polygon_points": [
+                [
+                  75.71727752685547,
+                  376.010009765625
+                ],
+                [
+                  1106.0,
+                  368.0
+                ],
+                [
+                  1107.28271484375,
+                  532.9900512695312
+                ],
+                [
+                  77.0,
+                  541.0000610351562
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8098917007446289,
+              "coordinate": [
+                84,
+                567,
+                499,
+                607
+              ],
+              "order": 6,
+              "polygon_points": [
+                [
+                  84.0,
+                  567.0
+                ],
+                [
+                  499.0,
+                  567.0
+                ],
+                [
+                  499.0,
+                  607.0
+                ],
+                [
+                  84.0,
+                  607.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.9322875738143921,
+              "coordinate": [
+                76,
+                634,
+                1106,
+                878
+              ],
+              "order": 7,
+              "polygon_points": [
+                [
+                  76.0,
+                  634.0
+                ],
+                [
+                  1106.0,
+                  634.0
+                ],
+                [
+                  1106.0,
+                  878.0
+                ],
+                [
+                  76.0,
+                  878.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8171610832214355,
+              "coordinate": [
+                83,
+                904,
+                778,
+                944
+              ],
+              "order": 8,
+              "polygon_points": [
+                [
+                  83.0,
+                  904.0
+                ],
+                [
+                  778.0,
+                  904.0
+                ],
+                [
+                  778.0,
+                  944.0
+                ],
+                [
+                  83.0,
+                  944.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.9392587542533875,
+              "coordinate": [
+                72,
+                969,
+                1108,
+                1553
+              ],
+              "order": 9,
+              "polygon_points": [
+                [
+                  72.0,
+                  969.0
+                ],
+                [
+                  1108.0,
+                  969.0
+                ],
+                [
+                  1108.0,
+                  1553.0
+                ],
+                [
+                  72.0,
+                  1553.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.8586631417274475,
+              "coordinate": [
+                823,
+                1568,
+                1065,
+                1607
+              ],
+              "order": 10,
+              "polygon_points": [
+                [
+                  823.0,
+                  1568.0
+                ],
+                [
+                  1065.0,
+                  1568.0
+                ],
+                [
+                  1065.0,
+                  1607.0
+                ],
+                [
+                  823.0,
+                  1607.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 9,
+              "label": "footer_image",
+              "score": 0.5783787965774536,
+              "coordinate": [
+                441,
+                1608,
+                653,
+                1674
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  441.0,
+                  1608.0
+                ],
+                [
+                  653.0,
+                  1608.0
+                ],
+                [
+                  653.0,
+                  1674.0
+                ],
+                [
+                  441.0,
+                  1674.0
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "markdown": {
+        "text": "答：我已经收阅。\n\n问：你是否认罪认罚并同意启动认罪认罚程序？\n\n答：我觉得自己没有犯法的，我不需要认罪认罚。\n\n问：说说你的传唤经过？\n\n答：2023年1月28日17时许，公安机关的民警来到我家位于广东省清远市清城区朝阳花园B栋902号房，随后公安机关的民警出示证件和相关证明以涉嫌诈骗传唤我到清远市公安局松岗派出所接受调查。\n\n问：你有否诈骗的犯罪行为？\n\n答：我没有，我只是收取了成龙飞的42000元用于办理成龙飞的孩子以及外甥入读清城区锦兴小学，但是我没有帮助成龙飞办理成功学位，我就答应退款给成龙飞了，我一共退款了18000元给成龙飞，还欠24000元没有退还给成龙飞。\n\n问：说说你帮助成龙飞办理锦兴小学学位的经过？\n\n答：我认识陈泳文、“傻全”，陈泳文是我同村的，“傻全”是吃宵夜的时候认识的，当时吃宵夜聊天时候得知了“傻全”可以帮忙办理小孩入读小学的学位，办理学位的费用是成功办理小孩入读小学之后才收钱，办理学位途中的任何费用都不需要给。之后到了2014年时候，陈泳文就跟我说到自己的外甥在清新区没有房子想入读清新区的小学，想问问我能否帮忙找人办理小孩学位。我就想到“傻全”跟我说过可以帮忙办理小孩的学位，我就跟陈泳文说了“傻全”办理学位的费用是成功办理小孩入读小学之后才收钱，办理学位途中的任何费用都不需要给，之后陈泳文就将他外甥的出生证明复印件、防疫证复印件给我，我就将这些证明的复印件给到“傻全”。",
+        "images": {
+          "imgs/img_in_footer_image_box_441_1608_653_1674.jpg": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//7cb84d74-a6b4-4472-8f4a-f2c74fe63c9a/markdown_2/imgs/img_in_footer_image_box_441_1608_653_1674.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T16%3A29%3A02Z%2F-1%2F%2Fbd4bc241691dae32cb721808195cafb35f595b51fea43de68d6a3c5d3884eef5"
+        }
+      }
+    },
+    {
+      "prunedResult": {
+        "page_count": 8,
+        "width": 1196,
+        "height": 1678,
+        "model_settings": {
+          "use_doc_preprocessor": true,
+          "use_layout_detection": true,
+          "use_chart_recognition": false,
+          "use_seal_recognition": false,
+          "use_ocr_for_image_block": false,
+          "format_block_content": false,
+          "merge_layout_blocks": true,
+          "markdown_ignore_labels": [
+            "number",
+            "footnote",
+            "header",
+            "header_image",
+            "footer",
+            "footer_image",
+            "aside_text"
+          ],
+          "return_layout_polygon_points": true
+        },
+        "parsing_res_list": [
+          {
+            "block_label": "number",
+            "block_content": "310",
+            "block_bbox": [
+              1101,
+              21,
+              1179,
+              71
+            ],
+            "block_id": 0,
+            "block_order": null,
+            "group_id": 0,
+            "block_polygon_points": [
+              [
+                1101.0,
+                21.0
+              ],
+              [
+                1179.0,
+                21.0
+              ],
+              [
+                1179.0,
+                71.0
+              ],
+              [
+                1101.0,
+                71.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "全”用于办理学位。但是“傻全”没有办理成功的，“傻全”就将陈泳文外甥的出生证明复印件、防疫证复印件给回我，我就给回陈泳文。就是这样陈泳文知道了我可以帮忙办理小孩学位，于是到了2020年6月4日的晚上，我就接到陈泳文的电话，陈泳文就在电话跟我说有个成龙飞的朋友想办理小孩入读小学学位，问我能否帮忙办理，如果可以办理的话就过来取现场跟他们谈，我就说好的。之后我就来到了陈泳文说的地点，地点大概是清远市清城区某间宵夜店。到了之后我就在现场看到了陈泳文、成龙飞、成龙飞的朋友。陈泳文就跟我介绍了成龙飞并再次跟我说了成龙飞需要办理小孩入读小学学位。之后我就跟成龙飞两个人交谈学位的事情并添加了成龙飞的微信，成龙飞在交谈中跟我说到他跟她亲戚一起在清远市清城区锦兴小学附近买了房子，但是房子还没有入住，所以小孩入读不了锦兴小学，就想找我帮忙办理成龙飞小孩以及他外甥入读锦兴小学的事情。我就跟成龙飞说需要成龙飞小孩以及他外甥的出生证明复印件、防疫证复印件以及办理的总费用需要42000元，如果可以就转钱并交资料给我办理，我也跟成龙飞说了办理不成功会将42000元退回给成龙飞。之后成龙飞就通过现金以及微信的方式总共给了我42000元，成龙飞是在清远市清城区麻巷街首创造型理发店给我现金以及将小孩的资料给我。到了2020年8月30日左右我就跟成龙飞说自己办理不了成龙飞小孩以及他外甥入读锦兴小学的学位之后会将42000元退回给成龙飞，到了2020年8月31日我就到清远市清城区麻巷街首创造型理发店当面退了15000元现金给成龙飞，到了2020年11月24日左右我就通过微信方式退还了3000元给成龙飞，至今拖欠24000元没有退还给成龙飞。",
+            "block_bbox": [
+              25,
+              119,
+              1114,
+              1569
+            ],
+            "block_id": 1,
+            "block_order": 1,
+            "group_id": 1,
+            "block_polygon_points": [
+              [
+                25.0,
+                119.0
+              ],
+              [
+                1114.0,
+                119.0
+              ],
+              [
+                1114.0,
+                1569.0
+              ],
+              [
+                25.0,
+                1569.0
+              ]
+            ]
+          },
+          {
+            "block_label": "number",
+            "block_content": "第 4 页 共 8 页",
+            "block_bbox": [
+              821,
+              1581,
+              1063,
+              1625
+            ],
+            "block_id": 2,
+            "block_order": null,
+            "group_id": 2,
+            "block_polygon_points": [
+              [
+                821.0,
+                1581.0
+              ],
+              [
+                1063.0,
+                1581.0
+              ],
+              [
+                1063.0,
+                1625.0
+              ],
+              [
+                821.0,
+                1625.0
+              ]
+            ]
+          },
+          {
+            "block_label": "footer_image",
+            "block_content": "",
+            "block_bbox": [
+              395,
+              1598,
+              673,
+              1678
+            ],
+            "block_id": 3,
+            "block_order": null,
+            "group_id": 3,
+            "block_polygon_points": [
+              [
+                395.0,
+                1598.0
+              ],
+              [
+                673.0,
+                1598.0
+              ],
+              [
+                673.0,
+                1678.0
+              ],
+              [
+                395.0,
+                1678.0
+              ]
+            ]
+          }
+        ],
+        "doc_preprocessor_res": {
+          "model_settings": {
+            "use_doc_orientation_classify": true,
+            "use_doc_unwarping": true
+          },
+          "angle": 0
+        },
+        "layout_det_res": {
+          "boxes": [
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.6834434270858765,
+              "coordinate": [
+                1101,
+                21,
+                1179,
+                71
+              ],
+              "order": 1,
+              "polygon_points": [
+                [
+                  1101.0,
+                  21.0
+                ],
+                [
+                  1179.0,
+                  21.0
+                ],
+                [
+                  1179.0,
+                  71.0
+                ],
+                [
+                  1101.0,
+                  71.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.9321824312210083,
+              "coordinate": [
+                25,
+                119,
+                1114,
+                1569
+              ],
+              "order": 2,
+              "polygon_points": [
+                [
+                  25.0,
+                  119.0
+                ],
+                [
+                  1114.0,
+                  119.0
+                ],
+                [
+                  1114.0,
+                  1569.0
+                ],
+                [
+                  25.0,
+                  1569.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.8491129875183105,
+              "coordinate": [
+                821,
+                1581,
+                1063,
+                1625
+              ],
+              "order": 3,
+              "polygon_points": [
+                [
+                  821.0,
+                  1581.0
+                ],
+                [
+                  1063.0,
+                  1581.0
+                ],
+                [
+                  1063.0,
+                  1625.0
+                ],
+                [
+                  821.0,
+                  1625.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 9,
+              "label": "footer_image",
+              "score": 0.7394653558731079,
+              "coordinate": [
+                395,
+                1598,
+                673,
+                1678
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  395.0,
+                  1598.0
+                ],
+                [
+                  673.0,
+                  1598.0
+                ],
+                [
+                  673.0,
+                  1678.0
+                ],
+                [
+                  395.0,
+                  1678.0
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "markdown": {
+        "text": "全”用于办理学位。但是“傻全”没有办理成功的，“傻全”就将陈泳文外甥的出生证明复印件、防疫证复印件给回我，我就给回陈泳文。就是这样陈泳文知道了我可以帮忙办理小孩学位，于是到了2020年6月4日的晚上，我就接到陈泳文的电话，陈泳文就在电话跟我说有个成龙飞的朋友想办理小孩入读小学学位，问我能否帮忙办理，如果可以办理的话就过来取现场跟他们谈，我就说好的。之后我就来到了陈泳文说的地点，地点大概是清远市清城区某间宵夜店。到了之后我就在现场看到了陈泳文、成龙飞、成龙飞的朋友。陈泳文就跟我介绍了成龙飞并再次跟我说了成龙飞需要办理小孩入读小学学位。之后我就跟成龙飞两个人交谈学位的事情并添加了成龙飞的微信，成龙飞在交谈中跟我说到他跟她亲戚一起在清远市清城区锦兴小学附近买了房子，但是房子还没有入住，所以小孩入读不了锦兴小学，就想找我帮忙办理成龙飞小孩以及他外甥入读锦兴小学的事情。我就跟成龙飞说需要成龙飞小孩以及他外甥的出生证明复印件、防疫证复印件以及办理的总费用需要42000元，如果可以就转钱并交资料给我办理，我也跟成龙飞说了办理不成功会将42000元退回给成龙飞。之后成龙飞就通过现金以及微信的方式总共给了我42000元，成龙飞是在清远市清城区麻巷街首创造型理发店给我现金以及将小孩的资料给我。到了2020年8月30日左右我就跟成龙飞说自己办理不了成龙飞小孩以及他外甥入读锦兴小学的学位之后会将42000元退回给成龙飞，到了2020年8月31日我就到清远市清城区麻巷街首创造型理发店当面退了15000元现金给成龙飞，到了2020年11月24日左右我就通过微信方式退还了3000元给成龙飞，至今拖欠24000元没有退还给成龙飞。",
+        "images": {
+          "imgs/img_in_footer_image_box_395_1598_673_1678.jpg": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//7cb84d74-a6b4-4472-8f4a-f2c74fe63c9a/markdown_3/imgs/img_in_footer_image_box_395_1598_673_1678.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T16%3A29%3A02Z%2F-1%2F%2Fcb6ebd855f556dc1771fca03af428a3e9d9547792ada532827e9ef05e19ed1ab"
+        }
+      }
+    },
+    {
+      "prunedResult": {
+        "page_count": 8,
+        "width": 1198,
+        "height": 1676,
+        "model_settings": {
+          "use_doc_preprocessor": true,
+          "use_layout_detection": true,
+          "use_chart_recognition": false,
+          "use_seal_recognition": false,
+          "use_ocr_for_image_block": false,
+          "format_block_content": false,
+          "merge_layout_blocks": true,
+          "markdown_ignore_labels": [
+            "number",
+            "footnote",
+            "header",
+            "header_image",
+            "footer",
+            "footer_image",
+            "aside_text"
+          ],
+          "return_layout_polygon_points": true
+        },
+        "parsing_res_list": [
+          {
+            "block_label": "header",
+            "block_content": "o",
+            "block_bbox": [
+              1130,
+              0,
+              1198,
+              19
+            ],
+            "block_id": 0,
+            "block_order": null,
+            "group_id": 0,
+            "block_polygon_points": [
+              [
+                1130.0,
+                0.0
+              ],
+              [
+                1197.0,
+                0.0
+              ],
+              [
+                1197.0,
+                18.0
+              ],
+              [
+                1130.0,
+                18.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：成龙飞说到房子在清远市清城区锦兴小学附近买了房子，这房子是何人的？",
+            "block_bbox": [
+              85,
+              93,
+              1106,
+              206
+            ],
+            "block_id": 1,
+            "block_order": 1,
+            "group_id": 1,
+            "block_polygon_points": [
+              [
+                85.0,
+                93.0
+              ],
+              [
+                1105.0,
+                93.0
+              ],
+              [
+                1105.0,
+                197.0
+              ],
+              [
+                85.0,
+                197.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：成龙飞就说他和他亲戚在清城区锦兴小学附近买了房子，具体房子是何人的，成龙飞没有跟我说，我也没有过问。",
+            "block_bbox": [
+              86,
+              234,
+              1106,
+              346
+            ],
+            "block_id": 2,
+            "block_order": 2,
+            "group_id": 2,
+            "block_polygon_points": [
+              [
+                86.0,
+                234.0
+              ],
+              [
+                1104.9998779296875,
+                243.0
+              ],
+              [
+                1104.01953125,
+                353.9913330078125
+              ],
+              [
+                85.0196533203125,
+                344.9913330078125
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：说说你收取成龙飞小孩学位费用在微信上的转账情况？",
+            "block_bbox": [
+              87,
+              372,
+              903,
+              413
+            ],
+            "block_id": 3,
+            "block_order": 3,
+            "group_id": 3,
+            "block_polygon_points": [
+              [
+                87.0,
+                372.0
+              ],
+              [
+                903.0,
+                372.0
+              ],
+              [
+                903.0,
+                413.0
+              ],
+              [
+                87.0,
+                413.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：成龙飞通过现金以及微信的方式总共给了我42000元用于帮助成龙飞办理小孩入读学位，2020年6月5日我来到清远市清城区麻巷街首创造型理发店成龙飞通过现金方式给了我17000元现金，2020年6月5日成龙飞通过微信方式转账了13000元给我微信，2020年8月5日成龙飞通过微信方式转账了6000元给我微信，2020年8月10日成龙飞通过微信方式转账了6000元给我微信。我在2020年8月31日到清远市清城区麻巷街首创造型理发店当面退了15000元现金给成龙飞，到了2020年11月24日左右我就通过微信方式退还了3000元给成龙飞，至今拖欠24000元没有退还给成龙飞。",
+            "block_bbox": [
+              76,
+              440,
+              1103,
+              1020
+            ],
+            "block_id": 4,
+            "block_order": 4,
+            "group_id": 4,
+            "block_polygon_points": [
+              [
+                76.0,
+                440.0
+              ],
+              [
+                1103.0,
+                440.0
+              ],
+              [
+                1103.0,
+                1020.0
+              ],
+              [
+                76.0,
+                1020.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：从2020年6月5日你收取成龙飞用于办理小孩学位费用开始直到在2020年8月30日，你跟成龙飞说无法办理成龙飞小孩以及他外甥入读锦兴小学的学位的这段时候，你将42000元用于何处？\n答：这42000元我是用于请客送礼帮助成龙飞办理小孩学位的事情上了。具体请了谁吃饭，在什么地方吃饭，买了什么礼物给谁，在什么地方买礼物我都忘记了。我也忘记了自己是通过微信方式还是现金方式支付这些请客送礼的费用了。",
+            "block_bbox": [
+              21,
+              1050,
+              1101,
+              1492
+            ],
+            "block_id": 5,
+            "block_order": 5,
+            "group_id": 5,
+            "block_polygon_points": [
+              [
+                75,
+                1050
+              ],
+              [
+                21,
+                1259
+              ],
+              [
+                21,
+                1433
+              ],
+              [
+                27,
+                1459
+              ],
+              [
+                21,
+                1491
+              ],
+              [
+                1100,
+                1491
+              ],
+              [
+                1094,
+                1050
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：说说你和成龙飞的微信情况？",
+            "block_bbox": [
+              80,
+              1523,
+              556,
+              1564
+            ],
+            "block_id": 6,
+            "block_order": 6,
+            "group_id": 6,
+            "block_polygon_points": [
+              [
+                80.0,
+                1523.0
+              ],
+              [
+                556.0,
+                1523.0
+              ],
+              [
+                556.0,
+                1564.0
+              ],
+              [
+                80.0,
+                1564.0
+              ]
+            ]
+          },
+          {
+            "block_label": "footer_image",
+            "block_content": "",
+            "block_bbox": [
+              468,
+              1606,
+              697,
+              1676
+            ],
+            "block_id": 7,
+            "block_order": null,
+            "group_id": 7,
+            "block_polygon_points": [
+              [
+                468.0,
+                1606.0
+              ],
+              [
+                697.0,
+                1606.0
+              ],
+              [
+                697.0,
+                1676.0
+              ],
+              [
+                468.0,
+                1676.0
+              ]
+            ]
+          },
+          {
+            "block_label": "number",
+            "block_content": "第 5 页 共 8 页",
+            "block_bbox": [
+              822,
+              1584,
+              1064,
+              1624
+            ],
+            "block_id": 8,
+            "block_order": null,
+            "group_id": 8,
+            "block_polygon_points": [
+              [
+                822.0,
+                1584.0
+              ],
+              [
+                1064.0,
+                1584.0
+              ],
+              [
+                1064.0,
+                1624.0
+              ],
+              [
+                822.0,
+                1624.0
+              ]
+            ]
+          }
+        ],
+        "doc_preprocessor_res": {
+          "model_settings": {
+            "use_doc_orientation_classify": true,
+            "use_doc_unwarping": true
+          },
+          "angle": 0
+        },
+        "layout_det_res": {
+          "boxes": [
+            {
+              "cls_id": 12,
+              "label": "header",
+              "score": 0.38121429085731506,
+              "coordinate": [
+                1130,
+                0,
+                1198,
+                19
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  1130.0,
+                  0.0
+                ],
+                [
+                  1197.0,
+                  0.0
+                ],
+                [
+                  1197.0,
+                  18.0
+                ],
+                [
+                  1130.0,
+                  18.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8748871684074402,
+              "coordinate": [
+                85,
+                93,
+                1106,
+                206
+              ],
+              "order": 1,
+              "polygon_points": [
+                [
+                  85.0,
+                  93.0
+                ],
+                [
+                  1105.0,
+                  93.0
+                ],
+                [
+                  1105.0,
+                  197.0
+                ],
+                [
+                  85.0,
+                  197.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8998167514801025,
+              "coordinate": [
+                86,
+                234,
+                1106,
+                346
+              ],
+              "order": 2,
+              "polygon_points": [
+                [
+                  86.0,
+                  234.0
+                ],
+                [
+                  1104.9998779296875,
+                  243.0
+                ],
+                [
+                  1104.01953125,
+                  353.9913330078125
+                ],
+                [
+                  85.0196533203125,
+                  344.9913330078125
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7725029587745667,
+              "coordinate": [
+                87,
+                372,
+                903,
+                413
+              ],
+              "order": 3,
+              "polygon_points": [
+                [
+                  87.0,
+                  372.0
+                ],
+                [
+                  903.0,
+                  372.0
+                ],
+                [
+                  903.0,
+                  413.0
+                ],
+                [
+                  87.0,
+                  413.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8125568628311157,
+              "coordinate": [
+                76,
+                440,
+                1103,
+                1020
+              ],
+              "order": 4,
+              "polygon_points": [
+                [
+                  76.0,
+                  440.0
+                ],
+                [
+                  1103.0,
+                  440.0
+                ],
+                [
+                  1103.0,
+                  1020.0
+                ],
+                [
+                  76.0,
+                  1020.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5184204578399658,
+              "coordinate": [
+                81,
+                1046,
+                1096,
+                1223
+              ],
+              "order": 5,
+              "polygon_points": [
+                [
+                  81.0,
+                  1046.0
+                ],
+                [
+                  1096.0,
+                  1046.0
+                ],
+                [
+                  1096.0,
+                  1223.0
+                ],
+                [
+                  81.0,
+                  1223.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.308349072933197,
+              "coordinate": [
+                21,
+                1050,
+                1101,
+                1492
+              ],
+              "order": 6,
+              "polygon_points": [
+                [
+                  75,
+                  1050
+                ],
+                [
+                  21,
+                  1259
+                ],
+                [
+                  21,
+                  1433
+                ],
+                [
+                  27,
+                  1459
+                ],
+                [
+                  21,
+                  1491
+                ],
+                [
+                  1100,
+                  1491
+                ],
+                [
+                  1094,
+                  1050
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.4446808993816376,
+              "coordinate": [
+                48,
+                1253,
+                1104,
+                1495
+              ],
+              "order": 7,
+              "polygon_points": [
+                [
+                  84,
+                  1253
+                ],
+                [
+                  78,
+                  1494
+                ],
+                [
+                  1103,
+                  1486
+                ],
+                [
+                  1097,
+                  1253
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7625210285186768,
+              "coordinate": [
+                80,
+                1523,
+                556,
+                1564
+              ],
+              "order": 8,
+              "polygon_points": [
+                [
+                  80.0,
+                  1523.0
+                ],
+                [
+                  556.0,
+                  1523.0
+                ],
+                [
+                  556.0,
+                  1564.0
+                ],
+                [
+                  80.0,
+                  1564.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 9,
+              "label": "footer_image",
+              "score": 0.520929217338562,
+              "coordinate": [
+                468,
+                1606,
+                697,
+                1676
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  468.0,
+                  1606.0
+                ],
+                [
+                  697.0,
+                  1606.0
+                ],
+                [
+                  697.0,
+                  1676.0
+                ],
+                [
+                  468.0,
+                  1676.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.85899817943573,
+              "coordinate": [
+                822,
+                1584,
+                1064,
+                1624
+              ],
+              "order": 9,
+              "polygon_points": [
+                [
+                  822.0,
+                  1584.0
+                ],
+                [
+                  1064.0,
+                  1584.0
+                ],
+                [
+                  1064.0,
+                  1624.0
+                ],
+                [
+                  822.0,
+                  1624.0
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "markdown": {
+        "text": "问：成龙飞说到房子在清远市清城区锦兴小学附近买了房子，这房子是何人的？\n\n答：成龙飞就说他和他亲戚在清城区锦兴小学附近买了房子，具体房子是何人的，成龙飞没有跟我说，我也没有过问。\n\n问：说说你收取成龙飞小孩学位费用在微信上的转账情况？\n\n答：成龙飞通过现金以及微信的方式总共给了我42000元用于帮助成龙飞办理小孩入读学位，2020年6月5日我来到清远市清城区麻巷街首创造型理发店成龙飞通过现金方式给了我17000元现金，2020年6月5日成龙飞通过微信方式转账了13000元给我微信，2020年8月5日成龙飞通过微信方式转账了6000元给我微信，2020年8月10日成龙飞通过微信方式转账了6000元给我微信。我在2020年8月31日到清远市清城区麻巷街首创造型理发店当面退了15000元现金给成龙飞，到了2020年11月24日左右我就通过微信方式退还了3000元给成龙飞，至今拖欠24000元没有退还给成龙飞。\n\n问：从2020年6月5日你收取成龙飞用于办理小孩学位费用开始直到在2020年8月30日，你跟成龙飞说无法办理成龙飞小孩以及他外甥入读锦兴小学的学位的这段时候，你将42000元用于何处？\n\n答：这42000元我是用于请客送礼帮助成龙飞办理小孩学位的事情上了。具体请了谁吃饭，在什么地方吃饭，买了什么礼物给谁，在什么地方买礼物我都忘记了。我也忘记了自己是通过微信方式还是现金方式支付这些请客送礼的费用了。\n\n问：说说你和成龙飞的微信情况？",
+        "images": {
+          "imgs/img_in_footer_image_box_468_1606_697_1676.jpg": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//7cb84d74-a6b4-4472-8f4a-f2c74fe63c9a/markdown_4/imgs/img_in_footer_image_box_468_1606_697_1676.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T16%3A29%3A02Z%2F-1%2F%2F4c9bb4c6227d8f9d04b7d352014a996d5afc38a1913f884e394c76ebf73079ef"
+        }
+      }
+    },
+    {
+      "prunedResult": {
+        "page_count": 8,
+        "width": 1198,
+        "height": 1674,
+        "model_settings": {
+          "use_doc_preprocessor": true,
+          "use_layout_detection": true,
+          "use_chart_recognition": false,
+          "use_seal_recognition": false,
+          "use_ocr_for_image_block": false,
+          "format_block_content": false,
+          "merge_layout_blocks": true,
+          "markdown_ignore_labels": [
+            "number",
+            "footnote",
+            "header",
+            "header_image",
+            "footer",
+            "footer_image",
+            "aside_text"
+          ],
+          "return_layout_polygon_points": true
+        },
+        "parsing_res_list": [
+          {
+            "block_label": "header",
+            "block_content": "21",
+            "block_bbox": [
+              1123,
+              0,
+              1198,
+              19
+            ],
+            "block_id": 0,
+            "block_order": null,
+            "group_id": 0,
+            "block_polygon_points": [
+              [
+                1123.0,
+                0.0
+              ],
+              [
+                1197.0,
+                0.0
+              ],
+              [
+                1197.0,
+                18.0
+              ],
+              [
+                1123.0,
+                18.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我的微信号是：wxid_wb67ftqi5p9722，微信昵称“凡事三思而后行”；成龙飞的微信号我忘记了，因为成龙飞拉黑了我微信，我找不到他的微信信息了。",
+            "block_bbox": [
+              80,
+              96,
+              1096,
+              278
+            ],
+            "block_id": 1,
+            "block_order": 1,
+            "group_id": 1,
+            "block_polygon_points": [
+              [
+                80.0,
+                96.0
+              ],
+              [
+                1096.0,
+                96.0
+              ],
+              [
+                1096.0,
+                278.0
+              ],
+              [
+                80.0,
+                278.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：能否提供你与成龙飞的微信聊天记录？",
+            "block_bbox": [
+              84,
+              302,
+              681,
+              344
+            ],
+            "block_id": 2,
+            "block_order": 2,
+            "group_id": 2,
+            "block_polygon_points": [
+              [
+                84.0,
+                302.0
+              ],
+              [
+                681.0,
+                302.0
+              ],
+              [
+                681.0,
+                344.0
+              ],
+              [
+                84.0,
+                344.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我只能提供与成龙飞的微信转账记录，因为成龙飞将我拉黑了，我与成龙飞的微信聊天记录就删除了。",
+            "block_bbox": [
+              79,
+              368,
+              1095,
+              478
+            ],
+            "block_id": 3,
+            "block_order": 3,
+            "group_id": 3,
+            "block_polygon_points": [
+              [
+                79.0,
+                368.0
+              ],
+              [
+                1095.0,
+                368.0
+              ],
+              [
+                1095.0,
+                478.0
+              ],
+              [
+                79.0,
+                478.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：2020年6月4日的晚上陈泳文、成龙飞的朋友是否知道你与成龙飞交谈办理学位的内容？",
+            "block_bbox": [
+              81,
+              501,
+              1097,
+              608
+            ],
+            "block_id": 4,
+            "block_order": 4,
+            "group_id": 4,
+            "block_polygon_points": [
+              [
+                81.0,
+                501.0
+              ],
+              [
+                1097.0,
+                501.0
+              ],
+              [
+                1097.0,
+                608.0
+              ],
+              [
+                81.0,
+                608.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：陈泳文、成龙飞的朋友知道的，他们两个在现场，但是具体办理学位的详细内容只有我跟成龙飞知道。",
+            "block_bbox": [
+              80,
+              633,
+              1097,
+              743
+            ],
+            "block_id": 5,
+            "block_order": 5,
+            "group_id": 5,
+            "block_polygon_points": [
+              [
+                80.0,
+                633.0
+              ],
+              [
+                1097.0,
+                633.0
+              ],
+              [
+                1097.0,
+                743.0
+              ],
+              [
+                80.0,
+                743.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：陈泳文为何要介绍成龙飞给你认识？",
+            "block_bbox": [
+              0,
+              769,
+              648,
+              814
+            ],
+            "block_id": 6,
+            "block_order": 6,
+            "group_id": 6,
+            "block_polygon_points": [
+              [
+                0.0,
+                769.0
+              ],
+              [
+                648.0,
+                769.0
+              ],
+              [
+                648.0,
+                814.0
+              ],
+              [
+                0.0,
+                814.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：因为陈泳文想帮助他朋友成龙飞办理小孩入读的学位。",
+            "block_bbox": [
+              79,
+              837,
+              891,
+              878
+            ],
+            "block_id": 7,
+            "block_order": 7,
+            "group_id": 7,
+            "block_polygon_points": [
+              [
+                79.0,
+                837.0
+              ],
+              [
+                891.0,
+                837.0
+              ],
+              [
+                891.0,
+                878.0
+              ],
+              [
+                79.0,
+                878.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：陈泳文介绍成龙飞给你办理小孩学位是否有收取费用？",
+            "block_bbox": [
+              83,
+              903,
+              897,
+              943
+            ],
+            "block_id": 8,
+            "block_order": 8,
+            "group_id": 8,
+            "block_polygon_points": [
+              [
+                83.0,
+                903.0
+              ],
+              [
+                897.0,
+                903.0
+              ],
+              [
+                897.0,
+                943.0
+              ],
+              [
+                83.0,
+                943.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：没有的。",
+            "block_bbox": [
+              82,
+              970,
+              267,
+              1009
+            ],
+            "block_id": 9,
+            "block_order": 9,
+            "group_id": 9,
+            "block_polygon_points": [
+              [
+                82.0,
+                970.0
+              ],
+              [
+                267.0,
+                970.0
+              ],
+              [
+                267.0,
+                1009.0
+              ],
+              [
+                82.0,
+                1009.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：从2020年11月24日你通过微信方式退还了3000元给成龙飞之后，你是否有主动联系过成龙飞？",
+            "block_bbox": [
+              77,
+              1037,
+              1092,
+              1147
+            ],
+            "block_id": 10,
+            "block_order": 10,
+            "group_id": 10,
+            "block_polygon_points": [
+              [
+                77.0,
+                1037.0
+              ],
+              [
+                1092.0,
+                1037.0
+              ],
+              [
+                1092.0,
+                1147.0
+              ],
+              [
+                77.0,
+                1147.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我有联系过成龙飞，但是成龙飞将我的电话以及微信拉黑了，我找不到成龙飞，我也想将拖欠成龙飞的24000元归还给成龙飞。",
+            "block_bbox": [
+              73,
+              1171,
+              1103,
+              1279
+            ],
+            "block_id": 11,
+            "block_order": 11,
+            "group_id": 11,
+            "block_polygon_points": [
+              [
+                73.0,
+                1171.0
+              ],
+              [
+                1103.0,
+                1171.0
+              ],
+              [
+                1103.0,
+                1279.0
+              ],
+              [
+                73.0,
+                1279.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：成龙飞为何要拉黑你吗？",
+            "block_bbox": [
+              79,
+              1304,
+              491,
+              1345
+            ],
+            "block_id": 12,
+            "block_order": 12,
+            "group_id": 12,
+            "block_polygon_points": [
+              [
+                79.0,
+                1304.0
+              ],
+              [
+                491.0,
+                1304.0
+              ],
+              [
+                491.0,
+                1345.0
+              ],
+              [
+                79.0,
+                1345.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我也不知道。",
+            "block_bbox": [
+              0,
+              1367,
+              327,
+              1411
+            ],
+            "block_id": 13,
+            "block_order": 13,
+            "group_id": 13,
+            "block_polygon_points": [
+              [
+                0.0,
+                1367.0
+              ],
+              [
+                327.0,
+                1367.0
+              ],
+              [
+                327.0,
+                1411.0
+              ],
+              [
+                0.0,
+                1411.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：说说成龙飞、陈泳文、成龙飞的朋友的情况？",
+            "block_bbox": [
+              77,
+              1438,
+              772,
+              1481
+            ],
+            "block_id": 14,
+            "block_order": 14,
+            "group_id": 14,
+            "block_polygon_points": [
+              [
+                77.0,
+                1438.0
+              ],
+              [
+                772.0,
+                1438.0
+              ],
+              [
+                772.0,
+                1481.0
+              ],
+              [
+                77.0,
+                1481.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：成龙飞就是真实姓名，男，大概35岁左右，身高约178厘米，身材偏",
+            "block_bbox": [
+              77,
+              1505,
+              1107,
+              1550
+            ],
+            "block_id": 15,
+            "block_order": 15,
+            "group_id": 15,
+            "block_polygon_points": [
+              [
+                77.0,
+                1505.0
+              ],
+              [
+                1107.0,
+                1505.0
+              ],
+              [
+                1107.0,
+                1550.0
+              ],
+              [
+                77.0,
+                1550.0
+              ]
+            ]
+          },
+          {
+            "block_label": "footer_image",
+            "block_content": "",
+            "block_bbox": [
+              496,
+              1586,
+              771,
+              1673
+            ],
+            "block_id": 16,
+            "block_order": null,
+            "group_id": 16,
+            "block_polygon_points": [
+              [
+                496.0,
+                1586.0
+              ],
+              [
+                771.0,
+                1586.0
+              ],
+              [
+                771.0,
+                1673.0
+              ],
+              [
+                496.0,
+                1673.0
+              ]
+            ]
+          },
+          {
+            "block_label": "number",
+            "block_content": "第 6 页 共 8 页",
+            "block_bbox": [
+              821,
+              1573,
+              1062,
+              1611
+            ],
+            "block_id": 17,
+            "block_order": null,
+            "group_id": 17,
+            "block_polygon_points": [
+              [
+                821.0,
+                1573.0
+              ],
+              [
+                1062.0,
+                1573.0
+              ],
+              [
+                1062.0,
+                1611.0
+              ],
+              [
+                821.0,
+                1611.0
+              ]
+            ]
+          }
+        ],
+        "doc_preprocessor_res": {
+          "model_settings": {
+            "use_doc_orientation_classify": true,
+            "use_doc_unwarping": true
+          },
+          "angle": 0
+        },
+        "layout_det_res": {
+          "boxes": [
+            {
+              "cls_id": 12,
+              "label": "header",
+              "score": 0.4043627083301544,
+              "coordinate": [
+                1123,
+                0,
+                1198,
+                19
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  1123.0,
+                  0.0
+                ],
+                [
+                  1197.0,
+                  0.0
+                ],
+                [
+                  1197.0,
+                  18.0
+                ],
+                [
+                  1123.0,
+                  18.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7638170719146729,
+              "coordinate": [
+                80,
+                96,
+                1096,
+                278
+              ],
+              "order": 1,
+              "polygon_points": [
+                [
+                  80.0,
+                  96.0
+                ],
+                [
+                  1096.0,
+                  96.0
+                ],
+                [
+                  1096.0,
+                  278.0
+                ],
+                [
+                  80.0,
+                  278.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8220968246459961,
+              "coordinate": [
+                84,
+                302,
+                681,
+                344
+              ],
+              "order": 2,
+              "polygon_points": [
+                [
+                  84.0,
+                  302.0
+                ],
+                [
+                  681.0,
+                  302.0
+                ],
+                [
+                  681.0,
+                  344.0
+                ],
+                [
+                  84.0,
+                  344.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8442286849021912,
+              "coordinate": [
+                79,
+                368,
+                1095,
+                478
+              ],
+              "order": 3,
+              "polygon_points": [
+                [
+                  79.0,
+                  368.0
+                ],
+                [
+                  1095.0,
+                  368.0
+                ],
+                [
+                  1095.0,
+                  478.0
+                ],
+                [
+                  79.0,
+                  478.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8913732171058655,
+              "coordinate": [
+                81,
+                501,
+                1097,
+                608
+              ],
+              "order": 4,
+              "polygon_points": [
+                [
+                  81.0,
+                  501.0
+                ],
+                [
+                  1097.0,
+                  501.0
+                ],
+                [
+                  1097.0,
+                  608.0
+                ],
+                [
+                  81.0,
+                  608.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.9051445126533508,
+              "coordinate": [
+                80,
+                633,
+                1097,
+                743
+              ],
+              "order": 5,
+              "polygon_points": [
+                [
+                  80.0,
+                  633.0
+                ],
+                [
+                  1097.0,
+                  633.0
+                ],
+                [
+                  1097.0,
+                  743.0
+                ],
+                [
+                  80.0,
+                  743.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7935324907302856,
+              "coordinate": [
+                0,
+                769,
+                648,
+                814
+              ],
+              "order": 6,
+              "polygon_points": [
+                [
+                  0.0,
+                  769.0
+                ],
+                [
+                  648.0,
+                  769.0
+                ],
+                [
+                  648.0,
+                  814.0
+                ],
+                [
+                  0.0,
+                  814.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8188677430152893,
+              "coordinate": [
+                79,
+                837,
+                891,
+                878
+              ],
+              "order": 7,
+              "polygon_points": [
+                [
+                  79.0,
+                  837.0
+                ],
+                [
+                  891.0,
+                  837.0
+                ],
+                [
+                  891.0,
+                  878.0
+                ],
+                [
+                  79.0,
+                  878.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8300606608390808,
+              "coordinate": [
+                83,
+                903,
+                897,
+                943
+              ],
+              "order": 8,
+              "polygon_points": [
+                [
+                  83.0,
+                  903.0
+                ],
+                [
+                  897.0,
+                  903.0
+                ],
+                [
+                  897.0,
+                  943.0
+                ],
+                [
+                  83.0,
+                  943.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7946162223815918,
+              "coordinate": [
+                82,
+                970,
+                267,
+                1009
+              ],
+              "order": 9,
+              "polygon_points": [
+                [
+                  82.0,
+                  970.0
+                ],
+                [
+                  267.0,
+                  970.0
+                ],
+                [
+                  267.0,
+                  1009.0
+                ],
+                [
+                  82.0,
+                  1009.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7638121247291565,
+              "coordinate": [
+                77,
+                1037,
+                1092,
+                1147
+              ],
+              "order": 10,
+              "polygon_points": [
+                [
+                  77.0,
+                  1037.0
+                ],
+                [
+                  1092.0,
+                  1037.0
+                ],
+                [
+                  1092.0,
+                  1147.0
+                ],
+                [
+                  77.0,
+                  1147.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8822662830352783,
+              "coordinate": [
+                73,
+                1171,
+                1103,
+                1279
+              ],
+              "order": 11,
+              "polygon_points": [
+                [
+                  73.0,
+                  1171.0
+                ],
+                [
+                  1103.0,
+                  1171.0
+                ],
+                [
+                  1103.0,
+                  1279.0
+                ],
+                [
+                  73.0,
+                  1279.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8171319365501404,
+              "coordinate": [
+                79,
+                1304,
+                491,
+                1345
+              ],
+              "order": 12,
+              "polygon_points": [
+                [
+                  79.0,
+                  1304.0
+                ],
+                [
+                  491.0,
+                  1304.0
+                ],
+                [
+                  491.0,
+                  1345.0
+                ],
+                [
+                  79.0,
+                  1345.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8176681399345398,
+              "coordinate": [
+                0,
+                1367,
+                327,
+                1411
+              ],
+              "order": 13,
+              "polygon_points": [
+                [
+                  0.0,
+                  1367.0
+                ],
+                [
+                  327.0,
+                  1367.0
+                ],
+                [
+                  327.0,
+                  1411.0
+                ],
+                [
+                  0.0,
+                  1411.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.829335629940033,
+              "coordinate": [
+                77,
+                1438,
+                772,
+                1481
+              ],
+              "order": 14,
+              "polygon_points": [
+                [
+                  77.0,
+                  1438.0
+                ],
+                [
+                  772.0,
+                  1438.0
+                ],
+                [
+                  772.0,
+                  1481.0
+                ],
+                [
+                  77.0,
+                  1481.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8190111517906189,
+              "coordinate": [
+                77,
+                1505,
+                1107,
+                1550
+              ],
+              "order": 15,
+              "polygon_points": [
+                [
+                  77.0,
+                  1505.0
+                ],
+                [
+                  1107.0,
+                  1505.0
+                ],
+                [
+                  1107.0,
+                  1550.0
+                ],
+                [
+                  77.0,
+                  1550.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 9,
+              "label": "footer_image",
+              "score": 0.5250179171562195,
+              "coordinate": [
+                496,
+                1586,
+                771,
+                1673
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  496.0,
+                  1586.0
+                ],
+                [
+                  771.0,
+                  1586.0
+                ],
+                [
+                  771.0,
+                  1673.0
+                ],
+                [
+                  496.0,
+                  1673.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.8746539950370789,
+              "coordinate": [
+                821,
+                1573,
+                1062,
+                1611
+              ],
+              "order": 16,
+              "polygon_points": [
+                [
+                  821.0,
+                  1573.0
+                ],
+                [
+                  1062.0,
+                  1573.0
+                ],
+                [
+                  1062.0,
+                  1611.0
+                ],
+                [
+                  821.0,
+                  1611.0
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "markdown": {
+        "text": "答：我的微信号是：wxid_wb67ftqi5p9722，微信昵称“凡事三思而后行”；成龙飞的微信号我忘记了，因为成龙飞拉黑了我微信，我找不到他的微信信息了。\n\n问：能否提供你与成龙飞的微信聊天记录？\n\n答：我只能提供与成龙飞的微信转账记录，因为成龙飞将我拉黑了，我与成龙飞的微信聊天记录就删除了。\n\n问：2020年6月4日的晚上陈泳文、成龙飞的朋友是否知道你与成龙飞交谈办理学位的内容？\n\n答：陈泳文、成龙飞的朋友知道的，他们两个在现场，但是具体办理学位的详细内容只有我跟成龙飞知道。\n\n问：陈泳文为何要介绍成龙飞给你认识？\n\n答：因为陈泳文想帮助他朋友成龙飞办理小孩入读的学位。\n\n问：陈泳文介绍成龙飞给你办理小孩学位是否有收取费用？\n\n答：没有的。\n\n问：从2020年11月24日你通过微信方式退还了3000元给成龙飞之后，你是否有主动联系过成龙飞？\n\n答：我有联系过成龙飞，但是成龙飞将我的电话以及微信拉黑了，我找不到成龙飞，我也想将拖欠成龙飞的24000元归还给成龙飞。\n\n问：成龙飞为何要拉黑你吗？\n\n答：我也不知道。\n\n问：说说成龙飞、陈泳文、成龙飞的朋友的情况？\n\n答：成龙飞就是真实姓名，男，大概35岁左右，身高约178厘米，身材偏",
+        "images": {
+          "imgs/img_in_footer_image_box_496_1586_771_1673.jpg": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//7cb84d74-a6b4-4472-8f4a-f2c74fe63c9a/markdown_5/imgs/img_in_footer_image_box_496_1586_771_1673.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T16%3A29%3A02Z%2F-1%2F%2F4aa01690030556ff68eedfd92290823ec6c6abdceee90eb1ab01f8ff8ccd7307"
+        }
+      }
+    },
+    {
+      "prunedResult": {
+        "page_count": 8,
+        "width": 1196,
+        "height": 1678,
+        "model_settings": {
+          "use_doc_preprocessor": true,
+          "use_layout_detection": true,
+          "use_chart_recognition": false,
+          "use_seal_recognition": false,
+          "use_ocr_for_image_block": false,
+          "format_block_content": false,
+          "merge_layout_blocks": true,
+          "markdown_ignore_labels": [
+            "number",
+            "footnote",
+            "header",
+            "header_image",
+            "footer",
+            "footer_image",
+            "aside_text"
+          ],
+          "return_layout_polygon_points": true
+        },
+        "parsing_res_list": [
+          {
+            "block_label": "header",
+            "block_content": "di",
+            "block_bbox": [
+              1136,
+              0,
+              1196,
+              33
+            ],
+            "block_id": 0,
+            "block_order": null,
+            "group_id": 0,
+            "block_polygon_points": [
+              [
+                1136.0,
+                0.0
+              ],
+              [
+                1196.0,
+                0.0
+              ],
+              [
+                1196.0,
+                33.0
+              ],
+              [
+                1136.0,
+                33.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "瘦，我只知道成龙飞店铺在清远市清城区麻巷街首创造型理发店，成龙飞的电话我忘记了，我不知道成龙飞的详细住址；",
+            "block_bbox": [
+              80,
+              98,
+              1098,
+              211
+            ],
+            "block_id": 1,
+            "block_order": 1,
+            "group_id": 1,
+            "block_polygon_points": [
+              [
+                80.0,
+                98.0
+              ],
+              [
+                1098.0,
+                98.0
+              ],
+              [
+                1098.0,
+                211.0
+              ],
+              [
+                80.0,
+                211.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": " $ \\underline{\\text{陈泳文就是真实姓名，男，大概35岁左右，身材偏瘦，身高约165厘米，身材中等，电话我忘记了，就是我同村人员但是我不知道他的详细住址；成龙飞的朋友，男，大概35岁左右，身材中等，身高约165厘米，其他情况不详。}} $",
+            "block_bbox": [
+              80,
+              236,
+              1098,
+              476
+            ],
+            "block_id": 2,
+            "block_order": 2,
+            "group_id": 2,
+            "block_polygon_points": [
+              [
+                80.0,
+                236.0
+              ],
+              [
+                1098.0,
+                236.0
+              ],
+              [
+                1098.0,
+                476.0
+              ],
+              [
+                80.0,
+                476.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你说成龙飞将你微信、电话拉黑了，但你上述说到知道成龙飞店铺在清远市清城区麻巷街首创造型理发店，你是否有到该店铺找过成龙飞？",
+            "block_bbox": [
+              79,
+              502,
+              1095,
+              611
+            ],
+            "block_id": 3,
+            "block_order": 3,
+            "group_id": 3,
+            "block_polygon_points": [
+              [
+                79.0,
+                502.0
+              ],
+              [
+                1095.0,
+                502.0
+              ],
+              [
+                1095.0,
+                611.0
+              ],
+              [
+                79.0,
+                611.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我有的，我每次过去成龙飞都不在该店铺。我最后一次到该店铺找成龙飞是在2022年9月份的时候。",
+            "block_bbox": [
+              78,
+              636,
+              1098,
+              744
+            ],
+            "block_id": 4,
+            "block_order": 4,
+            "group_id": 4,
+            "block_polygon_points": [
+              [
+                78.0,
+                636.0
+              ],
+              [
+                1098.0,
+                636.0
+              ],
+              [
+                1098.0,
+                744.0
+              ],
+              [
+                78.0,
+                744.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": " $ \\underline{\\text{问：你是否有跟成龙飞说过“傻全”可以帮忙办理小孩入读小学的学位的事情？}} $",
+            "block_bbox": [
+              7,
+              771,
+              1097,
+              880
+            ],
+            "block_id": 5,
+            "block_order": 5,
+            "group_id": 5,
+            "block_polygon_points": [
+              [
+                6.2085065841674805,
+                771.2261962890625
+              ],
+              [
+                1095.9429931640625,
+                763.2208251953125
+              ],
+              [
+                1096.7347412109375,
+                870.99462890625
+              ],
+              [
+                7.000244140625,
+                879.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：没有说过。",
+            "block_bbox": [
+              80,
+              906,
+              298,
+              945
+            ],
+            "block_id": 6,
+            "block_order": 6,
+            "group_id": 6,
+            "block_polygon_points": [
+              [
+                80.0,
+                906.0
+              ],
+              [
+                298.0,
+                906.0
+              ],
+              [
+                298.0,
+                945.0
+              ],
+              [
+                80.0,
+                945.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：说说“傻全”的个人情况？",
+            "block_bbox": [
+              80,
+              972,
+              523,
+              1012
+            ],
+            "block_id": 7,
+            "block_order": 7,
+            "group_id": 7,
+            "block_polygon_points": [
+              [
+                80.0,
+                972.0
+              ],
+              [
+                523.0,
+                972.0
+              ],
+              [
+                523.0,
+                1012.0
+              ],
+              [
+                80.0,
+                1012.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：“傻全”真实姓名：不详，年约57岁，身高约170cm，身材中等，大概在2019年我听我的朋友说“傻全”已经去世了，其他不详。",
+            "block_bbox": [
+              78,
+              1038,
+              1101,
+              1149
+            ],
+            "block_id": 8,
+            "block_order": 8,
+            "group_id": 8,
+            "block_polygon_points": [
+              [
+                78.0,
+                1038.0
+              ],
+              [
+                1101.0,
+                1038.0
+              ],
+              [
+                1101.0,
+                1149.0
+              ],
+              [
+                78.0,
+                1149.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：公安机关对你的尿液检测中，吗啡、甲基苯丙胺、摇头丸、大麻、氯氨酮呈阴性，你是否清楚？有否异议？",
+            "block_bbox": [
+              72,
+              1173,
+              1098,
+              1282
+            ],
+            "block_id": 9,
+            "block_order": 9,
+            "group_id": 9,
+            "block_polygon_points": [
+              [
+                72.0,
+                1173.0
+              ],
+              [
+                1098.0,
+                1173.0
+              ],
+              [
+                1098.0,
+                1282.0
+              ],
+              [
+                72.0,
+                1282.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：我清楚了，没有异议。",
+            "block_bbox": [
+              78,
+              1308,
+              453,
+              1350
+            ],
+            "block_id": 10,
+            "block_order": 10,
+            "group_id": 10,
+            "block_polygon_points": [
+              [
+                78.0,
+                1308.0
+              ],
+              [
+                453.0,
+                1308.0
+              ],
+              [
+                453.0,
+                1350.0
+              ],
+              [
+                78.0,
+                1350.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你有否有其他违法犯罪行为没有向公安机关交代？",
+            "block_bbox": [
+              0,
+              1376,
+              837,
+              1418
+            ],
+            "block_id": 11,
+            "block_order": 11,
+            "group_id": 11,
+            "block_polygon_points": [
+              [
+                -1.0,
+                1376.0
+              ],
+              [
+                837.0,
+                1376.0
+              ],
+              [
+                837.0,
+                1418.0
+              ],
+              [
+                -1.0,
+                1418.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：没有。",
+            "block_bbox": [
+              77,
+              1446,
+              233,
+              1487
+            ],
+            "block_id": 12,
+            "block_order": 12,
+            "group_id": 12,
+            "block_polygon_points": [
+              [
+                77.0,
+                1446.0
+              ],
+              [
+                233.0,
+                1446.0
+              ],
+              [
+                233.0,
+                1487.0
+              ],
+              [
+                77.0,
+                1487.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：公安机关对你进行讯问期间是否有保障你的休息和饮食？",
+            "block_bbox": [
+              78,
+              1515,
+              933,
+              1557
+            ],
+            "block_id": 13,
+            "block_order": 13,
+            "group_id": 13,
+            "block_polygon_points": [
+              [
+                78.0,
+                1515.0
+              ],
+              [
+                933.0,
+                1515.0
+              ],
+              [
+                933.0,
+                1557.0
+              ],
+              [
+                78.0,
+                1557.0
+              ]
+            ]
+          },
+          {
+            "block_label": "number",
+            "block_content": "第 7 页 共 8 页",
+            "block_bbox": [
+              824,
+              1576,
+              1066,
+              1617
+            ],
+            "block_id": 14,
+            "block_order": null,
+            "group_id": 14,
+            "block_polygon_points": [
+              [
+                824.0,
+                1576.0
+              ],
+              [
+                1066.0,
+                1576.0
+              ],
+              [
+                1066.0,
+                1617.0
+              ],
+              [
+                824.0,
+                1617.0
+              ]
+            ]
+          },
+          {
+            "block_label": "footer_image",
+            "block_content": "",
+            "block_bbox": [
+              433,
+              1620,
+              648,
+              1678
+            ],
+            "block_id": 15,
+            "block_order": null,
+            "group_id": 15,
+            "block_polygon_points": [
+              [
+                433.0,
+                1620.0
+              ],
+              [
+                648.0,
+                1620.0
+              ],
+              [
+                648.0,
+                1679.0
+              ],
+              [
+                433.0,
+                1679.0
+              ]
+            ]
+          }
+        ],
+        "doc_preprocessor_res": {
+          "model_settings": {
+            "use_doc_orientation_classify": true,
+            "use_doc_unwarping": true
+          },
+          "angle": 0
+        },
+        "layout_det_res": {
+          "boxes": [
+            {
+              "cls_id": 12,
+              "label": "header",
+              "score": 0.43776267766952515,
+              "coordinate": [
+                1136,
+                0,
+                1196,
+                33
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  1136.0,
+                  0.0
+                ],
+                [
+                  1196.0,
+                  0.0
+                ],
+                [
+                  1196.0,
+                  33.0
+                ],
+                [
+                  1136.0,
+                  33.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8463911414146423,
+              "coordinate": [
+                80,
+                98,
+                1098,
+                211
+              ],
+              "order": 1,
+              "polygon_points": [
+                [
+                  80.0,
+                  98.0
+                ],
+                [
+                  1098.0,
+                  98.0
+                ],
+                [
+                  1098.0,
+                  211.0
+                ],
+                [
+                  80.0,
+                  211.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5843980312347412,
+              "coordinate": [
+                80,
+                236,
+                1098,
+                476
+              ],
+              "order": 2,
+              "polygon_points": [
+                [
+                  80.0,
+                  236.0
+                ],
+                [
+                  1098.0,
+                  236.0
+                ],
+                [
+                  1098.0,
+                  476.0
+                ],
+                [
+                  80.0,
+                  476.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8739436864852905,
+              "coordinate": [
+                79,
+                502,
+                1095,
+                611
+              ],
+              "order": 3,
+              "polygon_points": [
+                [
+                  79.0,
+                  502.0
+                ],
+                [
+                  1095.0,
+                  502.0
+                ],
+                [
+                  1095.0,
+                  611.0
+                ],
+                [
+                  79.0,
+                  611.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8956759572029114,
+              "coordinate": [
+                78,
+                636,
+                1098,
+                744
+              ],
+              "order": 4,
+              "polygon_points": [
+                [
+                  78.0,
+                  636.0
+                ],
+                [
+                  1098.0,
+                  636.0
+                ],
+                [
+                  1098.0,
+                  744.0
+                ],
+                [
+                  78.0,
+                  744.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8869178891181946,
+              "coordinate": [
+                7,
+                771,
+                1097,
+                880
+              ],
+              "order": 5,
+              "polygon_points": [
+                [
+                  6.2085065841674805,
+                  771.2261962890625
+                ],
+                [
+                  1095.9429931640625,
+                  763.2208251953125
+                ],
+                [
+                  1096.7347412109375,
+                  870.99462890625
+                ],
+                [
+                  7.000244140625,
+                  879.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7912590503692627,
+              "coordinate": [
+                80,
+                906,
+                298,
+                945
+              ],
+              "order": 6,
+              "polygon_points": [
+                [
+                  80.0,
+                  906.0
+                ],
+                [
+                  298.0,
+                  906.0
+                ],
+                [
+                  298.0,
+                  945.0
+                ],
+                [
+                  80.0,
+                  945.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8281005620956421,
+              "coordinate": [
+                80,
+                972,
+                523,
+                1012
+              ],
+              "order": 7,
+              "polygon_points": [
+                [
+                  80.0,
+                  972.0
+                ],
+                [
+                  523.0,
+                  972.0
+                ],
+                [
+                  523.0,
+                  1012.0
+                ],
+                [
+                  80.0,
+                  1012.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.9108974933624268,
+              "coordinate": [
+                78,
+                1038,
+                1101,
+                1149
+              ],
+              "order": 8,
+              "polygon_points": [
+                [
+                  78.0,
+                  1038.0
+                ],
+                [
+                  1101.0,
+                  1038.0
+                ],
+                [
+                  1101.0,
+                  1149.0
+                ],
+                [
+                  78.0,
+                  1149.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8756511807441711,
+              "coordinate": [
+                72,
+                1173,
+                1098,
+                1282
+              ],
+              "order": 9,
+              "polygon_points": [
+                [
+                  72.0,
+                  1173.0
+                ],
+                [
+                  1098.0,
+                  1173.0
+                ],
+                [
+                  1098.0,
+                  1282.0
+                ],
+                [
+                  72.0,
+                  1282.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7974976301193237,
+              "coordinate": [
+                78,
+                1308,
+                453,
+                1350
+              ],
+              "order": 10,
+              "polygon_points": [
+                [
+                  78.0,
+                  1308.0
+                ],
+                [
+                  453.0,
+                  1308.0
+                ],
+                [
+                  453.0,
+                  1350.0
+                ],
+                [
+                  78.0,
+                  1350.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8303489089012146,
+              "coordinate": [
+                0,
+                1376,
+                837,
+                1418
+              ],
+              "order": 11,
+              "polygon_points": [
+                [
+                  -1.0,
+                  1376.0
+                ],
+                [
+                  837.0,
+                  1376.0
+                ],
+                [
+                  837.0,
+                  1418.0
+                ],
+                [
+                  -1.0,
+                  1418.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7433377504348755,
+              "coordinate": [
+                77,
+                1446,
+                233,
+                1487
+              ],
+              "order": 12,
+              "polygon_points": [
+                [
+                  77.0,
+                  1446.0
+                ],
+                [
+                  233.0,
+                  1446.0
+                ],
+                [
+                  233.0,
+                  1487.0
+                ],
+                [
+                  77.0,
+                  1487.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.8128925561904907,
+              "coordinate": [
+                78,
+                1515,
+                933,
+                1557
+              ],
+              "order": 13,
+              "polygon_points": [
+                [
+                  78.0,
+                  1515.0
+                ],
+                [
+                  933.0,
+                  1515.0
+                ],
+                [
+                  933.0,
+                  1557.0
+                ],
+                [
+                  78.0,
+                  1557.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.8788648843765259,
+              "coordinate": [
+                824,
+                1576,
+                1066,
+                1617
+              ],
+              "order": 14,
+              "polygon_points": [
+                [
+                  824.0,
+                  1576.0
+                ],
+                [
+                  1066.0,
+                  1576.0
+                ],
+                [
+                  1066.0,
+                  1617.0
+                ],
+                [
+                  824.0,
+                  1617.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 9,
+              "label": "footer_image",
+              "score": 0.7108582258224487,
+              "coordinate": [
+                433,
+                1620,
+                648,
+                1678
+              ],
+              "order": null,
+              "polygon_points": [
+                [
+                  433.0,
+                  1620.0
+                ],
+                [
+                  648.0,
+                  1620.0
+                ],
+                [
+                  648.0,
+                  1679.0
+                ],
+                [
+                  433.0,
+                  1679.0
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "markdown": {
+        "text": "瘦，我只知道成龙飞店铺在清远市清城区麻巷街首创造型理发店，成龙飞的电话我忘记了，我不知道成龙飞的详细住址；\n\n $ \\underline{\\text{陈泳文就是真实姓名，男，大概35岁左右，身材偏瘦，身高约165厘米，身材中等，电话我忘记了，就是我同村人员但是我不知道他的详细住址；成龙飞的朋友，男，大概35岁左右，身材中等，身高约165厘米，其他情况不详。}} $\n\n问：你说成龙飞将你微信、电话拉黑了，但你上述说到知道成龙飞店铺在清远市清城区麻巷街首创造型理发店，你是否有到该店铺找过成龙飞？\n\n答：我有的，我每次过去成龙飞都不在该店铺。我最后一次到该店铺找成龙飞是在2022年9月份的时候。\n\n $ \\underline{\\text{问：你是否有跟成龙飞说过“傻全”可以帮忙办理小孩入读小学的学位的事情？}} $\n\n答：没有说过。\n\n问：说说“傻全”的个人情况？\n\n答：“傻全”真实姓名：不详，年约57岁，身高约170cm，身材中等，大概在2019年我听我的朋友说“傻全”已经去世了，其他不详。\n\n问：公安机关对你的尿液检测中，吗啡、甲基苯丙胺、摇头丸、大麻、氯氨酮呈阴性，你是否清楚？有否异议？\n\n答：我清楚了，没有异议。\n\n问：你有否有其他违法犯罪行为没有向公安机关交代？\n\n答：没有。\n\n问：公安机关对你进行讯问期间是否有保障你的休息和饮食？",
+        "images": {
+          "imgs/img_in_footer_image_box_433_1620_648_1678.jpg": "https://pplines-online.bj.bcebos.com/deploy/official/paddleocr/pp-ocr-vl-15//7cb84d74-a6b4-4472-8f4a-f2c74fe63c9a/markdown_6/imgs/img_in_footer_image_box_433_1620_648_1678.jpg?authorization=bce-auth-v1%2FALTAKzReLNvew3ySINYJ0fuAMN%2F2026-02-16T16%3A29%3A02Z%2F-1%2F%2F9c7895f18fa421c4d6c37e1a7c64058fce47d077489673d829ec87175a31e0e5"
+        }
+      }
+    },
+    {
+      "prunedResult": {
+        "page_count": 8,
+        "width": 1196,
+        "height": 1676,
+        "model_settings": {
+          "use_doc_preprocessor": true,
+          "use_layout_detection": true,
+          "use_chart_recognition": false,
+          "use_seal_recognition": false,
+          "use_ocr_for_image_block": false,
+          "format_block_content": false,
+          "merge_layout_blocks": true,
+          "markdown_ignore_labels": [
+            "number",
+            "footnote",
+            "header",
+            "header_image",
+            "footer",
+            "footer_image",
+            "aside_text"
+          ],
+          "return_layout_polygon_points": true
+        },
+        "parsing_res_list": [
+          {
+            "block_label": "number",
+            "block_content": "014",
+            "block_bbox": [
+              1098,
+              1,
+              1177,
+              43
+            ],
+            "block_id": 0,
+            "block_order": null,
+            "group_id": 0,
+            "block_polygon_points": [
+              [
+                1098.0,
+                1.0
+              ],
+              [
+                1177.0,
+                1.0
+              ],
+              [
+                1177.0,
+                43.0
+              ],
+              [
+                1098.0,
+                43.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：有的。",
+            "block_bbox": [
+              75,
+              88,
+              1089,
+              133
+            ],
+            "block_id": 1,
+            "block_order": 1,
+            "group_id": 1,
+            "block_polygon_points": [
+              [
+                75.0,
+                88.0
+              ],
+              [
+                1089.0,
+                88.0
+              ],
+              [
+                1089.0,
+                133.0
+              ],
+              [
+                75.0,
+                133.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：公安机关是否有对你进行刑讯逼供或者诱供？",
+            "block_bbox": [
+              10,
+              160,
+              778,
+              206
+            ],
+            "block_id": 2,
+            "block_order": 2,
+            "group_id": 2,
+            "block_polygon_points": [
+              [
+                10.0,
+                160.0
+              ],
+              [
+                778.0,
+                160.0
+              ],
+              [
+                778.0,
+                206.0
+              ],
+              [
+                10.0,
+                206.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：没有的。",
+            "block_bbox": [
+              65,
+              226,
+              1106,
+              276
+            ],
+            "block_id": 3,
+            "block_order": 3,
+            "group_id": 3,
+            "block_polygon_points": [
+              [
+                65,
+                235
+              ],
+              [
+                65,
+                267
+              ],
+              [
+                77,
+                275
+              ],
+              [
+                1100,
+                275
+              ],
+              [
+                1094,
+                226
+              ],
+              [
+                77,
+                226
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：你还有何补充？",
+            "block_bbox": [
+              81,
+              301,
+              370,
+              344
+            ],
+            "block_id": 4,
+            "block_order": 4,
+            "group_id": 4,
+            "block_polygon_points": [
+              [
+                81.0,
+                301.0
+              ],
+              [
+                370.0,
+                301.0
+              ],
+              [
+                370.0,
+                344.0
+              ],
+              [
+                81.0,
+                344.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": " $ \\underline{\\text{答：我不觉得自己是诈骗，我有找过成龙飞也尝试将钱归还给成龙飞。}} $",
+            "block_bbox": [
+              26,
+              365,
+              1044,
+              410
+            ],
+            "block_id": 5,
+            "block_order": 5,
+            "group_id": 5,
+            "block_polygon_points": [
+              [
+                26.0,
+                365.0
+              ],
+              [
+                1044.0,
+                365.0
+              ],
+              [
+                1044.0,
+                410.0
+              ],
+              [
+                26.0,
+                410.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "问：以上所说是否属实？",
+            "block_bbox": [
+              79,
+              433,
+              432,
+              476
+            ],
+            "block_id": 6,
+            "block_order": 6,
+            "group_id": 6,
+            "block_polygon_points": [
+              [
+                79.0,
+                433.0
+              ],
+              [
+                432.0,
+                433.0
+              ],
+              [
+                432.0,
+                476.0
+              ],
+              [
+                79.0,
+                476.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "答：属实。",
+            "block_bbox": [
+              78,
+              500,
+              235,
+              543
+            ],
+            "block_id": 7,
+            "block_order": 7,
+            "group_id": 7,
+            "block_polygon_points": [
+              [
+                78.0,
+                500.0
+              ],
+              [
+                235.0,
+                500.0
+              ],
+              [
+                235.0,
+                543.0
+              ],
+              [
+                78.0,
+                543.0
+              ]
+            ]
+          },
+          {
+            "block_label": "text",
+            "block_content": "以上笔录我已看过，和我之说的相符",
+            "block_bbox": [
+              7,
+              941,
+              1165,
+              1510
+            ],
+            "block_id": 8,
+            "block_order": 8,
+            "group_id": 8,
+            "block_polygon_points": [
+              [
+                7,
+                1059
+              ],
+              [
+                7,
+                1501
+              ],
+              [
+                1105,
+                1509
+              ],
+              [
+                1129,
+                1493
+              ],
+              [
+                1153,
+                1250
+              ],
+              [
+                1164,
+                1066
+              ],
+              [
+                1153,
+                958
+              ],
+              [
+                121,
+                941
+              ],
+              [
+                79,
+                1084
+              ],
+              [
+                24,
+                1116
+              ]
+            ]
+          },
+          {
+            "block_label": "number",
+            "block_content": "第 8 页 共 8 页",
+            "block_bbox": [
+              831,
+              1592,
+              1087,
+              1635
+            ],
+            "block_id": 9,
+            "block_order": null,
+            "group_id": 9,
+            "block_polygon_points": [
+              [
+                831.0,
+                1592.0
+              ],
+              [
+                1087.0,
+                1592.0
+              ],
+              [
+                1087.0,
+                1635.0
+              ],
+              [
+                831.0,
+                1635.0
+              ]
+            ]
+          }
+        ],
+        "doc_preprocessor_res": {
+          "model_settings": {
+            "use_doc_orientation_classify": true,
+            "use_doc_unwarping": true
+          },
+          "angle": 0
+        },
+        "layout_det_res": {
+          "boxes": [
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.6286885142326355,
+              "coordinate": [
+                1098,
+                1,
+                1177,
+                43
+              ],
+              "order": 1,
+              "polygon_points": [
+                [
+                  1098.0,
+                  1.0
+                ],
+                [
+                  1177.0,
+                  1.0
+                ],
+                [
+                  1177.0,
+                  43.0
+                ],
+                [
+                  1098.0,
+                  43.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.6378722786903381,
+              "coordinate": [
+                75,
+                88,
+                1089,
+                133
+              ],
+              "order": 2,
+              "polygon_points": [
+                [
+                  75.0,
+                  88.0
+                ],
+                [
+                  1089.0,
+                  88.0
+                ],
+                [
+                  1089.0,
+                  133.0
+                ],
+                [
+                  75.0,
+                  133.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.6714975237846375,
+              "coordinate": [
+                10,
+                160,
+                778,
+                206
+              ],
+              "order": 3,
+              "polygon_points": [
+                [
+                  10.0,
+                  160.0
+                ],
+                [
+                  778.0,
+                  160.0
+                ],
+                [
+                  778.0,
+                  206.0
+                ],
+                [
+                  10.0,
+                  206.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.4517316520214081,
+              "coordinate": [
+                81,
+                231,
+                270,
+                276
+              ],
+              "order": 4,
+              "polygon_points": [
+                [
+                  81.0,
+                  231.0
+                ],
+                [
+                  270.0,
+                  231.0
+                ],
+                [
+                  270.0,
+                  276.0
+                ],
+                [
+                  81.0,
+                  276.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.3266746699810028,
+              "coordinate": [
+                65,
+                226,
+                1106,
+                276
+              ],
+              "order": 5,
+              "polygon_points": [
+                [
+                  65,
+                  235
+                ],
+                [
+                  65,
+                  267
+                ],
+                [
+                  77,
+                  275
+                ],
+                [
+                  1100,
+                  275
+                ],
+                [
+                  1094,
+                  226
+                ],
+                [
+                  77,
+                  226
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.6227267980575562,
+              "coordinate": [
+                81,
+                301,
+                370,
+                344
+              ],
+              "order": 6,
+              "polygon_points": [
+                [
+                  81.0,
+                  301.0
+                ],
+                [
+                  370.0,
+                  301.0
+                ],
+                [
+                  370.0,
+                  344.0
+                ],
+                [
+                  81.0,
+                  344.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.7239212393760681,
+              "coordinate": [
+                26,
+                365,
+                1044,
+                410
+              ],
+              "order": 7,
+              "polygon_points": [
+                [
+                  26.0,
+                  365.0
+                ],
+                [
+                  1044.0,
+                  365.0
+                ],
+                [
+                  1044.0,
+                  410.0
+                ],
+                [
+                  26.0,
+                  410.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.6504375338554382,
+              "coordinate": [
+                79,
+                433,
+                432,
+                476
+              ],
+              "order": 8,
+              "polygon_points": [
+                [
+                  79.0,
+                  433.0
+                ],
+                [
+                  432.0,
+                  433.0
+                ],
+                [
+                  432.0,
+                  476.0
+                ],
+                [
+                  79.0,
+                  476.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5547847747802734,
+              "coordinate": [
+                78,
+                500,
+                235,
+                543
+              ],
+              "order": 9,
+              "polygon_points": [
+                [
+                  78.0,
+                  500.0
+                ],
+                [
+                  235.0,
+                  500.0
+                ],
+                [
+                  235.0,
+                  543.0
+                ],
+                [
+                  78.0,
+                  543.0
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.5165298581123352,
+              "coordinate": [
+                127,
+                935,
+                1164,
+                1072
+              ],
+              "order": 10,
+              "polygon_points": [
+                [
+                  127.0,
+                  935.0000610351562
+                ],
+                [
+                  1163.136962890625,
+                  953.195556640625
+                ],
+                [
+                  1160.9205322265625,
+                  1079.410400390625
+                ],
+                [
+                  124.7835693359375,
+                  1061.21484375
+                ]
+              ]
+            },
+            {
+              "cls_id": 22,
+              "label": "text",
+              "score": 0.4312875270843506,
+              "coordinate": [
+                7,
+                941,
+                1165,
+                1510
+              ],
+              "order": 11,
+              "polygon_points": [
+                [
+                  7,
+                  1059
+                ],
+                [
+                  7,
+                  1501
+                ],
+                [
+                  1105,
+                  1509
+                ],
+                [
+                  1129,
+                  1493
+                ],
+                [
+                  1153,
+                  1250
+                ],
+                [
+                  1164,
+                  1066
+                ],
+                [
+                  1153,
+                  958
+                ],
+                [
+                  121,
+                  941
+                ],
+                [
+                  79,
+                  1084
+                ],
+                [
+                  24,
+                  1116
+                ]
+              ]
+            },
+            {
+              "cls_id": 16,
+              "label": "number",
+              "score": 0.8540812134742737,
+              "coordinate": [
+                831,
+                1592,
+                1087,
+                1635
+              ],
+              "order": 12,
+              "polygon_points": [
+                [
+                  831.0,
+                  1592.0
+                ],
+                [
+                  1087.0,
+                  1592.0
+                ],
+                [
+                  1087.0,
+                  1635.0
+                ],
+                [
+                  831.0,
+                  1635.0
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "markdown": {
+        "text": "答：有的。\n\n问：公安机关是否有对你进行刑讯逼供或者诱供？\n\n答：没有的。\n\n问：你还有何补充？\n\n $ \\underline{\\text{答：我不觉得自己是诈骗，我有找过成龙飞也尝试将钱归还给成龙飞。}} $\n\n问：以上所说是否属实？\n\n答：属实。\n\n以上笔录我已看过，和我之说的相符",
+        "images": {}
+      }
+    }
+  ],
+  "dataInfo": {
+    "numPages": 8,
+    "pages": [
+      {
+        "width": 1194,
+        "height": 1678
+      },
+      {
+        "width": 1196,
+        "height": 1678
+      },
+      {
+        "width": 1196,
+        "height": 1674
+      },
+      {
+        "width": 1196,
+        "height": 1678
+      },
+      {
+        "width": 1198,
+        "height": 1676
+      },
+      {
+        "width": 1198,
+        "height": 1674
+      },
+      {
+        "width": 1196,
+        "height": 1678
+      },
+      {
+        "width": 1196,
+        "height": 1676
+      }
+    ],
+    "type": "pdf"
+  },
+  "preprocessedImages": []
+}
