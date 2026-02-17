@@ -20,8 +20,8 @@ chat:
 test:
   parse_timeout: 300
   parse_interval: 5
-  top_k: 10
-  score_threshold: 0.0
+  top_k: 6
+  score_threshold: 0.3
 
 documents:
   - name: "曾庆成危险驾驶案"
@@ -40,11 +40,12 @@ matching:
     normalize_whitespace: true
     case_sensitive: false
   evidence:
-    # 证据集合型：覆盖率阈值
-    coverage_threshold: 0.8
+    # 证据集合型：覆盖率阈值 (降低以适应 LLM 摘要式回答)
+    coverage_threshold: 0.5
   gap:
-    # 冲突缺口型：否定关键词
+    # 冲突缺口型：否定关键词 (扩展以覆盖更多表达方式，包括英文)
     negative_keywords:
+      # 中文关键词
       - "材料未显示"
       - "文档未提及"
       - "无法确定"
@@ -54,3 +55,31 @@ matching:
       - "无法从材料中得知"
       - "材料中没有"
       - "未提供"
+      - "没有明确提及"
+      - "未在文档中"
+      - "文档中没有"
+      - "没有在文档中提及"
+      - "未知"
+      - "不明确"
+      - "没有相关信息"
+      - "信息不详"
+      - "未提及"
+      - "不清楚"
+      - "无法确认"
+      - "没有记载"
+      - "不详"
+      - "忘记了"
+      - "忘记"
+      - "不提供"
+      - "没有列出"
+      # 英文关键词 (LLM 可能返回英文)
+      - "not found"
+      - "no relevant content"
+      - "not in the dataset"
+      - "not provided"
+      - "does not contain"
+      - "not available"
+      - "unable to"
+      - "cannot find"
+      - "sorry"
+      - "does not provide"

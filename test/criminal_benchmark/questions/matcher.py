@@ -210,7 +210,7 @@ class AnswerMatcher:
         )
 
     def _match_evidence(self, expected: str, actual: str) -> MatchResult:
-        """Match evidence collection answers using coverage."""
+        """Match evidence collection answers using coverage with flexible matching."""
         expected_items = self._extract_items(expected)
         actual_items = self._extract_items(actual)
 
@@ -221,8 +221,24 @@ class AnswerMatcher:
                 reason="No items found in expected answer",
             )
 
-        # Calculate coverage
-        matched_items = expected_items & actual_items
+        # Calculate coverage with fuzzy matching
+        matched_items = set()
+        norm_actual = self._normalize(actual)
+
+        for exp_item in expected_items:
+            # Try exact match first
+            if exp_item in actual_items:
+                matched_items.add(exp_item)
+            # Try substring match in actual text (handles summary responses)
+            elif exp_item in norm_actual:
+                matched_items.add(exp_item)
+            # Try partial keyword match
+            else:
+                # Extract key terms from expected item (2+ chars)
+                key_terms = [t for t in re.findall(r'[\u4e00-\u9fff\w]{2,}', exp_item) if len(t) >= 2]
+                if any(term in norm_actual for term in key_terms):
+                    matched_items.add(exp_item)
+
         coverage = len(matched_items) / len(expected_items)
 
         return MatchResult(

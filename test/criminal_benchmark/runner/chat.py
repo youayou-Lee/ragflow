@@ -34,21 +34,39 @@ class ChatRunner:
         question: str,
         session_id: Optional[str] = None,
         stream: bool = False,
+        doc_ids: Optional[list[str]] = None,
     ) -> tuple[str, dict, float]:
         """
         Send a chat message and get response.
 
+        If no session_id is provided, a new session is created automatically.
+        This is required because the server clears the question when no session_id
+        is provided, returning only the prologue/greeting instead of answering.
+
+        Args:
+            chat_id: The chat assistant ID
+            question: The question to ask
+            session_id: Optional session ID for conversation continuity
+            stream: Whether to stream the response
+            doc_ids: Optional list of document IDs to filter retrieval
+
         Returns:
             Tuple of (answer, raw_response, time_ms)
         """
+        # Auto-create session if not provided - required for actual question processing
+        if not session_id:
+            session_id = self.create_session(chat_id)
+
         url = f"{self.base_url}/api/v1/chats/{chat_id}/completions"
         payload = {
             "question": question,
             "stream": stream,
+            "session_id": session_id,
         }
 
-        if session_id:
-            payload["session_id"] = session_id
+        # Add document filter if provided (comma-separated string)
+        if doc_ids:
+            payload["doc_ids"] = ",".join(doc_ids)
 
         start_time = time.perf_counter()
         resp = self.session.post(url, json=payload)

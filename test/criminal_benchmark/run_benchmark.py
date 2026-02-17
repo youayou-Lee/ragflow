@@ -108,18 +108,29 @@ def run_benchmark(
     )
     logger.info(f"Dataset created: {dataset_id}")
 
-    # Upload and parse documents
+    # Upload and parse documents (filter by case if specified)
     document_ids = []
     doc_case_map = {}  # Map document_id to case name
+    case_doc_map = {}  # Map case name to document_id (for retrieval filtering)
+
+    # Get unique case names from questions to determine which documents to upload
+    cases_needed = set(q.case for q in questions)
 
     for doc_config in config["documents"]:
-        doc_path = Path(base_path).parent / doc_config["path"]
         case_name = doc_config["name"]
+
+        # Skip documents not needed for the filtered questions
+        if cases_needed and case_name not in cases_needed:
+            logger.info(f"Skipping document for other case: {case_name}")
+            continue
+
+        doc_path = Path(base_path).parent / doc_config["path"]
 
         logger.info(f"Uploading document: {doc_path}")
         doc_id = setup.upload_document(dataset_id, str(doc_path))
         document_ids.append(doc_id)
         doc_case_map[doc_id] = case_name
+        case_doc_map[case_name] = doc_id
         logger.info(f"Document uploaded: {doc_id}")
 
     logger.info("Triggering document parsing...")
@@ -157,10 +168,15 @@ def run_benchmark(
         try:
             test_start = time.time()
 
+            # Get document ID for this case to limit retrieval scope
+            doc_id_for_case = case_doc_map.get(q.case)
+            doc_ids_filter = [doc_id_for_case] if doc_id_for_case else None
+
             # Retrieval
             chunks, retrieval_time = retrieval_runner.retrieve(
                 question=q.question,
                 dataset_ids=[dataset_id],
+                document_ids=doc_ids_filter,
                 top_k=config["test"]["top_k"],
                 score_threshold=config["test"]["score_threshold"],
             )
@@ -169,6 +185,7 @@ def run_benchmark(
             answer, chat_data, chat_time = chat_runner.chat(
                 chat_id=chat_id,
                 question=q.question,
+                doc_ids=doc_ids_filter,
             )
 
             total_time = (time.time() - test_start) * 1000
