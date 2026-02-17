@@ -34,7 +34,7 @@ class BenchmarkSetup:
 
     def login(self) -> bool:
         """Login and get API token."""
-        url = f"{self.base_url}/api/v1/user/login"
+        url = f"{self.base_url}/v1/user/login"
         payload = {
             "email": self.email,
             "password": self.password,
