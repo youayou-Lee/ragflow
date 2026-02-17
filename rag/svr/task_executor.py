@@ -269,6 +269,10 @@ async def build_chunks(task, progress_callback):
 
     try:
         async with chunk_limiter:
+            # Add doc_id to parser_config for OCR caching
+            parser_config = task["parser_config"].copy() if task["parser_config"] else {}
+            parser_config["doc_id"] = task["doc_id"]
+
             cks = await thread_pool_exec(
                 chunker.chunk,
                 task["name"],
@@ -278,7 +282,7 @@ async def build_chunks(task, progress_callback):
                 lang=task["language"],
                 callback=progress_callback,
                 kb_id=task["kb_id"],
-                parser_config=task["parser_config"],
+                parser_config=parser_config,
                 tenant_id=task["tenant_id"],
             )
         logging.info("Chunking({}) {}/{} done".format(timer() - st, task["location"], task["name"]))

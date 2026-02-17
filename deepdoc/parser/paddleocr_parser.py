@@ -212,6 +212,9 @@ class PaddleOCRParser(RAGFlowPdfParser):
         self.page_images: list[Image.Image] = []
         self.page_from = 0
 
+        # Store the last API result for caching
+        self._last_api_result: Optional[dict[str, Any]] = None
+
     # Public methods
     def check_installation(self) -> tuple[bool, str]:
         """Check if the parser is properly installed and configured."""
@@ -277,6 +280,9 @@ class PaddleOCRParser(RAGFlowPdfParser):
         # Build and send request
         result = self._send_request(data_bytes, cfg, callback)
 
+        # Store the API result for caching
+        self._last_api_result = result
+
         # Process response
         sections = self._transfer_to_sections(result, algorithm=cfg.algorithm, parse_method=parse_method)
         if callback:
@@ -285,6 +291,70 @@ class PaddleOCRParser(RAGFlowPdfParser):
         tables = self._transfer_to_tables(result)
         if callback:
             callback(1.0, f"[PaddleOCR] done, tables: {len(tables)}")
+
+        return sections, tables
+
+    def get_last_api_result(self) -> Optional[dict[str, Any]]:
+        """
+        Get the last API result for caching purposes.
+
+        Returns:
+            The last API result dictionary, or None if no result is available.
+        """
+        return self._last_api_result
+
+    def parse_from_cached_result(
+        self,
+        cached_result: dict[str, Any],
+        filepath: str | PathLike[str] | None = None,
+        binary: BytesIO | bytes | None = None,
+        callback: Optional[Callable[[float, str], None]] = None,
+        *,
+        parse_method: str = "raw",
+        algorithm: Optional[AlgorithmType] = None,
+    ) -> ParseResult:
+        """
+        Parse PDF from cached OCR result without making API call.
+
+        This method is used for text-only re-parsing where the OCR result
+        is already available from cache.
+
+        Args:
+            cached_result: The cached OCR API result dictionary.
+            filepath: Optional file path for generating page images.
+            binary: Optional binary content for generating page images.
+            callback: Progress callback function.
+            parse_method: Parse method (raw, manual, paper).
+            algorithm: Algorithm type used for parsing.
+
+        Returns:
+            Tuple of (sections, tables).
+        """
+        if callback:
+            callback(0.1, "[PaddleOCR] parsing from cached result")
+
+        # Generate page images for cropping functionality if source is provided
+        if filepath or binary:
+            input_source = filepath if binary is None else binary
+            try:
+                self.__images__(input_source, callback=callback)
+            except Exception as e:
+                self.logger.warning(f"[PaddleOCR] Failed to generate page images for cropping: {e}")
+
+        # Use provided algorithm or default
+        algo = algorithm or self.algorithm
+
+        # Process cached result
+        sections = self._transfer_to_sections(cached_result, algorithm=algo, parse_method=parse_method)
+        if callback:
+            callback(0.9, f"[PaddleOCR] done from cache, sections: {len(sections)}")
+
+        tables = self._transfer_to_tables(cached_result)
+        if callback:
+            callback(1.0, f"[PaddleOCR] done from cache, tables: {len(tables)}")
+
+        # Store the result
+        self._last_api_result = cached_result
 
         return sections, tables
 

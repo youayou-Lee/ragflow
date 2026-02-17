@@ -163,6 +163,13 @@ def by_paddleocr(
     **kwargs,
 ):
     pdf_parser = None
+
+    # Get reparse_type and kb_id/doc_id for OCR caching
+    parser_config = kwargs.get("parser_config", {})
+    reparse_type = parser_config.get("reparse_type", "full")
+    kb_id = kwargs.get("kb_id", "")
+    doc_id = parser_config.get("doc_id", "")
+
     if tenant_id:
         if not paddleocr_llm_name:
             try:
@@ -182,6 +189,31 @@ def by_paddleocr(
             try:
                 ocr_model = LLMBundle(tenant_id=tenant_id, llm_type=LLMType.OCR, llm_name=paddleocr_llm_name, lang=lang)
                 pdf_parser = ocr_model.mdl
+
+                # Check for text_only reparse with OCR cache
+                if reparse_type == "text_only" and kb_id and doc_id:
+                    from api.db.services.ocr_cache_service import OCRCacheService
+
+                    cache_key = OCRCacheService.get_cache_key(doc_id)
+                    cached_result = OCRCacheService.load_ocr_result(kb_id, cache_key)
+
+                    if cached_result:
+                        if callback:
+                            callback(0.1, "[PaddleOCR] using cached OCR result for text-only reparse")
+                        sections, tables = pdf_parser.parse_from_cached_result(
+                            cached_result=cached_result,
+                            filepath=filename,
+                            binary=binary,
+                            callback=callback,
+                            parse_method=parse_method,
+                        )
+                        return sections, tables, pdf_parser
+                    else:
+                        if callback:
+                            callback(0.1, "[PaddleOCR] OCR cache miss, falling back to full reparse")
+                        logging.info(f"OCR cache miss for doc {doc_id}, falling back to full reparse")
+
+                # Full reparse - call OCR API
                 sections, tables = pdf_parser.parse_pdf(
                     filepath=filename,
                     binary=binary,
@@ -189,6 +221,18 @@ def by_paddleocr(
                     parse_method=parse_method,
                     **kwargs,
                 )
+
+                # Save OCR result to cache for future text_only reparse
+                if kb_id and doc_id and sections is not None:
+                    try:
+                        from api.db.services.ocr_cache_service import OCRCacheService
+
+                        api_result = pdf_parser.get_last_api_result()
+                        if api_result:
+                            OCRCacheService.save_ocr_result(doc_id, kb_id, api_result)
+                    except Exception as e:
+                        logging.warning(f"Failed to save OCR cache: {e}")
+
                 return sections, tables, pdf_parser
             except LookupError as e:
                 # Model not authorized, try fallback to database lookup
@@ -214,6 +258,26 @@ def by_paddleocr(
                     try:
                         ocr_model = LLMBundle(tenant_id=tenant_id, llm_type=LLMType.OCR, llm_name=paddleocr_llm_name, lang=lang)
                         pdf_parser = ocr_model.mdl
+
+                        # Check for text_only reparse with OCR cache (fallback path)
+                        if reparse_type == "text_only" and kb_id and doc_id:
+                            from api.db.services.ocr_cache_service import OCRCacheService
+
+                            cache_key = OCRCacheService.get_cache_key(doc_id)
+                            cached_result = OCRCacheService.load_ocr_result(kb_id, cache_key)
+
+                            if cached_result:
+                                if callback:
+                                    callback(0.1, "[PaddleOCR] using cached OCR result for text-only reparse")
+                                sections, tables = pdf_parser.parse_from_cached_result(
+                                    cached_result=cached_result,
+                                    filepath=filename,
+                                    binary=binary,
+                                    callback=callback,
+                                    parse_method=parse_method,
+                                )
+                                return sections, tables, pdf_parser
+
                         sections, tables = pdf_parser.parse_pdf(
                             filepath=filename,
                             binary=binary,
@@ -221,6 +285,18 @@ def by_paddleocr(
                             parse_method=parse_method,
                             **kwargs,
                         )
+
+                        # Save OCR result to cache
+                        if kb_id and doc_id and sections is not None:
+                            try:
+                                from api.db.services.ocr_cache_service import OCRCacheService
+
+                                api_result = pdf_parser.get_last_api_result()
+                                if api_result:
+                                    OCRCacheService.save_ocr_result(doc_id, kb_id, api_result)
+                            except Exception as e:
+                                logging.warning(f"Failed to save OCR cache: {e}")
+
                         return sections, tables, pdf_parser
                     except Exception as e:
                         logging.error(f"Failed to parse pdf via LLMBundle PaddleOCR ({paddleocr_llm_name}): {e}")

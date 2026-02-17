@@ -73,6 +73,7 @@ export function ParsingStatusCell({
   const handleOperationIconClick = (option?: {
     delete: boolean;
     apply_kb: boolean;
+    reparse_type?: string;
   }) => {
     handleRunDocumentByIds(record.id, isRunning, option);
   };

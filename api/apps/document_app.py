@@ -602,6 +602,11 @@ async def run():
                     return get_json_result(data=False, message="No authorization.", code=RetCode.AUTHENTICATION_ERROR)
 
             kb_table_num_map = {}
+            # Get reparse_type from request (default: "full")
+            # "full": Full reparse with OCR (current behavior)
+            # "text_only": Text-only reparse using OCR cache
+            reparse_type = req.get("reparse_type", "full")
+
             for id in req["doc_ids"]:
                 info = {"run": str(req["run"]), "progress": 0}
                 if str(req["run"]) == TaskStatus.RUNNING.value and req.get("delete", False):
@@ -640,7 +645,10 @@ async def run():
                         doc.parser_config["llm_id"] = kb.parser_config.get("llm_id")
                         doc.parser_config["enable_metadata"] = kb.parser_config.get("enable_metadata", False)
                         doc.parser_config["metadata"] = kb.parser_config.get("metadata", {})
-                        DocumentService.update_parser_config(doc.id, doc.parser_config)
+
+                    # Add reparse_type to parser_config for task executor
+                    doc.parser_config["reparse_type"] = reparse_type
+                    DocumentService.update_parser_config(doc.id, doc.parser_config)
                     doc_dict = doc.to_dict()
                     DocumentService.run(tenant_id, doc_dict, kb_table_num_map)
 

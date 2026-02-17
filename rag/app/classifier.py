@@ -36,6 +36,9 @@ MAX_TEXT_SAMPLE_CHARS = 2000
 # Maximum pages to extract from PDFs for classification
 MAX_PDF_PAGES = 3
 
+# Minimum text threshold for pypdf extraction (below this, use OCR fallback)
+MIN_TEXT_THRESHOLD = 50
+
 
 # Rule-based classification patterns
 # Each pattern maps to (parser_id, description)
@@ -73,7 +76,14 @@ def extract_text_sample(binary: bytes, filename: str, max_chars: int = MAX_TEXT_
     try:
         # PDF files - extract text from first few pages
         if ext == "pdf":
-            return _extract_pdf_text(binary, max_chars)
+            text = _extract_pdf_text(binary, max_chars)
+            # OCR fallback for scanned PDFs
+            if len(text.strip()) < MIN_TEXT_THRESHOLD:
+                logging.debug(f"pypdf extracted only {len(text.strip())} chars, trying OCR fallback")
+                ocr_text = _extract_pdf_text_with_ocr(binary, max_chars)
+                if ocr_text.strip():
+                    text = ocr_text
+            return text
 
         # DOCX files - extract text using python-docx
         if ext == "docx":
@@ -107,6 +117,69 @@ def _extract_pdf_text(binary: bytes, max_chars: int) -> str:
         return " ".join(text_parts)
     except Exception as e:
         logging.debug(f"PDF text extraction failed: {e}")
+        return ""
+
+
+def _extract_pdf_text_with_ocr(binary: bytes, max_chars: int) -> str:
+    """
+    Extract text from scanned PDF using OCR.
+
+    This is a fallback when pypdf fails to extract meaningful text
+    from scanned PDF documents.
+
+    Args:
+        binary: The raw PDF file content as bytes.
+        max_chars: Maximum number of characters to extract.
+
+    Returns:
+        Extracted text from OCR.
+    """
+    try:
+        from deepdoc.parser.paddleocr_parser import PaddleOCRParser
+        import os
+
+        # Get OCR API configuration from environment
+        api_url = os.getenv("PADDLEOCR_API_URL", "")
+        access_token = os.getenv("PADDLEOCR_ACCESS_TOKEN")
+
+        if not api_url:
+            logging.debug("PADDLEOCR_API_URL not configured, skipping OCR fallback")
+            return ""
+
+        # Create parser instance
+        parser = PaddleOCRParser(api_url=api_url, access_token=access_token)
+
+        # Check if parser is properly configured
+        ok, reason = parser.check_installation()
+        if not ok:
+            logging.debug(f"PaddleOCR not available: {reason}")
+            return ""
+
+        # Parse PDF and extract text from sections
+        sections, _ = parser.parse_pdf(
+            filepath="",  # Not used when binary is provided
+            binary=binary,
+            parse_method="raw",
+        )
+
+        # Extract text from sections
+        text_parts = []
+        total_chars = 0
+
+        for section in sections[:MAX_PDF_PAGES]:
+            # Section format: (content, tag) or (content, label, tag)
+            section_text = section[0] if section else ""
+            if total_chars + len(section_text) > max_chars:
+                section_text = section_text[: max_chars - total_chars]
+            text_parts.append(section_text)
+            total_chars += len(section_text)
+            if total_chars >= max_chars:
+                break
+
+        return " ".join(text_parts)
+
+    except Exception as e:
+        logging.warning(f"OCR fallback failed: {e}")
         return ""
 
 
@@ -160,13 +233,14 @@ class DocumentClassifier:
     """
 
     @staticmethod
-    def classify(binary: bytes, filename: str) -> Tuple[str, str, float]:
+    def classify(binary: bytes, filename: str, tenant_id: str = None) -> Tuple[str, str, float]:
         """
         Classify a document and return the appropriate parser.
 
         Args:
             binary: The raw file content as bytes.
             filename: The filename (used for extension-based hints).
+            tenant_id: Optional tenant ID for LLM-based classification fallback.
 
         Returns:
             Tuple of (parser_id, method, confidence):
@@ -182,9 +256,14 @@ class DocumentClassifier:
             if confidence > 0:
                 return parser_id, method, confidence
 
-        # Step 2: LLM-based fallback (optional, for ambiguous cases)
-        # For now, we use naive parser as fallback
-        # TODO: Implement LLM-based classification when needed
+        # Step 2: LLM-based fallback for ambiguous cases
+        # Only use LLM if we have enough text and tenant_id
+        if text and len(text.strip()) >= 50 and tenant_id:
+            parser_id, method, confidence = DocumentClassifier._classify_by_llm(text[:500], tenant_id)
+            if confidence > 0:
+                return parser_id, method, confidence
+
+        # Step 3: Final fallback
         return DocumentClassifier._fallback_classify(filename)
 
     @staticmethod
@@ -223,6 +302,68 @@ class DocumentClassifier:
         return ParserType.NAIVE.value, "fallback", 0.0
 
     @staticmethod
+    def _classify_by_llm(text_sample: str, tenant_id: str) -> Tuple[str, str, float]:
+        """
+        Use LLM to classify document type when rule-based matching fails.
+
+        This method sends a text sample to an LLM and asks it to identify
+        the document type from a predefined list of parser types.
+
+        Args:
+            text_sample: The text sample to classify (max 500 chars recommended).
+            tenant_id: The tenant ID for LLM access.
+
+        Returns:
+            Tuple of (parser_id, method, confidence).
+            Returns ("naive", "llm", 0.0) if classification fails.
+        """
+        if not text_sample or len(text_sample.strip()) < 20:
+            return ParserType.NAIVE.value, "llm", 0.0
+
+        prompt = f"""分析以下文本片段，判断它属于哪种文档类型。
+
+文本片段：
+{text_sample}
+
+可选类型：
+1. interrogation - 讯问笔录/询问笔录（问答形式的执法记录）
+2. laws - 法律文书/判决书/法规
+3. resume - 简历
+4. book - 书籍/教材
+5. naive - 通用文档
+
+只返回类型名称（interrogation/laws/resume/book/naive），不要其他解释。"""
+
+        try:
+            from api.db.services.llm_service import LLMBundle
+            from common.constants import LLMType
+
+            llm = LLMBundle(tenant_id=tenant_id, llm_type=LLMType.CHAT)
+
+            # Call the chat model
+            messages = [{"role": "user", "content": prompt}]
+            response, _ = llm.mdl.chat("", messages, {})
+
+            # Parse response to extract classification
+            response_lower = response.lower().strip()
+
+            # Map response to parser type
+            if "interrogation" in response_lower:
+                return ParserType.INTERROGATION.value, "llm", 0.8
+            elif "laws" in response_lower or "法律" in response:
+                return ParserType.LAWS.value, "llm", 0.8
+            elif "resume" in response_lower or "简历" in response:
+                return ParserType.RESUME.value, "llm", 0.8
+            elif "book" in response_lower or "书" in response:
+                return ParserType.BOOK.value, "llm", 0.8
+            else:
+                return ParserType.NAIVE.value, "llm", 0.5
+
+        except Exception as e:
+            logging.warning(f"LLM classification failed: {e}")
+            return ParserType.NAIVE.value, "llm", 0.0
+
+    @staticmethod
     def classify_with_llm(text: str, tenant_id: str, llm_id: str = None) -> Tuple[str, str, float]:
         """
         LLM-based classification for ambiguous documents.
@@ -233,29 +374,9 @@ class DocumentClassifier:
         Args:
             text: The text sample to classify.
             tenant_id: The tenant ID for LLM access.
-            llm_id: Optional specific LLM ID to use.
+            llm_id: Optional specific LLM ID to use (not currently used).
 
         Returns:
             Tuple of (parser_id, method, confidence).
-
-        Note:
-            This method is currently a placeholder. Implement when needed.
         """
-        # TODO: Implement LLM-based classification
-        # Example prompt structure:
-        # prompt = f"""请根据以下文档内容判断文档类型：
-        #
-        # 文档内容：
-        # {text[:1000]}
-        #
-        # 可选类型：
-        # - interrogation: 讯问笔录
-        # - indictment: 起诉意见书
-        # - laws: 法律法规
-        # - naive: 普通文档
-        #
-        # 请只返回类型名称，不要返回其他内容。
-        # """
-
-        # For now, return fallback
-        return ParserType.NAIVE.value, "fallback", 0.0
+        return DocumentClassifier._classify_by_llm(text, tenant_id)

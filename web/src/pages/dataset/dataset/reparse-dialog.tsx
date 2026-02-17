@@ -6,6 +6,7 @@ import {
   FormFieldType,
 } from '@/components/dynamic-form';
 import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { DialogProps } from '@radix-ui/react-dialog';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
@@ -24,6 +25,7 @@ export const ReparseDialog = memo(
     handleOperationIconClick: (options?: {
       delete: boolean;
       apply_kb: boolean;
+      reparse_type?: string;
     }) => void;
     enable_metadata?: boolean;
     visible: boolean;
@@ -50,6 +52,7 @@ export const ReparseDialog = memo(
       setDefaultValues({
         delete: chunk_num > 0,
         apply_kb: false,
+        reparse_type: 'full',
       });
       const deleteField = {
         name: 'delete',
@@ -74,6 +77,47 @@ export const ReparseDialog = memo(
           </div>
         ),
       };
+      const reparseTypeField = {
+        name: 'reparse_type',
+        label: t('knowledgeDetails.reparseType'),
+        type: FormFieldType.Custom,
+        defaultValue: 'full',
+        render: (fieldProps: ControllerRenderProps) => (
+          <div className="text-text-secondary p-5 border border-border-button rounded-lg space-y-3">
+            <div className="font-medium mb-3">
+              {t('knowledgeDetails.reparseType')}
+            </div>
+            <RadioGroup
+              onValueChange={fieldProps.onChange}
+              value={fieldProps.value || 'full'}
+              className="space-y-3"
+            >
+              <div className="flex items-center space-x-3">
+                <RadioGroupItem value="full" id="full" />
+                <label htmlFor="full" className="cursor-pointer">
+                  <span className="font-medium">
+                    {t('knowledgeDetails.fullReparse')}
+                  </span>
+                  <span className="block text-sm text-text-secondary mt-1">
+                    {t('knowledgeDetails.fullReparseDesc')}
+                  </span>
+                </label>
+              </div>
+              <div className="flex items-center space-x-3">
+                <RadioGroupItem value="text_only" id="text_only" />
+                <label htmlFor="text_only" className="cursor-pointer">
+                  <span className="font-medium">
+                    {t('knowledgeDetails.textOnlyReparse')}
+                  </span>
+                  <span className="block text-sm text-text-secondary mt-1">
+                    {t('knowledgeDetails.textOnlyReparseDesc')}
+                  </span>
+                </label>
+              </div>
+            </RadioGroup>
+          </div>
+        ),
+      };
       const applyKBField = {
         name: 'apply_kb',
         label: '',
@@ -95,13 +139,13 @@ export const ReparseDialog = memo(
         ),
       };
       if (chunk_num > 0 && enable_metadata) {
-        setFields([deleteField, applyKBField]);
+        setFields([deleteField, reparseTypeField, applyKBField]);
       } else if (chunk_num > 0 && !enable_metadata) {
-        setFields([deleteField]);
+        setFields([deleteField, reparseTypeField]);
       } else if (chunk_num <= 0 && enable_metadata) {
-        setFields([applyKBField]);
+        setFields([reparseTypeField, applyKBField]);
       } else {
-        setFields([]);
+        setFields([reparseTypeField]);
       }
     }, [chunk_num, t, enable_metadata]);
 
@@ -130,6 +174,7 @@ export const ReparseDialog = memo(
         handleOperationIconClick({
           delete: formValues.delete,
           apply_kb: formValues.apply_kb,
+          reparse_type: formValues.reparse_type || 'full',
         });
       }
     }, [formCallbackRef, handleOperationIconClick]);

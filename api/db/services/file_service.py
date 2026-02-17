@@ -473,7 +473,7 @@ class FileService(CommonService):
 
                 # Determine parser_id: use classifier for general documents
                 parser_id, classifier_method, classifier_confidence = self.get_parser_with_classification(
-                    filetype, filename, kb.parser_id, blob
+                    filetype, filename, kb.parser_id, blob, kb.tenant_id
                 )
 
                 doc = {
@@ -557,7 +557,7 @@ class FileService(CommonService):
         return default
 
     @staticmethod
-    def get_parser_with_classification(doc_type, filename, default, binary=None):
+    def get_parser_with_classification(doc_type, filename, default, binary=None, tenant_id=None):
         """
         Determine parser with automatic document classification.
 
@@ -570,6 +570,7 @@ class FileService(CommonService):
             filename: The filename (used for extension-based hints).
             default: The default parser_id from knowledge base.
             binary: The file content for classification (optional).
+            tenant_id: The tenant ID for LLM-based classification fallback (optional).
 
         Returns:
             Tuple of (parser_id, method, confidence):
@@ -591,7 +592,7 @@ class FileService(CommonService):
         if binary:
             try:
                 from rag.app.classifier import DocumentClassifier
-                return DocumentClassifier.classify(binary, filename)
+                return DocumentClassifier.classify(binary, filename, tenant_id=tenant_id)
             except Exception as e:
                 logging.warning(f"Document classification failed, using default: {e}")
 

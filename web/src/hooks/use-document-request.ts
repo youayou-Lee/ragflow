@@ -275,7 +275,7 @@ export const useRunDocument = () => {
     }: {
       documentIds: string[];
       run: number;
-      option?: { delete: boolean; apply_kb: boolean };
+      option?: { delete: boolean; apply_kb: boolean; reparse_type?: string };
     }) => {
       queryClient.invalidateQueries({
         queryKey: [DocumentApiAction.FetchDocumentList],
