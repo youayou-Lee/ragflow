@@ -83,7 +83,7 @@ class ParserParam(ProcessParamBase):
 
         self.setups = {
             "pdf": {
-                "parse_method": "deepdoc",  # deepdoc/plain_text/tcadp_parser/vlm
+                "parse_method": "paddleocr",  # deepdoc/plain_text/tcadp_parser/vlm/paddleocr
                 "lang": "Chinese",
                 "suffix": [
                     "pdf",

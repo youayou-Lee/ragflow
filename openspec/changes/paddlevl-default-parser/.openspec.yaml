@@ -1,0 +1,11 @@
+version: "1.0"
+change:
+  id: paddlevl-default-parser
+  title: PaddleVL as Default PDF Parser
+  status: implemented
+  created: 2026-02-17
+  updated: 2026-02-17
+  authors:
+    - claude-code
+  type: feature
+  impact: medium

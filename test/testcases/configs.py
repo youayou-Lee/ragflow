@@ -44,7 +44,7 @@ CHAT_ASSISTANT_NAME_LIMIT = 255
 SESSION_WITH_CHAT_NAME_LIMIT = 255
 
 DEFAULT_PARSER_CONFIG = {
-    "layout_recognize": "DeepDOC",
+    "layout_recognize": "PaddleOCR-VL@paddleocr",
     "chunk_token_num": 512,
     "delimiter": "\n",
     "auto_keywords": 0,

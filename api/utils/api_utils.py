@@ -367,7 +367,7 @@ def get_parser_config(chunk_method, parser_config):
     }
     key_mapping = {
         "naive": {
-            "layout_recognize": "DeepDOC",
+            "layout_recognize": "PaddleOCR-VL@paddleocr",
             "chunk_token_num": 512,
             "delimiter": "\n",
             "auto_keywords": 0,
