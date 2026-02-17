@@ -471,10 +471,15 @@ class FileService(CommonService):
                     thumbnail_location = f"thumbnail_{doc_id}.png"
                     settings.STORAGE_IMPL.put(kb.id, thumbnail_location, img)
 
+                # Determine parser_id: use classifier for general documents
+                parser_id, classifier_method, classifier_confidence = self.get_parser_with_classification(
+                    filetype, filename, kb.parser_id, blob
+                )
+
                 doc = {
                     "id": doc_id,
                     "kb_id": kb.id,
-                    "parser_id": self.get_parser(filetype, filename, kb.parser_id),
+                    "parser_id": parser_id,
                     "pipeline_id": kb.pipeline_id,
                     "parser_config": kb.parser_config,
                     "created_by": user_id,
@@ -486,6 +491,10 @@ class FileService(CommonService):
                     "size": len(blob),
                     "thumbnail": thumbnail_location,
                 }
+                # Store classifier metadata for tracking (optional)
+                if classifier_method != "filetype":
+                    doc["classifier_method"] = classifier_method
+                    doc["classifier_confidence"] = classifier_confidence
                 DocumentService.insert(doc)
 
                 FileService.add_file_from_kb(doc, kb_folder["id"], kb.tenant_id)
@@ -546,6 +555,48 @@ class FileService(CommonService):
         if re.search(r"\.(msg|eml)$", filename):
             return ParserType.EMAIL.value
         return default
+
+    @staticmethod
+    def get_parser_with_classification(doc_type, filename, default, binary=None):
+        """
+        Determine parser with automatic document classification.
+
+        This method first checks for special file types (images, audio, etc.),
+        then uses DocumentClassifier for general documents to auto-detect
+        the appropriate parser based on content.
+
+        Args:
+            doc_type: The file type from FileType enum.
+            filename: The filename (used for extension-based hints).
+            default: The default parser_id from knowledge base.
+            binary: The file content for classification (optional).
+
+        Returns:
+            Tuple of (parser_id, method, confidence):
+            - parser_id: The parser to use
+            - method: How classification was done ('filetype', 'rule', 'llm', 'fallback')
+            - confidence: Classification confidence (0.0 to 1.0)
+        """
+        # Step 1: Check for special file types that have fixed parsers
+        if doc_type == FileType.VISUAL:
+            return ParserType.PICTURE.value, "filetype", 1.0
+        if doc_type == FileType.AURAL:
+            return ParserType.AUDIO.value, "filetype", 1.0
+        if re.search(r"\.(ppt|pptx|pages)$", filename):
+            return ParserType.PRESENTATION.value, "filetype", 1.0
+        if re.search(r"\.(msg|eml)$", filename):
+            return ParserType.EMAIL.value, "filetype", 1.0
+
+        # Step 2: For general documents, use classifier for auto-detection
+        if binary:
+            try:
+                from rag.app.classifier import DocumentClassifier
+                return DocumentClassifier.classify(binary, filename)
+            except Exception as e:
+                logging.warning(f"Document classification failed, using default: {e}")
+
+        # Step 3: Fallback to default parser from knowledge base
+        return default or ParserType.NAIVE.value, "default", 0.0
 
     @staticmethod
     def get_blob(user_id, location):

@@ -77,7 +77,7 @@ async def create():
 
 @manager.route('/update', methods=['post'])  # noqa: F821
 @login_required
-@validate_request("kb_id", "name", "description", "parser_id")
+@validate_request("kb_id", "name", "description")
 @not_allowed_parameters("id", "tenant_id", "created_by", "create_time", "update_time", "create_date", "update_date", "created_by")
 async def update():
     req = await get_request_json()

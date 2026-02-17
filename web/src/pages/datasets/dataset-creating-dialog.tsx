@@ -1,4 +1,3 @@
-import { DataFlowSelect } from '@/components/data-pipeline-select';
 import { ButtonLoading } from '@/components/ui/button';
 import {
   Dialog,
@@ -17,19 +16,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { FormLayout } from '@/constants/form';
 import { useFetchTenantInfo } from '@/hooks/use-user-setting-request';
 import { IModalProps } from '@/interfaces/common';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import {
-  ChunkMethodItem,
-  EmbeddingModelItem,
-  ParseTypeItem,
-} from '../dataset/dataset-setting/configuration/common-item';
+import { EmbeddingModelItem } from '../dataset/dataset-setting/configuration/common-item';
 
 const FormId = 'dataset-creating-form';
 
@@ -37,52 +30,25 @@ export function InputForm({ onOk }: IModalProps<any>) {
   const { t } = useTranslation();
   const { data: tenantInfo } = useFetchTenantInfo();
 
-  const FormSchema = z
-    .object({
-      name: z
-        .string()
-        .min(1, {
-          message: t('knowledgeList.namePlaceholder'),
-        })
-        .trim(),
-      parseType: z.number().optional(),
-      embd_id: z
-        .string()
-        .min(1, {
-          message: t('knowledgeConfiguration.embeddingModelPlaceholder'),
-        })
-        .trim(),
-      parser_id: z.string().optional(),
-      pipeline_id: z.string().optional(),
-    })
-    .superRefine((data, ctx) => {
-      // When parseType === 1, parser_id is required
-      if (
-        data.parseType === 1 &&
-        (!data.parser_id || data.parser_id.trim() === '')
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: t('knowledgeList.parserRequired'),
-          path: ['parser_id'],
-        });
-      }
-      // When parseType === 1, pipline_id required
-      if (data.parseType === 2 && !data.pipeline_id) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: t('knowledgeList.dataFlowRequired'),
-          path: ['pipeline_id'],
-        });
-      }
-    });
+  const FormSchema = z.object({
+    name: z
+      .string()
+      .min(1, {
+        message: t('knowledgeList.namePlaceholder'),
+      })
+      .trim(),
+    embd_id: z
+      .string()
+      .min(1, {
+        message: t('knowledgeConfiguration.embeddingModelPlaceholder'),
+      })
+      .trim(),
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: '',
-      parseType: 1,
-      parser_id: '',
       embd_id: tenantInfo?.embd_id,
     },
   });
@@ -91,18 +57,6 @@ export function InputForm({ onOk }: IModalProps<any>) {
     console.log('submit', data);
     onOk?.(data);
   }
-
-  const parseType = useWatch({
-    control: form.control,
-    name: 'parseType',
-  });
-
-  useEffect(() => {
-    console.log('parseType', parseType);
-    if (parseType === 1) {
-      form.setValue('pipeline_id', '');
-    }
-  }, [parseType, form]);
 
   return (
     <Form {...form}>
@@ -132,16 +86,6 @@ export function InputForm({ onOk }: IModalProps<any>) {
         />
 
         <EmbeddingModelItem line={2} isEdit={false} />
-        <ParseTypeItem />
-        {parseType === 1 && <ChunkMethodItem></ChunkMethodItem>}
-        {parseType === 2 && (
-          <DataFlowSelect
-            isMult={false}
-            showToDataPipeline={true}
-            formFieldName="pipeline_id"
-            layout={FormLayout.Vertical}
-          />
-        )}
       </form>
     </Form>
   );
