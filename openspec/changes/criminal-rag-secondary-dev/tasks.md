@@ -41,10 +41,10 @@
 
 ## 5. 集成测试 (PR-5)
 
-- [ ] 5.1 创建 `test/testcases/test_e2e_criminal_rag.py`
-- [ ] 5.2 编写端到端测试：上传 → 解析 → 检索 → 问答 → 校验引用
-- [ ] 5.3 更新 API 文档
-- [ ] 5.4 验收：`uv run pytest test/testcases/test_e2e_criminal_rag.py -v`
+- [x] 5.1 创建 `test/testcases/test_http_api/test_e2e_criminal_rag.py`
+- [x] 5.2 编写端到端测试：上传 → 解析 → 检索 → 问答 → 校验引用
+- [x] 5.3 更新 API 文档
+- [x] 5.4 验收：`uv run pytest test/testcases/test_http_api/test_e2e_criminal_rag.py -v`
 
 ---
 
@@ -82,5 +82,5 @@ uv run pytest test/unit/test_answer_gate.py -v
 uv run pytest test/unit/test_retrieval_extension.py -v
 
 # PR5 端到端验收
-uv run pytest test/testcases/test_e2e_criminal_rag.py -v
+uv run pytest test/testcases/test_http_api/test_e2e_criminal_rag.py -v
 ```

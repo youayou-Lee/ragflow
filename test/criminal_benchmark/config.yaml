@@ -11,7 +11,7 @@ auth:
 
 dataset:
   name_prefix: "criminal_benchmark"
-  embedding_model: "BAAI/bge-large-zh-v1.5@Builtin"
+  embedding_model: "embedding-3@ZHIPU-AI"
   chunk_method: "naive"
 
 chat:

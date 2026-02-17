@@ -2525,6 +2525,78 @@ Failure:
 
 ---
 
+## Criminal RAG Extensions
+
+---
+
+RAGFlow provides extended functionality for criminal case document processing. These features enable structured chunking of legal documents, citation validation, and precise block-level referencing.
+
+### Chunk Schema Extensions
+
+When using criminal document chunkers (interrogation record, indictment), chunks include additional fields for precise source tracking:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `block_refs` | `array[object]` | References to original document blocks. Each object contains `page_index` and `block_id`. |
+| `bbox_union` | `array[integer]` | Unified bounding box `[x1, y1, x2, y2]` encompassing all content blocks. |
+| `page_range` | `array[integer]` | Page range `[start, end]` for multi-page chunks. |
+| `chunk_type` | `string` | Type identifier (e.g., `qa`, `section`, `paragraph`). |
+
+### Retrieval API Extensions
+
+The retrieval API supports additional parameters and response fields for criminal RAG:
+
+#### Additional Request Parameters
+
+- `"doc_type"`: (*Body parameter*), `string`
+  Filter chunks by document type. Supported values:
+  - `"interrogation_record"` - Interrogation records (讯问笔录)
+  - `"indictment_opinion"` - Indictment opinions (起诉意见书)
+
+#### Extended Response Fields
+
+The retrieval response includes additional fields when criminal document parsers are used:
+
+```json
+{
+    "chunks": [
+        {
+            "id": "chunk_id",
+            "content": "chunk content...",
+            "block_refs": [
+                {"page_index": 1, "block_id": "block_001"},
+                {"page_index": 1, "block_id": "block_002"}
+            ],
+            "bbox_union": [100, 200, 500, 400],
+            "page_range": [1, 1],
+            "chunk_type": "qa",
+            "similarity": 0.85
+        }
+    ]
+}
+```
+
+### Answer Gate Validation
+
+The Answer Gate validates LLM responses against retrieved chunks to ensure citation accuracy:
+
+| Validation | Description |
+|------------|-------------|
+| **Chunk existence** | Verifies all `chunk_id` references exist in retrieved chunks |
+| **Excerpt matching** | Validates excerpts are substrings of chunk content (with fuzzy matching for OCR errors) |
+| **Numeric grounding** | Ensures numeric values (amounts, dates, etc.) appear in evidence excerpts |
+| **Coordinate provenance** | Validates `page_index` and `bbox` match chunk metadata |
+
+#### Validation Status
+
+| Status | Description |
+|--------|-------------|
+| `valid` | All validations passed |
+| `no_evidence` | No chunks or evidences provided |
+| `citation_insufficient` | One or more validation checks failed |
+
+---
+
 ## CHAT ASSISTANT MANAGEMENT
 
 ---

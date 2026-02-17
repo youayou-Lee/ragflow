@@ -34,30 +34,43 @@ class BenchmarkSetup:
 
     def login(self) -> bool:
         """Login and get API token."""
-        url = f"{self.base_url}/v1/user/login"
+        # Step 1: Login to get session cookie
+        login_url = f"{self.base_url}/v1/user/login"
         payload = {
             "email": self.email,
             "password": self.password,
         }
 
-        resp = self.session.post(url, json=payload)
+        resp = self.session.post(login_url, json=payload)
         data = resp.json()
 
         if data.get("code") != 0:
             raise RuntimeError(f"Login failed: {data.get('message')}")
 
-        self.token = data["data"].get("authorization_token")
-        if not self.token:
-            # Try to get from cookies
-            for cookie in self.session.cookies:
-                if cookie.name == "authorization_token":
-                    self.token = cookie.value
-                    break
+        # Get login token from response header (used for creating API token)
+        login_token = resp.headers.get("Authorization")
+        if not login_token:
+            # Try from response data
+            login_token = data["data"].get("access_token")
 
-        if not self.token:
-            raise RuntimeError("No token received after login")
+        if not login_token:
+            raise RuntimeError("No login token received after login")
 
-        # Set authorization header
+        # Step 2: Create API token using login token
+        api_token_url = f"{self.base_url}/v1/system/new_token"
+        headers = {"Authorization": login_token}
+
+        resp = self.session.post(api_token_url, headers=headers)
+        token_data = resp.json()
+
+        if token_data.get("code") != 0:
+            raise RuntimeError(f"Create API token failed: {token_data.get('message')}")
+
+        self.token = token_data.get("data", {}).get("token")
+        if not self.token:
+            raise RuntimeError("No API token received")
+
+        # Set authorization header for SDK API calls
         self.session.headers["Authorization"] = f"Bearer {self.token}"
         return True
 
@@ -121,10 +134,19 @@ class BenchmarkSetup:
         """Wait for all documents to finish parsing."""
         url = f"{self.base_url}/api/v1/datasets/{dataset_id}/documents"
         start_time = time.time()
+        max_retries = 3
 
         while time.time() - start_time < timeout:
-            resp = self.session.get(url)
-            data = resp.json()
+            for retry in range(max_retries):
+                try:
+                    resp = self.session.get(url, timeout=30)
+                    data = resp.json()
+                    break
+                except Exception as e:
+                    if retry < max_retries - 1:
+                        time.sleep(2)
+                        continue
+                    raise RuntimeError(f"List documents failed after retries: {e}")
 
             if data.get("code") != 0:
                 raise RuntimeError(f"List documents failed: {data.get('message')}")

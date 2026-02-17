@@ -52,6 +52,8 @@ from utils import wait_for
 # Sample file paths for dual-mode testing
 SAMPLE_PDF_PATH = Path("/home/you/cs/proj/Superyou/SampleData/讯问笔录_sample.pdf")
 SAMPLE_JSON_PATH = Path("/home/you/cs/proj/Superyou/ragflow/benchmark/起诉意见书/曾庆成危险驾驶案/原始数据/paddleocr_response.json")
+# Indictment PDF sample file
+INDICTMENT_PDF_PATH = Path("/home/you/cs/proj/Superyou/ragflow/benchmark/起诉意见书/曾庆成危险驾驶案/原始数据/起诉意见书_sample.pdf")
 
 
 def get_test_file_type(file_path: Path) -> str:
@@ -190,11 +192,11 @@ def _wait_for_pdf_parsing(auth, dataset_id, document_ids=None):
 class TestCriminalRagE2E:
     """End-to-end tests for Criminal RAG flow."""
 
-    def test_full_flow_with_indictment_content(self, HttpApiAuth, tmp_path, request):
+    def test_full_flow_with_indictment_content(self, HttpApiAuth, request):
         """
         Test the complete Criminal RAG flow:
-        1. Create dataset
-        2. Upload indictment document
+        1. Create dataset with PaddleOCR config
+        2. Upload indictment PDF document
         3. Parse document
         4. Verify chunks have content
         5. Create chat assistant linked to dataset
@@ -202,22 +204,31 @@ class TestCriminalRagE2E:
         7. Send question via chat completions
         8. Verify response structure
         """
-        # 1. Create dataset
-        res = create_dataset(HttpApiAuth, {"name": "criminal_rag_e2e_dataset", "embedding_model": "embedding-3@ZHIPU-AI"})
+        # Skip if PDF file not found
+        if not INDICTMENT_PDF_PATH.exists():
+            pytest.skip(f"Indictment PDF file not found: {INDICTMENT_PDF_PATH}")
+
+        # 1. Create dataset with PaddleOCR config for PDF parsing
+        res = create_dataset(HttpApiAuth, {
+            "name": "criminal_rag_e2e_dataset",
+            "embedding_model": "embedding-3@ZHIPU-AI",
+            "parser_config": {
+                "layout_recognize": "PaddleOCR-VL@paddleocr",
+            }
+        })
         assert res["code"] == 0, res
         dataset_id = res["data"]["id"]
         request.addfinalizer(lambda: delete_datasets(HttpApiAuth, {"ids": [dataset_id]}))
 
-        # 2. Upload indictment document
-        file_path = create_indictment_txt_file(tmp_path / "indictment.txt")
-        res = upload_documents(HttpApiAuth, dataset_id, [file_path])
+        # 2. Upload indictment PDF document
+        res = upload_documents(HttpApiAuth, dataset_id, [INDICTMENT_PDF_PATH])
         assert res["code"] == 0, res
         document_ids = [doc["id"] for doc in res["data"]]
 
         # 3. Parse document
         res = parse_documents(HttpApiAuth, dataset_id, {"document_ids": document_ids})
         assert res["code"] == 0, res
-        _wait_for_parsing(HttpApiAuth, dataset_id, document_ids)
+        _wait_for_pdf_parsing(HttpApiAuth, dataset_id, document_ids)
 
         # 4. Verify chunks exist and have content
         res = list_chunks(HttpApiAuth, dataset_id, document_ids[0])
@@ -253,7 +264,7 @@ class TestCriminalRagE2E:
             HttpApiAuth,
             chat_id,
             {
-                "question": "被告人张某盗窃金额是多少？",
+                "question": "曾庆成的酒精测试结果是多少？",
                 "stream": False,
                 "session_id": session_id,
             },
@@ -314,33 +325,42 @@ class TestCriminalRagE2E:
 class TestRetrievalExtensionFields:
     """Test that retrieval API returns PR-4 fields (block_refs, bbox_union)."""
 
-    def test_retrieval_chunk_structure(self, HttpApiAuth, tmp_path, request):
+    def test_retrieval_chunk_structure(self, HttpApiAuth, request):
         """
         Test that retrieved chunks have the expected structure,
         including PR-4 extension fields when available.
         """
-        # Create dataset
-        res = create_dataset(HttpApiAuth, {"name": "retrieval_fields_dataset", "embedding_model": "embedding-3@ZHIPU-AI"})
+        # Skip if PDF file not found
+        if not INDICTMENT_PDF_PATH.exists():
+            pytest.skip(f"Indictment PDF file not found: {INDICTMENT_PDF_PATH}")
+
+        # Create dataset with PaddleOCR config
+        res = create_dataset(HttpApiAuth, {
+            "name": "retrieval_fields_dataset",
+            "embedding_model": "embedding-3@ZHIPU-AI",
+            "parser_config": {
+                "layout_recognize": "PaddleOCR-VL@paddleocr",
+            }
+        })
         assert res["code"] == 0, res
         dataset_id = res["data"]["id"]
         request.addfinalizer(lambda: delete_datasets(HttpApiAuth, {"ids": [dataset_id]}))
 
-        # Upload document
-        file_path = create_indictment_txt_file(tmp_path / "indictment_fields.txt")
-        res = upload_documents(HttpApiAuth, dataset_id, [file_path])
+        # Upload PDF document
+        res = upload_documents(HttpApiAuth, dataset_id, [INDICTMENT_PDF_PATH])
         assert res["code"] == 0, res
         document_ids = [doc["id"] for doc in res["data"]]
 
         # Parse document
         res = parse_documents(HttpApiAuth, dataset_id, {"document_ids": document_ids})
         assert res["code"] == 0, res
-        _wait_for_parsing(HttpApiAuth, dataset_id, document_ids)
+        _wait_for_pdf_parsing(HttpApiAuth, dataset_id, document_ids)
 
-        # Retrieve chunks
+        # Retrieve chunks (using keywords relevant to the indictment content)
         res = retrieval_chunks(
             HttpApiAuth,
             {
-                "question": "盗窃",
+                "question": "危险驾驶",
                 "dataset_ids": [dataset_id],
                 "page_size": 10,
             },
@@ -361,26 +381,35 @@ class TestRetrievalExtensionFields:
             assert "dataset_id" in chunk, chunk
             assert "document_id" in chunk, chunk
 
-    def test_list_chunks_includes_pr4_fields(self, HttpApiAuth, tmp_path, request):
+    def test_list_chunks_includes_pr4_fields(self, HttpApiAuth, request):
         """
         Test that the /chunks/list API includes PR-4 fields in response.
         """
-        # Create dataset
-        res = create_dataset(HttpApiAuth, {"name": "list_chunks_dataset", "embedding_model": "embedding-3@ZHIPU-AI"})
+        # Skip if PDF file not found
+        if not INDICTMENT_PDF_PATH.exists():
+            pytest.skip(f"Indictment PDF file not found: {INDICTMENT_PDF_PATH}")
+
+        # Create dataset with PaddleOCR config
+        res = create_dataset(HttpApiAuth, {
+            "name": "list_chunks_dataset",
+            "embedding_model": "embedding-3@ZHIPU-AI",
+            "parser_config": {
+                "layout_recognize": "PaddleOCR-VL@paddleocr",
+            }
+        })
         assert res["code"] == 0, res
         dataset_id = res["data"]["id"]
         request.addfinalizer(lambda: delete_datasets(HttpApiAuth, {"ids": [dataset_id]}))
 
-        # Upload document
-        file_path = create_indictment_txt_file(tmp_path / "list_chunks.txt")
-        res = upload_documents(HttpApiAuth, dataset_id, [file_path])
+        # Upload PDF document
+        res = upload_documents(HttpApiAuth, dataset_id, [INDICTMENT_PDF_PATH])
         assert res["code"] == 0, res
         document_ids = [doc["id"] for doc in res["data"]]
 
         # Parse document
         res = parse_documents(HttpApiAuth, dataset_id, {"document_ids": document_ids})
         assert res["code"] == 0, res
-        _wait_for_parsing(HttpApiAuth, dataset_id, document_ids)
+        _wait_for_pdf_parsing(HttpApiAuth, dataset_id, document_ids)
 
         # List chunks
         res = list_chunks(HttpApiAuth, dataset_id, document_ids[0])
@@ -504,43 +533,52 @@ class TestAnswerGateIntegration:
 class TestDocTypeFilter:
     """Test doc_type filter support in retrieval."""
 
-    def test_retrieval_with_doc_type_filter(self, HttpApiAuth, tmp_path, request):
+    def test_retrieval_with_doc_type_filter(self, HttpApiAuth, request):
         """
         Test retrieval API with doc_type filter.
-        Note: For TXT files, doc_type may not be set automatically.
+        Uses PDF file for proper doc_type detection.
         """
-        # Create dataset
-        res = create_dataset(HttpApiAuth, {"name": "doc_type_filter_dataset", "embedding_model": "embedding-3@ZHIPU-AI"})
+        # Skip if PDF file not found
+        if not INDICTMENT_PDF_PATH.exists():
+            pytest.skip(f"Indictment PDF file not found: {INDICTMENT_PDF_PATH}")
+
+        # Create dataset with PaddleOCR config
+        res = create_dataset(HttpApiAuth, {
+            "name": "doc_type_filter_dataset",
+            "embedding_model": "embedding-3@ZHIPU-AI",
+            "parser_config": {
+                "layout_recognize": "PaddleOCR-VL@paddleocr",
+            }
+        })
         assert res["code"] == 0, res
         dataset_id = res["data"]["id"]
         request.addfinalizer(lambda: delete_datasets(HttpApiAuth, {"ids": [dataset_id]}))
 
-        # Upload document
-        file_path = create_indictment_txt_file(tmp_path / "doc_type_test.txt")
-        res = upload_documents(HttpApiAuth, dataset_id, [file_path])
+        # Upload PDF document
+        res = upload_documents(HttpApiAuth, dataset_id, [INDICTMENT_PDF_PATH])
         assert res["code"] == 0, res
         document_ids = [doc["id"] for doc in res["data"]]
 
         # Parse document
         res = parse_documents(HttpApiAuth, dataset_id, {"document_ids": document_ids})
         assert res["code"] == 0, res
-        _wait_for_parsing(HttpApiAuth, dataset_id, document_ids)
+        _wait_for_pdf_parsing(HttpApiAuth, dataset_id, document_ids)
 
         # Test retrieval without doc_type filter (should work)
         res = retrieval_chunks(
             HttpApiAuth,
             {
-                "question": "盗窃",
+                "question": "危险驾驶",
                 "dataset_ids": [dataset_id],
             },
         )
         assert res["code"] == 0, res
 
-        # Test retrieval with doc_type filter (may return empty for TXT files)
+        # Test retrieval with doc_type filter
         res = retrieval_chunks(
             HttpApiAuth,
             {
-                "question": "盗窃",
+                "question": "危险驾驶",
                 "dataset_ids": [dataset_id],
                 "doc_type": "indictment",  # Filter by doc_type
             },
@@ -613,12 +651,12 @@ class TestCriminalRagEdgeCases:
         dataset_id = res["data"]["id"]
         request.addfinalizer(lambda: delete_datasets(HttpApiAuth, {"ids": [dataset_id]}))
 
-        # Upload multiple documents
+        # Upload multiple documents (using generic legal content, not indictment-specific)
         file_paths = []
         for i, content in enumerate([
-            INDICTMENT_SAMPLE,
             LEGAL_CONTENT_WITH_NUMBERS,
-            "案件编号：2024民初字第00456号\n这是一起民事案件。",
+            "案件编号：2024民初字第00456号\n这是一起民事案件。当事人张某与李某因合同纠纷诉至法院。",
+            "判决书摘要：本院经审理查明，被告李某确实存在违约行为，应当承担相应的民事责任。",
         ]):
             file_path = tmp_path / f"legal_doc_{i}.txt"
             with open(file_path, "w", encoding="utf-8") as f:
