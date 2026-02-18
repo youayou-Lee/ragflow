@@ -13,7 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-"""Data models for criminal benchmark testing."""
+"""Data models for RAG evaluation framework."""
 
 from dataclasses import dataclass, field
 from enum import Enum

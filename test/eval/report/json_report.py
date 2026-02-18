@@ -13,26 +13,36 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-"""JSON report generator for criminal benchmark."""
+"""JSON report generator for RAG evaluation framework."""
 
 import json
 from datetime import datetime
 from pathlib import Path
 
 import sys
+
 # Add project root to path
 _project_root = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(_project_root))
 
-from test.criminal_benchmark.models import BenchmarkReport
+from test.eval.models import BenchmarkReport
 
 
 def save_json_report(report: BenchmarkReport, output_dir: Path) -> Path:
-    """Save report as JSON file."""
+    """
+    Save benchmark report as JSON file.
+
+    Args:
+        report: BenchmarkReport to save
+        output_dir: Directory to save report in
+
+    Returns:
+        Path to saved JSON file
+    """
     output_dir.mkdir(parents=True, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"benchmark_{timestamp}.json"
+    filename = f"eval_report_{timestamp}.json"
     filepath = output_dir / filename
 
     with filepath.open("w", encoding="utf-8") as f:

@@ -13,7 +13,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-"""Retrieval runner for criminal benchmark."""
+"""Retrieval evaluator for RAG evaluation framework.
+
+This module handles retrieval operations without tuning parameters.
+It uses server-side defaults for retrieval configuration.
+"""
 
 import time
 from typing import Optional
@@ -22,15 +26,16 @@ import requests
 
 import sys
 from pathlib import Path
+
 # Add project root to path
 _project_root = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(_project_root))
 
-from test.criminal_benchmark.models import ChunkInfo
+from test.eval.models import ChunkInfo
 
 
-class RetrievalRunner:
-    """Handles retrieval operations for benchmark testing."""
+class RetrievalEvaluator:
+    """Handles retrieval operations for evaluation."""
 
     def __init__(self, session: requests.Session, base_url: str):
         self.session = session
@@ -41,26 +46,36 @@ class RetrievalRunner:
         question: str,
         dataset_ids: list[str],
         document_ids: Optional[list[str]] = None,
-        top_k: int = 10,
-        score_threshold: float = 0.0,
+        top_k: Optional[int] = None,
+        similarity_threshold: Optional[float] = None,
     ) -> tuple[list[ChunkInfo], float]:
         """
         Perform retrieval and return chunks with timing.
 
+        Args:
+            question: The question to retrieve for
+            dataset_ids: Dataset IDs to search in
+            document_ids: Optional document IDs to filter
+            top_k: Optional top_k override (None = use server default)
+            similarity_threshold: Optional threshold override (None = use server default)
+
         Returns:
-            Tuple of (chunks, time_ms)
+            Tuple of (list of ChunkInfo, retrieval time in ms)
         """
         url = f"{self.base_url}/api/v1/retrieval"
+
         payload = {
             "question": question,
             "dataset_ids": dataset_ids,
-            "top_k": top_k,
-            # API expects "similarity_threshold", not "score_threshold"
-            "similarity_threshold": score_threshold,
         }
 
+        # Only add optional parameters if specified (otherwise use server defaults)
         if document_ids:
             payload["document_ids"] = document_ids
+        if top_k is not None:
+            payload["top_k"] = top_k
+        if similarity_threshold is not None:
+            payload["similarity_threshold"] = similarity_threshold
 
         start_time = time.perf_counter()
         resp = self.session.post(url, json=payload)
@@ -73,15 +88,15 @@ class RetrievalRunner:
 
         # Parse chunks
         chunks = []
-        for item in data.get("data", {}).get("chunks", []):
+        for chunk_data in data.get("data", {}).get("chunks", []):
             chunks.append(ChunkInfo(
-                chunk_id=item.get("chunk_id", ""),
-                content=item.get("content_with_weight", "") or item.get("content", ""),
-                score=item.get("similarity", 0.0),
-                document_id=item.get("document_id", ""),
-                document_name=item.get("docnm_kwt", "") or item.get("docnm_kwd", ""),
-                page_num=item.get("page_num_int", [None])[0] if item.get("page_num_int") else None,
-                bbox=item.get("bbox"),
+                chunk_id=chunk_data.get("chunk_id", ""),
+                content=chunk_data.get("content", ""),
+                score=chunk_data.get("similarity", 0.0),
+                document_id=chunk_data.get("document_id", ""),
+                document_name=chunk_data.get("document_keyword", ""),
+                page_num=chunk_data.get("page_num"),
+                bbox=chunk_data.get("bbox"),
             ))
 
         return chunks, elapsed_ms

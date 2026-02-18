@@ -14,7 +14,19 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-"""Main entry point for criminal benchmark testing."""
+"""Main entry point for RAG evaluation framework.
+
+This framework evaluates RAG system performance on retrieval accuracy
+and answer correctness. It is designed with clear separation of concerns:
+
+- Evaluation module: measures performance, does NOT change retrieval behavior
+- Server-side configuration: handles embedding models, chunking, reranking, etc.
+
+Usage:
+    uv run python test/eval/run.py
+    uv run python test/eval/run.py --case "曾庆成危险驾驶案"
+    uv run python test/eval/run.py --config custom_config.yaml
+"""
 
 import argparse
 import logging
@@ -29,20 +41,18 @@ sys_path = Path(__file__).parent.parent.parent
 import sys
 sys.path.insert(0, str(sys_path))
 
-from test.criminal_benchmark.models import (
+from test.eval.models import (
     BenchmarkReport,
     BenchmarkSummary,
-    QuestionCategory,
     TestResult,
-    GateStatus,
 )
-from test.criminal_benchmark.questions.parser import load_all_questions, load_questions_for_case
-from test.criminal_benchmark.questions.matcher import AnswerMatcher
-from test.criminal_benchmark.runner.setup import BenchmarkSetup
-from test.criminal_benchmark.runner.retrieval import RetrievalRunner
-from test.criminal_benchmark.runner.chat import ChatRunner
-from test.criminal_benchmark.report.json_report import save_json_report
-from test.criminal_benchmark.report.md_report import save_md_report
+from test.eval.questions.parser import load_all_questions, load_questions_for_case
+from test.eval.evaluator.matcher import AnswerMatcher
+from test.eval.evaluator.setup import EvaluationSetup
+from test.eval.evaluator.retrieval import RetrievalEvaluator
+from test.eval.evaluator.chat import ChatEvaluator
+from test.eval.report.json_report import save_json_report
+from test.eval.report.md_report import save_md_report
 
 logging.basicConfig(
     level=logging.INFO,
@@ -57,14 +67,26 @@ def load_config(config_path: Path) -> dict:
         return yaml.safe_load(f)
 
 
-def run_benchmark(
+def run_evaluation(
     config: dict,
     case_filter: str = None,
     category_filter: str = None,
     cleanup: bool = True,
     base_path: str = "benchmark",
 ) -> BenchmarkReport:
-    """Run the complete benchmark test."""
+    """
+    Run the complete evaluation test.
+
+    Args:
+        config: Configuration dictionary
+        case_filter: Optional case name filter
+        category_filter: Optional category filter
+        cleanup: Whether to cleanup resources after test
+        base_path: Base path to benchmark directory
+
+    Returns:
+        BenchmarkReport with results
+    """
     start_time = time.time()
 
     # Load questions
@@ -74,6 +96,7 @@ def run_benchmark(
     else:
         questions = load_all_questions(base_path)
 
+    # Filter by category if specified
     if category_filter:
         questions = [q for q in questions if q.category.value == category_filter]
 
@@ -83,11 +106,17 @@ def run_benchmark(
         raise RuntimeError("No questions found to test")
 
     # Initialize components
-    setup = BenchmarkSetup(
+    setup = EvaluationSetup(
         base_url=config["server"]["base_url"],
         email=config["auth"]["email"],
         password=config["auth"]["password"],
     )
+
+    # Get optional retrieval parameters (for development/debugging only)
+    retrieval_config = config.get("retrieval", {})
+    top_k = retrieval_config.get("top_k")  # None = use server default
+    similarity_threshold = retrieval_config.get("similarity_threshold")  # None = use server default
+
     matcher = AnswerMatcher(
         coverage_threshold=config["matching"]["evidence"]["coverage_threshold"],
         negative_keywords=config["matching"]["gap"]["negative_keywords"],
@@ -108,18 +137,18 @@ def run_benchmark(
     )
     logger.info(f"Dataset created: {dataset_id}")
 
-    # Upload and parse documents (filter by case if specified)
+    # Upload and parse documents
     document_ids = []
-    doc_case_map = {}  # Map document_id to case name
-    case_doc_map = {}  # Map case name to document_id (for retrieval filtering)
+    doc_case_map = {}
+    case_doc_map = {}
 
-    # Get unique case names from questions to determine which documents to upload
+    # Get unique case names from questions
     cases_needed = set(q.case for q in questions)
 
-    for doc_config in config["documents"]:
+    for doc_config in config.get("test_cases", config.get("documents", [])):
         case_name = doc_config["name"]
 
-        # Skip documents not needed for the filtered questions
+        # Skip documents not needed for filtered questions
         if cases_needed and case_name not in cases_needed:
             logger.info(f"Skipping document for other case: {case_name}")
             continue
@@ -146,7 +175,7 @@ def run_benchmark(
     logger.info("Parsing completed")
 
     # Create chat assistant
-    chat_name = f"benchmark_chat_{timestamp}"
+    chat_name = f"eval_chat_{timestamp}"
     logger.info(f"Creating chat assistant: {chat_name}")
     chat_id = setup.create_chat_assistant(
         name=chat_name,
@@ -155,9 +184,9 @@ def run_benchmark(
     )
     logger.info(f"Chat assistant created: {chat_id}")
 
-    # Initialize runners
-    retrieval_runner = RetrievalRunner(setup.session, config["server"]["base_url"])
-    chat_runner = ChatRunner(setup.session, config["server"]["base_url"])
+    # Initialize evaluators
+    retrieval_eval = RetrievalEvaluator(setup.session, config["server"]["base_url"])
+    chat_eval = ChatEvaluator(setup.session, config["server"]["base_url"])
 
     # Run tests
     results: list[TestResult] = []
@@ -168,21 +197,21 @@ def run_benchmark(
         try:
             test_start = time.time()
 
-            # Get document ID for this case to limit retrieval scope
+            # Get document ID for this case
             doc_id_for_case = case_doc_map.get(q.case)
             doc_ids_filter = [doc_id_for_case] if doc_id_for_case else None
 
-            # Retrieval
-            chunks, retrieval_time = retrieval_runner.retrieve(
+            # Retrieval (using server defaults unless override specified)
+            chunks, retrieval_time = retrieval_eval.retrieve(
                 question=q.question,
                 dataset_ids=[dataset_id],
                 document_ids=doc_ids_filter,
-                top_k=config["test"]["top_k"],
-                score_threshold=config["test"]["score_threshold"],
+                top_k=top_k,
+                similarity_threshold=similarity_threshold,
             )
 
             # Chat
-            answer, chat_data, chat_time = chat_runner.chat(
+            answer, chat_data, chat_time = chat_eval.chat(
                 chat_id=chat_id,
                 question=q.question,
                 doc_ids=doc_ids_filter,
@@ -236,7 +265,14 @@ def run_benchmark(
     # Create report
     report = BenchmarkReport(
         timestamp=datetime.now().isoformat(),
-        config={"dataset_name": dataset_name, "chat_name": chat_name},
+        config={
+            "dataset_name": dataset_name,
+            "chat_name": chat_name,
+            "retrieval_params": {
+                "top_k": top_k if top_k else "server_default",
+                "similarity_threshold": similarity_threshold if similarity_threshold else "server_default",
+            },
+        },
         summary=summary,
         results=results,
     )
@@ -249,14 +285,14 @@ def run_benchmark(
         logger.info("Cleanup completed")
 
     total_time = time.time() - start_time
-    logger.info(f"Benchmark completed in {total_time:.1f}s")
+    logger.info(f"Evaluation completed in {total_time:.1f}s")
     logger.info(f"Results: {summary.passed}/{summary.total} passed ({summary.score:.1%})")
 
     return report
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Run criminal RAG benchmark tests")
+    parser = argparse.ArgumentParser(description="Run RAG evaluation benchmark tests")
     parser.add_argument(
         "--config",
         type=Path,
@@ -299,8 +335,8 @@ def main():
     # Load config
     config = load_config(args.config)
 
-    # Run benchmark
-    report = run_benchmark(
+    # Run evaluation
+    report = run_evaluation(
         config=config,
         case_filter=args.case,
         category_filter=args.category,
@@ -317,7 +353,7 @@ def main():
 
     # Print summary
     print("\n" + "=" * 60)
-    print("BENCHMARK SUMMARY")
+    print("EVALUATION SUMMARY")
     print("=" * 60)
     print(f"Total:   {report.summary.total}")
     print(f"Passed:  {report.summary.passed}")

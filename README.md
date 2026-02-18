@@ -203,6 +203,46 @@ docker logs -f docker-ragflow-cpu-1
 
 ---
 
+## 评测框架
+
+项目提供了统一的 RAG 评测框架，用于评估检索准确率和答案正确性。
+
+### 快速开始
+
+```bash
+# 运行完整评测
+uv run python test/eval/run.py
+
+# 按案件过滤
+uv run python test/eval/run.py --case "曾庆成危险驾驶案"
+
+# 按题型过滤
+uv run python test/eval/run.py --category factual
+```
+
+### 评测题型
+
+| 题型 | 说明 | 评分策略 |
+|------|------|----------|
+| 事实型 (factual) | 事实提取准确率 | 精确匹配 + 语义等价 |
+| 证据集合型 (evidence) | 证据收集完整率 | 覆盖率 ≥ 50% |
+| 冲突缺口型 (gap) | 缺失识别正确率 | 否定关键词检测 |
+
+### 设计原则
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 评测框架 (test/eval/)                                       │
+│ - 测量 RAG 系统表现                                         │
+│ - 不改变检索行为                                            │
+│ - 默认使用服务端配置                                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**详细文档**: [test/eval/README.md](./test/eval/README.md)
+
+---
+
 ## 技术栈
 
 ### 后端
@@ -248,6 +288,12 @@ criminal-rag/
 ├── web/                  # 前端代码
 │   └── src/             # React 组件
 ├── docker/              # Docker 配置
+├── test/                # 测试
+│   ├── eval/            # RAG 评测框架
+│   │   ├── evaluator/   # 评测器（匹配、检索、对话）
+│   │   ├── questions/   # 题目解析
+│   │   └── report/      # 报告生成
+│   └── benchmark/       # 性能压测
 ├── docs/                # 文档
 │   ├── 刑事案件RAG检索系统prd.md
 │   └── 第一阶段开发汇总.md
@@ -300,11 +346,11 @@ bun run build      # 生产构建
 - PR-3: Answer Gate 校验器
 - PR-4: 检索扩展 (返回 block_refs)
 - PR-6: PaddleVL 作为默认 PDF 解析器
+- RAG 评测框架 (test/eval/)
 
 **进行中**:
 - PR-5: 集成测试
 - 自动检测文书类型解析方案
-- Benchmark 检索测试
 
 ---
 
@@ -312,6 +358,7 @@ bun run build      # 生产构建
 
 - [产品需求文档 (PRD)](./docs/刑事案件RAG检索系统prd.md)
 - [第一阶段开发汇总](./docs/第一阶段开发汇总.md)
+- [RAG 评测框架](./test/eval/README.md)
 - [RAGFlow 原始文档](./README-RAGFlow-Original.md)
 
 ---

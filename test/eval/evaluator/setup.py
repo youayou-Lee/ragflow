@@ -13,7 +13,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-"""Setup runner for criminal benchmark - login, dataset, documents."""
+"""Setup runner for RAG evaluation framework.
+
+Handles login, dataset creation, document upload, and chat assistant creation.
+"""
 
 import time
 from pathlib import Path
@@ -22,8 +25,8 @@ from typing import Optional
 import requests
 
 
-class BenchmarkSetup:
-    """Handles setup operations for benchmark testing."""
+class EvaluationSetup:
+    """Handles setup operations for evaluation testing."""
 
     def __init__(self, base_url: str, email: str, password: str):
         self.base_url = base_url.rstrip("/")
@@ -47,10 +50,9 @@ class BenchmarkSetup:
         if data.get("code") != 0:
             raise RuntimeError(f"Login failed: {data.get('message')}")
 
-        # Get login token from response header (used for creating API token)
+        # Get login token from response header
         login_token = resp.headers.get("Authorization")
         if not login_token:
-            # Try from response data
             login_token = data["data"].get("access_token")
 
         if not login_token:
@@ -108,7 +110,6 @@ class BenchmarkSetup:
         if data.get("code") != 0:
             raise RuntimeError(f"Upload document failed: {data.get('message')}")
 
-        # Return first document ID
         return data["data"][0]["id"]
 
     def parse_document(self, dataset_id: str, document_ids: list[str]) -> bool:
