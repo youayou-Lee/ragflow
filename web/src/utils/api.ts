@@ -1,4 +1,4 @@
-let api_host = `/v1`;
+const api_host = `/v1`;
 const ExternalApi = `/api`;
 
 export { api_host };
@@ -121,6 +121,12 @@ export default {
   parse: `${api_host}/document/parse`,
   setMeta: `${api_host}/document/set_meta`,
   get_dataset_filter: `${api_host}/document/filter`,
+  sub_document_list: `${api_host}/sub_document/list`,
+  sub_document_version_list: `${api_host}/sub_document/version/list`,
+  sub_document_correct: `${api_host}/sub_document/correct`,
+  sub_document_merge: `${api_host}/sub_document/merge`,
+  sub_document_split: `${api_host}/sub_document/split`,
+  sub_document_rerun: `${api_host}/sub_document/rerun`,
 
   // chat
   setDialog: `${api_host}/dialog/set`,
