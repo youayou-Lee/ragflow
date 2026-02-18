@@ -6,7 +6,7 @@
 - [x] Modify `api/utils/api_utils.py`
 - [x] Modify `rag/flow/parser/parser.py`
 - [x] Modify `test/testcases/configs.py`
-- [ ] Run verification tests
+- [x] Run verification tests
 
 ## Implementation Details
 

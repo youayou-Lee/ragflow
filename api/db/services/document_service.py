@@ -504,6 +504,18 @@ class DocumentService(CommonService):
 
     @classmethod
     @DB.connection_context()
+    def update_parser_id(cls, doc_id, parser_id, classifier_method=None, classifier_confidence=None):
+        """Update document's parser_id after auto-classification."""
+        # Use simple string assignment to avoid peewee issues with FloatField
+        num = cls.model.update(
+            parser_id=parser_id,
+            classifier_method=classifier_method,
+            classifier_confidence=classifier_confidence if classifier_confidence is not None else 0
+        ).where(cls.model.id == doc_id).execute()
+        return num
+
+    @classmethod
+    @DB.connection_context()
     def decrement_chunk_num(cls, doc_id, kb_id, token_num, chunk_num, duration):
         num = cls.model.update(token_num=cls.model.token_num - token_num,
                                chunk_num=cls.model.chunk_num - chunk_num,

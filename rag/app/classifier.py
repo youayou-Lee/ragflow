@@ -42,12 +42,18 @@ MIN_TEXT_THRESHOLD = 50
 
 # Rule-based classification patterns
 # Each pattern maps to (parser_id, description)
+# Note: \s* allows for spaces between characters (common in OCR/scanned PDFs)
 DOCUMENT_PATTERNS = [
     # Legal document patterns (Chinese)
-    (r"讯问笔录|询问笔录", ParserType.INTERROGATION.value, "Interrogation record"),
-    (r"起诉意见书", ParserType.INDICTMENT.value, "Indictment opinion"),
-    (r"起诉书", ParserType.INDICTMENT.value, "Indictment"),
-    (r"判决书|裁定书", ParserType.LAWS.value, "Court judgment"),
+    # Interrogation/Inquiry records - must match before generic "规定" pattern
+    (r"讯\s*问\s*笔\s*录|询\s*问\s*笔\s*录", ParserType.INTERROGATION.value, "Interrogation record"),
+    # Indictment opinion - specific document type from police
+    (r"起\s*诉\s*意\s*见\s*书", ParserType.INDICTMENT.value, "Indictment opinion"),
+    # Indictment - from prosecutor
+    (r"起\s*诉\s*书", ParserType.INDICTMENT.value, "Indictment"),
+    # Court judgments
+    (r"判\s*决\s*书|裁\s*定\s*书", ParserType.LAWS.value, "Court judgment"),
+    # Generic legal documents - keep last as fallback for legal content
     (r"法律|法规|条例|规定", ParserType.LAWS.value, "Legal document"),
     # Add more patterns as needed
 ]
@@ -248,7 +254,7 @@ class DocumentClassifier:
             - method: Classification method ('rule', 'llm', or 'fallback')
             - confidence: Classification confidence (0.0 to 1.0)
         """
-        # Step 1: Rule-based classification (fast path)
+        # Step 1: Rule-based classification on extracted text (fast path)
         text = extract_text_sample(binary, filename)
 
         if text:
@@ -263,7 +269,13 @@ class DocumentClassifier:
             if confidence > 0:
                 return parser_id, method, confidence
 
-        # Step 3: Final fallback
+        # Step 3: Filename-based classification (for scanned PDFs)
+        # Try to classify based on filename when text extraction fails
+        parser_id, method, confidence = DocumentClassifier._classify_by_filename(filename)
+        if confidence > 0:
+            return parser_id, method, confidence
+
+        # Step 4: Final fallback
         return DocumentClassifier._fallback_classify(filename)
 
     @staticmethod
@@ -284,6 +296,39 @@ class DocumentClassifier:
 
         # No rule matched
         return "", "rule", 0.0
+
+    @staticmethod
+    def _classify_by_filename(filename: str) -> Tuple[str, str, float]:
+        """
+        Classify document based on filename.
+
+        This is useful for scanned PDFs where text extraction fails.
+        Many users name their files with the document type.
+
+        Args:
+            filename: The filename to classify.
+
+        Returns:
+            Tuple of (parser_id, method, confidence).
+        """
+        # Remove extension and common prefixes/suffixes
+        name = filename.lower()
+        if "." in name:
+            name = name.rsplit(".", 1)[0]
+
+        # Remove common prefixes like "sample_", "test_", etc.
+        for prefix in ["sample_", "test_", "copy_of_", "副本_", "复件_"]:
+            if name.startswith(prefix):
+                name = name[len(prefix):]
+
+        # Apply same patterns to filename
+        for pattern, parser_id, description in DOCUMENT_PATTERNS:
+            if re.search(pattern, name, re.IGNORECASE):
+                logging.debug(f"Filename matched: {pattern} -> {parser_id} ({description})")
+                return parser_id, "filename", 0.7
+
+        # No filename match
+        return "", "filename", 0.0
 
     @staticmethod
     def _fallback_classify(filename: str) -> Tuple[str, str, float]:

@@ -471,10 +471,11 @@ class FileService(CommonService):
                     thumbnail_location = f"thumbnail_{doc_id}.png"
                     settings.STORAGE_IMPL.put(kb.id, thumbnail_location, img)
 
-                # Determine parser_id: use classifier for general documents
-                parser_id, classifier_method, classifier_confidence = self.get_parser_with_classification(
-                    filetype, filename, kb.parser_id, blob, kb.tenant_id
-                )
+                # Determine parser_id: use default from knowledge base (no classification at upload time)
+                # Classification will happen during parsing phase after PaddleVL recognition
+                parser_id = kb.parser_id or ParserType.NAIVE.value
+                classifier_method = "pending"  # Will be set during parsing
+                classifier_confidence = 0.0
 
                 doc = {
                     "id": doc_id,
@@ -491,10 +492,6 @@ class FileService(CommonService):
                     "size": len(blob),
                     "thumbnail": thumbnail_location,
                 }
-                # Store classifier metadata for tracking (optional)
-                if classifier_method != "filetype":
-                    doc["classifier_method"] = classifier_method
-                    doc["classifier_confidence"] = classifier_confidence
                 DocumentService.insert(doc)
 
                 FileService.add_file_from_kb(doc, kb_folder["id"], kb.tenant_id)

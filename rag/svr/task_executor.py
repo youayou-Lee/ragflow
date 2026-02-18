@@ -249,7 +249,7 @@ async def build_chunks(task, progress_callback):
         set_progress(task["id"], prog=-1, msg="File size exceeds( <= %dMb )" % (int(settings.DOC_MAXIMUM_SIZE / 1024 / 1024)))
         return []
 
-    chunker = FACTORY[task["parser_id"].lower()]
+    # Get binary content first (needed for classification)
     try:
         st = timer()
         bucket, name = File2DocumentService.get_storage_address(doc_id=task["doc_id"])
@@ -266,6 +266,52 @@ async def build_chunks(task, progress_callback):
             progress_callback(-1, "Get file from minio: %s" % str(e).replace("'", ""))
         logging.exception("Chunking {}/{} got exception".format(task["location"], task["name"]))
         raise
+
+    # Dynamic classification: try to auto-detect document type
+    current_parser_id = task["parser_id"].lower()
+    # Parsers that should NOT be overridden by classification (user explicitly chose these)
+    # These are specialized parsers that require specific handling
+    skip_classification_parsers = [
+        ParserType.PRESENTATION.value,
+        ParserType.MANUAL.value,
+        ParserType.PAPER.value,
+        ParserType.RESUME.value,
+        ParserType.BOOK.value,
+        ParserType.QA.value,
+        ParserType.TABLE.value,
+        ParserType.PICTURE.value,
+        ParserType.ONE.value,
+        ParserType.AUDIO.value,
+        ParserType.EMAIL.value,
+        ParserType.KG.value,
+        ParserType.TAG.value,
+    ]
+    # Only classify if not in skip list
+    if current_parser_id not in skip_classification_parsers:
+        try:
+            from rag.app.classifier import DocumentClassifier
+            classified_parser_id, classifier_method, confidence = DocumentClassifier.classify(
+                binary, task["name"], tenant_id=task.get("tenant_id")
+            )
+            # Only update if classification is confident AND different from current
+            # Use higher threshold (0.5) for re-classification to avoid false positives
+            if confidence >= 0.5 and classified_parser_id != current_parser_id:
+                logging.info(f"Re-classifying document {task['name']}: {current_parser_id} -> {classified_parser_id} (method={classifier_method}, confidence={confidence})")
+                current_parser_id = classified_parser_id
+                task["parser_id"] = classified_parser_id
+                # Update database with new parser_id
+                try:
+                    DocumentService.update_parser_id(task["doc_id"], classified_parser_id, classifier_method, confidence)
+                except Exception as db_err:
+                    logging.warning(f"Failed to update parser_id in database: {db_err}")
+                progress_callback(0.05, f"[Auto-detect] Classified as {classified_parser_id} (confidence: {confidence:.0%})")
+            elif confidence > 0:
+                # Log when classification agrees with current parser
+                logging.debug(f"Classification confirmed {task['name']}: {current_parser_id} (method={classifier_method}, confidence={confidence})")
+        except Exception as e:
+            logging.warning(f"Document classification failed, using default parser: {e}")
+
+    chunker = FACTORY[current_parser_id]
 
     try:
         async with chunk_limiter:

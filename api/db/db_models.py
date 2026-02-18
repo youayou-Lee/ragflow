@@ -880,6 +880,8 @@ class Document(DataBaseModel):
     process_begin_at = DateTimeField(null=True, index=True)
     process_duration = FloatField(default=0)
     suffix = CharField(max_length=32, null=False, help_text="The real file extension suffix", index=True)
+    classifier_method = CharField(max_length=32, null=True, help_text="how the parser was classified (rule/llm/filename/default)")
+    classifier_confidence = FloatField(default=0, help_text="classification confidence score")
 
     run = CharField(max_length=1, null=True, help_text="start to run processing or cancel.(1: run it; 2: cancel)", default="0", index=True)
     status = CharField(max_length=1, null=True, help_text="is it validate(0: wasted, 1: validate)", default="1", index=True)
