@@ -55,7 +55,8 @@ class RetrievalRunner:
             "question": question,
             "dataset_ids": dataset_ids,
             "top_k": top_k,
-            "score_threshold": score_threshold,
+            # API expects "similarity_threshold", not "score_threshold"
+            "similarity_threshold": score_threshold,
         }
 
         if document_ids:

@@ -20,8 +20,15 @@ chat:
 test:
   parse_timeout: 300
   parse_interval: 5
-  top_k: 6
-  score_threshold: 0.3
+  # 检索参数优化：
+  # - top_k: 从 6 增加到 15，提高召回更多候选 chunk 的机会
+  # - score_threshold: 从 0.3 降低到 0.0，移除相似度阈值限制
+  #   原因：测试显示许多有效答案的相似度在 0.23-0.37 之间，
+  #   过高的阈值会过滤掉有效结果
+  # 注意：retrieval.py 使用 score_threshold，但 API 期望 similarity_threshold
+  # 如果参数名不匹配，API 会使用默认值 0.2
+  top_k: 15
+  score_threshold: 0.0
 
 documents:
   - name: "曾庆成危险驾驶案"
