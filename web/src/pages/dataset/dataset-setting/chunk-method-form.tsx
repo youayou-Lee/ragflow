@@ -36,6 +36,7 @@ const ConfigurationComponentMap = {
   [DocumentParserType.Tag]: TagConfiguration,
   [DocumentParserType.KnowledgeGraph]: KnowledgeGraphConfiguration,
   [DocumentParserType.Interrogation]: InterrogationConfiguration,
+  [DocumentParserType.Indictment]: NaiveConfiguration,
 };
 
 function EmptyComponent() {

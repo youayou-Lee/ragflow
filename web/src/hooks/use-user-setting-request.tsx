@@ -128,6 +128,7 @@ const DEFAULT_PARSERS = [
   { value: 'email', label: 'Email' },
   { value: 'tag', label: 'Tag' },
   { value: 'interrogation', label: 'Interrogation' },
+  { value: 'indictment', label: 'Indictment' },
 ];
 
 export const useSelectParserList = (): Array<{

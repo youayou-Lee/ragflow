@@ -120,6 +120,9 @@ export default {
   upload_and_parse: `${api_host}/document/upload_info`,
   parse: `${api_host}/document/parse`,
   setMeta: `${api_host}/document/set_meta`,
+  subdocList: `${api_host}/document/subdocs/list`,
+  subdocGenerate: `${api_host}/document/subdocs/generate`,
+  subdocSave: `${api_host}/document/subdocs/save`,
   get_dataset_filter: `${api_host}/document/filter`,
 
   // chat

@@ -601,6 +601,11 @@ export default {
       </p><p>
       解析器在分块时保护问答边界，并保留位置信息用于前端高亮显示。
       </p>`,
+      indictment: `<p>仅支持 <b>PDF</b> 文件格式。</p><p>
+      本解析器面向起诉意见书/起诉书等案件主线文书。
+      </p><p>
+      默认按案情段落进行结构化分块，并保留位置引用信息，便于证据溯源。
+      </p>`,
       useRaptor: '使用召回增强 RAPTOR 策略',
       useRaptorTip:
         'RAPTOR 常应用于复杂的多跳问答任务。如需打开，请跳转至知识库的文件页面，点击生成 > RAPTOR 开启。详见: https://ragflow.io/docs/dev/enable_raptor。',

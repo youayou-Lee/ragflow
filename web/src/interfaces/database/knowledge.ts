@@ -221,3 +221,15 @@ export interface IKnowledgeGraph {
   graph: Record<string, any>;
   mind_map: TreeData;
 }
+
+
+export interface ISubDocument {
+  index: number;
+  name: string;
+  start_page: number;
+  end_page: number;
+  doc_type: string;
+  confidence: number;
+  title_hint?: string;
+  status: string;
+}

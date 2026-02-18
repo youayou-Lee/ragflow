@@ -18,4 +18,5 @@ export const ImageMap = {
   knowledge_graph: getImageName('knowledge-graph', 2),
   tag: getImageName('tag', 2),
   interrogation: getImageName('paper', 2), // Using paper images as placeholder
+  indictment: getImageName('paper', 2), // Using paper images as placeholder
 };
