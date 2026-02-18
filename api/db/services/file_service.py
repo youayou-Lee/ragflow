@@ -626,6 +626,7 @@ class FileService(CommonService):
                 b, n = File2DocumentService.get_storage_address(doc_id=doc_id)
 
                 TaskService.filter_delete([Task.doc_id == doc_id])
+                DocumentService.delete_sub_docs_by_doc_id(doc_id)
                 if not DocumentService.remove_document(doc, tenant_id):
                     raise Exception("Database error (Document removal)!")
 
