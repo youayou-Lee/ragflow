@@ -35,6 +35,7 @@ import { useTheme } from '../theme-provider';
 import { Button } from '../ui/button';
 import { AssistantGroupButton, UserGroupButton } from './group-button';
 import styles from './index.module.less';
+import { ReferenceCitationList } from './reference-citation-list';
 import { ReferenceDocumentList } from './reference-document-list';
 import { ReferenceImageList } from './reference-image-list';
 import { UploadedMessageFiles } from './uploaded-message-files';
@@ -99,6 +100,16 @@ function MessageItem({
 
     return Object.values(docs);
   }, [reference?.doc_aggs]);
+
+  const referenceCitationChunks = useMemo(() => {
+    if (Array.isArray(reference?.chunks)) {
+      return reference?.chunks;
+    }
+    if (reference?.chunks) {
+      return Object.values(reference.chunks);
+    }
+    return [];
+  }, [reference?.chunks]);
 
   // Extract PDF download info from message content
   const pdfDownloadInfo = useMemo(
@@ -298,9 +309,23 @@ function MessageItem({
 
             {renderContent()}
 
+            {isAssistant && reference?.has_sufficient_evidence === false && (
+              <p className="text-xs text-text-sub-title-invert">
+                {reference?.no_evidence_statement ||
+                  '未检索到足够证据支持当前回答。'}
+              </p>
+            )}
+
+            {isAssistant && referenceCitationChunks.length > 0 && (
+              <ReferenceCitationList
+                list={referenceCitationChunks}
+                clickDocumentButton={clickDocumentButton}
+              ></ReferenceCitationList>
+            )}
+
             {isAssistant && (
               <ReferenceImageList
-                referenceChunks={reference?.chunks}
+                referenceChunks={referenceCitationChunks}
                 messageContent={messageContent}
               ></ReferenceImageList>
             )}

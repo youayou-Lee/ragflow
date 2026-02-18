@@ -50,6 +50,40 @@ from rag.answer_gate import AnswerGate, ValidationStatus
 # Answer Gate configuration
 ANSWER_GATE_ENABLED = getattr(settings, "ANSER_GATE_ENABLED", False)
 
+P0_SUB_DOC_TYPES = {"interrogation", "indictment"}
+
+
+def _normalize_sub_doc_type(value):
+    if value is None:
+        return ""
+    return str(value).strip().lower()
+
+
+def _reference_chunk_priority(chunk):
+    t = _normalize_sub_doc_type(chunk.get("sub_doc_type") or chunk.get("doc_type") or chunk.get("doc_type_kwd"))
+    return 0 if t in P0_SUB_DOC_TYPES else 1
+
+
+def _build_reference_payload(reference, declare_missing_evidence=False, missing_evidence_reason=None):
+    refs = deepcopy(reference) if isinstance(reference, dict) else {"chunks": [], "doc_aggs": []}
+    refs.setdefault("chunks", [])
+    refs.setdefault("doc_aggs", [])
+    refs["chunks"] = sorted(chunks_format(refs), key=_reference_chunk_priority)
+    refs["doc_aggs"] = sorted(
+        refs.get("doc_aggs", []),
+        key=lambda x: (
+            0 if _normalize_sub_doc_type(x.get("sub_doc_type")) in P0_SUB_DOC_TYPES else 1,
+            -(x.get("count") or 0),
+        ),
+    )
+
+    if declare_missing_evidence:
+        has_evidence = bool(refs.get("chunks"))
+        refs["has_sufficient_evidence"] = has_evidence
+        if not has_evidence:
+            refs["no_evidence_statement"] = missing_evidence_reason or "未检索到足够证据支持当前回答。"
+    return refs
+
 
 class DialogService(CommonService):
     model = Dialog
@@ -455,7 +489,13 @@ async def async_chat(dialog, messages, stream=True, **kwargs):
     retrieval_ts = timer()
     if not knowledges and prompt_config.get("empty_response"):
         empty_res = prompt_config["empty_response"]
-        yield {"answer": empty_res, "reference": kbinfos, "prompt": "\n\n### Query:\n%s" % " ".join(questions),
+        declare_missing_evidence = bool(kwargs.get("no_evidence_declaration") or prompt_config.get("no_evidence_declaration"))
+        refs = _build_reference_payload(
+            kbinfos,
+            declare_missing_evidence=declare_missing_evidence,
+            missing_evidence_reason=prompt_config.get("no_evidence_statement"),
+        )
+        yield {"answer": empty_res, "reference": refs, "prompt": "\n\n### Query:\n%s" % " ".join(questions),
                "audio_binary": tts(tts_mdl, empty_res), "final": True}
         return
 
@@ -478,6 +518,7 @@ async def async_chat(dialog, messages, stream=True, **kwargs):
         nonlocal embd_mdl, prompt_config, knowledges, kwargs, kbinfos, prompt, retrieval_ts, questions, langfuse_tracer
 
         refs = []
+        declare_missing_evidence = bool(kwargs.get("no_evidence_declaration") or prompt_config.get("no_evidence_declaration"))
         ans = answer.split("</think>")
         think = ""
         if len(ans) == 2:
@@ -551,6 +592,7 @@ async def async_chat(dialog, messages, stream=True, **kwargs):
             langfuse_generation.end()
 
         # Answer Gate validation (PR-3)
+        gate_no_evidence = False
         if ANSWER_GATE_ENABLED and refs and refs.get("chunks"):
             try:
                 gate = AnswerGate()
@@ -565,11 +607,18 @@ async def async_chat(dialog, messages, stream=True, **kwargs):
                 )
                 if result.status == ValidationStatus.NO_EVIDENCE:
                     logging.warning("Answer Gate: no_evidence for answer")
+                    gate_no_evidence = True
                 elif result.status == ValidationStatus.CITATION_INSUFFICIENT:
                     logging.warning(f"Answer Gate: citation_insufficient - {result.validation_errors}")
+                    gate_no_evidence = True
             except Exception as e:
                 logging.warning(f"Answer Gate validation failed: {e}")
 
+        refs = _build_reference_payload(
+            refs,
+            declare_missing_evidence=(declare_missing_evidence or gate_no_evidence),
+            missing_evidence_reason=prompt_config.get("no_evidence_statement"),
+        )
         return {"answer": think + answer, "reference": refs, "prompt": re.sub(r"\n", "  \n", prompt), "created_at": time.time()}
 
     if langfuse_tracer:
@@ -937,13 +986,16 @@ Please correct the error and write SQL again using json_extract_string(chunk_dat
                                 doc_aggs[doc_id]["count"] += 1
                             doc_aggs_list = [{"doc_id": did, "doc_name": d["doc_name"], "count": d["count"]} for did, d in doc_aggs.items()]
                             logging.debug(f"use_sql: Returning aggregate answer with {len(chunks)} chunks from {len(doc_aggs)} documents")
-                            return {"answer": answer, "reference": {"chunks": chunks, "doc_aggs": doc_aggs_list}, "prompt": sys_prompt}
+                            refs = _build_reference_payload({"chunks": chunks, "doc_aggs": doc_aggs_list})
+                            return {"answer": answer, "reference": refs, "prompt": sys_prompt}
                 except Exception as e:
                     logging.warning(f"use_sql: Failed to fetch chunks: {e}")
             # Fallback: return answer without chunks
-            return {"answer": answer, "reference": {"chunks": [], "doc_aggs": []}, "prompt": sys_prompt}
+            refs = _build_reference_payload({"chunks": [], "doc_aggs": []})
+            return {"answer": answer, "reference": refs, "prompt": sys_prompt}
         # Fallback to table format for other cases
-        return {"answer": "\n".join([columns, line, rows]), "reference": {"chunks": [], "doc_aggs": []}, "prompt": sys_prompt}
+        refs = _build_reference_payload({"chunks": [], "doc_aggs": []})
+        return {"answer": "\n".join([columns, line, rows]), "reference": refs, "prompt": sys_prompt}
 
     docid_idx = list(docid_idx)[0]
     doc_name_idx = list(doc_name_idx)[0]
@@ -953,12 +1005,13 @@ Please correct the error and write SQL again using json_extract_string(chunk_dat
             doc_aggs[r[docid_idx]] = {"doc_name": r[doc_name_idx], "count": 0}
         doc_aggs[r[docid_idx]]["count"] += 1
 
+    refs = _build_reference_payload({
+        "chunks": [{"doc_id": r[docid_idx], "docnm_kwd": r[doc_name_idx]} for r in tbl["rows"]],
+        "doc_aggs": [{"doc_id": did, "doc_name": d["doc_name"], "count": d["count"]} for did, d in doc_aggs.items()],
+    })
     result = {
         "answer": "\n".join([columns, line, rows]),
-        "reference": {
-            "chunks": [{"doc_id": r[docid_idx], "docnm_kwd": r[doc_name_idx]} for r in tbl["rows"]],
-            "doc_aggs": [{"doc_id": did, "doc_name": d["doc_name"], "count": d["count"]} for did, d in doc_aggs.items()],
-        },
+        "reference": refs,
         "prompt": sys_prompt,
     }
     logging.debug(f"use_sql: Returning answer with {len(result['reference']['chunks'])} chunks from {len(doc_aggs)} documents")
@@ -1148,7 +1201,7 @@ async def async_ask(question, kb_ids, tenant_id, chat_llm_name=None, search_conf
 
         if answer.lower().find("invalid key") >= 0 or answer.lower().find("invalid api") >= 0:
             answer += " Please set LLM API-Key in 'User Setting -> Model Providers -> API-Key'"
-        refs["chunks"] = chunks_format(refs)
+        refs = _build_reference_payload(refs)
         return {"answer": answer, "reference": refs}
 
     stream_iter = chat_mdl.async_chat_streamly_delta(sys_prompt, msg, {"temperature": 0.1})

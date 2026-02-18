@@ -104,7 +104,8 @@ export interface Message {
 
 export interface IReferenceChunk {
   id: string;
-  content: null;
+  chunk_id?: string;
+  content: string | null;
   document_id: string;
   document_name: string;
   dataset_id: string;
@@ -113,18 +114,27 @@ export interface IReferenceChunk {
   vector_similarity: number;
   term_similarity: number;
   positions: number[];
+  position_int?: number[];
+  page_num_int?: number[];
   doc_type?: string;
+  doc_name?: string;
+  sub_doc_type?: string;
+  sub_doc_id?: string;
 }
 
 export interface IReference {
   chunks: IReferenceChunk[];
   doc_aggs: Docagg[];
   total: number;
+  has_sufficient_evidence?: boolean;
+  no_evidence_statement?: string;
 }
 
 export interface IReferenceObject {
-  chunks: Record<string, IReferenceChunk>;
+  chunks: Record<string, IReferenceChunk> | IReferenceChunk[];
   doc_aggs: Record<string, Docagg>;
+  has_sufficient_evidence?: boolean;
+  no_evidence_statement?: string;
 }
 
 export interface IAnswer {
