@@ -2,6 +2,7 @@ import { ButtonLoading } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -15,23 +16,19 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useFetchTenantInfo } from '@/hooks/use-user-setting-request';
 import { IModalProps } from '@/interfaces/common';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import {
-  DataExtractKnowledgeItem,
-  DataFlowItem,
-  EmbeddingModelItem,
-  ParseTypeItem,
-  TeamItem,
-} from '../dataset/dataset-setting/configuration/common-item';
+import { EmbeddingModelItem } from '../dataset/dataset-setting/configuration/common-item';
 
 const FormId = 'dataset-creating-form';
 
 export function InputForm({ onOk }: IModalProps<any>) {
   const { t } = useTranslation();
+  const { data: tenantInfo } = useFetchTenantInfo();
 
   const FormSchema = z.object({
     name: z
@@ -40,24 +37,26 @@ export function InputForm({ onOk }: IModalProps<any>) {
         message: t('knowledgeList.namePlaceholder'),
       })
       .trim(),
-    parseType: z.number().optional(),
+    embd_id: z
+      .string()
+      .min(1, {
+        message: t('knowledgeConfiguration.embeddingModelPlaceholder'),
+      })
+      .trim(),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: '',
-      parseType: 1,
+      embd_id: tenantInfo?.embd_id,
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    onOk?.(data.name);
+    onOk?.(data);
   }
-  const parseType = useWatch({
-    control: form.control,
-    name: 'parseType',
-  });
+
   return (
     <Form {...form}>
       <form
@@ -84,15 +83,7 @@ export function InputForm({ onOk }: IModalProps<any>) {
             </FormItem>
           )}
         />
-        <EmbeddingModelItem line={2} />
-        <ParseTypeItem />
-        {parseType === 2 && (
-          <>
-            <DataFlowItem />
-            <DataExtractKnowledgeItem />
-            <TeamItem />
-          </>
-        )}
+        <EmbeddingModelItem line={2} isEdit={false} />
       </form>
     </Form>
   );
@@ -107,10 +98,20 @@ export function DatasetCreatingDialog({
 
   return (
     <Dialog open onOpenChange={hideModal}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        className="sm:max-w-[425px] focus-visible:!outline-none flex flex-col"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            const form = document.getElementById(FormId) as HTMLFormElement;
+            form?.requestSubmit();
+          }
+        }}
+      >
         <DialogHeader>
           <DialogTitle>{t('knowledgeList.createKnowledgeBase')}</DialogTitle>
         </DialogHeader>
+        <DialogDescription></DialogDescription>
         <InputForm onOk={onOk}></InputForm>
         <DialogFooter>
           <ButtonLoading type="submit" form={FormId} loading={loading}>
