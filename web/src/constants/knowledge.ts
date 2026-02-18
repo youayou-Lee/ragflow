@@ -93,6 +93,7 @@ export enum DocumentParserType {
   Tag = 'tag',
   KnowledgeGraph = 'knowledge_graph',
   Interrogation = 'interrogation',
+  Indictment = 'indictment',
 }
 
 export const TagRenameId = 'tagRename';

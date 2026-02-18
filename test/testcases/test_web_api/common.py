@@ -400,6 +400,21 @@ def document_set_meta(auth, payload=None, *, headers=HEADERS, data=None):
     return res.json()
 
 
+def document_subdocs_list(auth, payload=None, *, headers=HEADERS, data=None):
+    res = requests.post(url=f"{HOST_ADDRESS}{DOCUMENT_APP_URL}/subdocs/list", headers=headers, auth=auth, json=payload, data=data)
+    return res.json()
+
+
+def document_subdocs_generate(auth, payload=None, *, headers=HEADERS, data=None):
+    res = requests.post(url=f"{HOST_ADDRESS}{DOCUMENT_APP_URL}/subdocs/generate", headers=headers, auth=auth, json=payload, data=data)
+    return res.json()
+
+
+def document_subdocs_save(auth, payload=None, *, headers=HEADERS, data=None):
+    res = requests.post(url=f"{HOST_ADDRESS}{DOCUMENT_APP_URL}/subdocs/save", headers=headers, auth=auth, json=payload, data=data)
+    return res.json()
+
+
 def bulk_upload_documents(auth, kb_id, num, tmp_path):
     fps = []
     for i in range(num):

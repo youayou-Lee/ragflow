@@ -638,6 +638,11 @@ Example: A 1 KB message with 1024-dim embedding uses ~9 KB. The 5 MB default lim
       </p><p>
       The parser protects QA boundaries during chunking and preserves position information for frontend highlighting.
       </p>`,
+      indictment: `<p>Only <b>PDF</b> file is supported.</p><p>
+      This parser targets indictment opinion/indictment documents.
+      </p><p>
+      It chunks by case narrative sections and preserves positional references for evidence tracing.
+      </p>`,
       useRaptor: 'RAPTOR',
       useRaptorTip:
         'RAPTOR can be used for multi-hop question-answering tasks. Navigate to the Files page, click Generate > RAPTOR to enable it. See https://ragflow.io/docs/dev/enable_raptor for details.',

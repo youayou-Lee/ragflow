@@ -37,6 +37,9 @@ const {
   document_infos,
   listTagByKnowledgeIds,
   setMeta,
+  subdocList,
+  subdocGenerate,
+  subdocSave,
   getMeta,
   retrievalTestShare,
   getKnowledgeBasicInfo,
@@ -119,6 +122,18 @@ const methods = {
   },
   setMeta: {
     url: setMeta,
+    method: 'post',
+  },
+  subdocList: {
+    url: subdocList,
+    method: 'post',
+  },
+  subdocGenerate: {
+    url: subdocGenerate,
+    method: 'post',
+  },
+  subdocSave: {
+    url: subdocSave,
     method: 'post',
   },
   // chunk管理

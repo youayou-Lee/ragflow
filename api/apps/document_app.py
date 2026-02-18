@@ -46,6 +46,7 @@ from common.file_utils import get_project_base_directory
 from common.constants import RetCode, VALID_TASK_STATUS, ParserType, TaskStatus
 from api.utils.web_utils import CONTENT_TYPE_MAP, html2pdf, is_valid_url
 from deepdoc.parser.html_parser import RAGFlowHtmlParser
+from rag.app.subdoc_splitter import split_mixed_pdf
 from rag.nlp import search, rag_tokenizer
 from common import settings
 
@@ -896,6 +897,101 @@ async def parse():
 
     return get_json_result(data=txt)
 
+
+
+
+@manager.route("/subdocs/list", methods=["POST"])  # noqa: F821
+@login_required
+@validate_request("doc_id")
+async def list_subdocs():
+    req = await get_request_json()
+    doc_id = req["doc_id"]
+    if not DocumentService.accessible(doc_id, current_user.id):
+        return get_json_result(data=False, message="No authorization.", code=RetCode.AUTHENTICATION_ERROR)
+
+    metadata = DocMetadataService.get_document_metadata(doc_id) or {}
+    sub_docs = metadata.get("_sub_docs", [])
+    return get_json_result(data={"doc_id": doc_id, "sub_docs": sub_docs})
+
+
+@manager.route("/subdocs/generate", methods=["POST"])  # noqa: F821
+@login_required
+@validate_request("doc_id")
+async def generate_subdocs():
+    req = await get_request_json()
+    doc_id = req["doc_id"]
+    if not DocumentService.accessible(doc_id, current_user.id):
+        return get_json_result(data=False, message="No authorization.", code=RetCode.AUTHENTICATION_ERROR)
+
+    try:
+        e, doc = DocumentService.get_by_id(doc_id)
+        if not e:
+            return get_data_error_result(message="Document not found!")
+        if doc.type != FileType.PDF.value:
+            return get_data_error_result(message="Sub-document splitting only supports PDF.")
+
+        tenant_id = DocumentService.get_tenant_id(doc_id)
+        if not tenant_id:
+            return get_data_error_result(message="Tenant not found!")
+
+        blob = await thread_pool_exec(settings.STORAGE_IMPL.get, doc.kb_id, doc.location)
+        sub_docs = split_mixed_pdf(blob, doc.name)
+
+        metadata = DocMetadataService.get_document_metadata(doc_id) or {}
+        metadata["_sub_docs"] = sub_docs
+        metadata["_subdoc_splitter"] = {"version": 1, "mode": "rule_based"}
+
+        if not DocMetadataService.update_document_metadata(doc_id, metadata):
+            return get_data_error_result(message="Failed to persist sub-document split result.")
+
+        return get_json_result(data={"doc_id": doc_id, "sub_docs": sub_docs})
+    except Exception as ex:
+        return server_error_response(ex)
+
+
+@manager.route("/subdocs/save", methods=["POST"])  # noqa: F821
+@login_required
+@validate_request("doc_id", "sub_docs")
+async def save_subdocs():
+    req = await get_request_json()
+    doc_id = req["doc_id"]
+    sub_docs = req.get("sub_docs", [])
+
+    if not DocumentService.accessible(doc_id, current_user.id):
+        return get_json_result(data=False, message="No authorization.", code=RetCode.AUTHENTICATION_ERROR)
+
+    if not isinstance(sub_docs, list):
+        return get_json_result(data=False, message="sub_docs must be a list.", code=RetCode.ARGUMENT_ERROR)
+
+    cleaned = []
+    for idx, item in enumerate(sub_docs):
+        if not isinstance(item, dict):
+            return get_json_result(data=False, message=f"sub_docs[{idx}] must be an object.", code=RetCode.ARGUMENT_ERROR)
+        start = int(item.get("start_page", 0) or 0)
+        end = int(item.get("end_page", 0) or 0)
+        if start <= 0 or end <= 0 or start > end:
+            return get_json_result(data=False, message=f"Invalid page range at sub_docs[{idx}]", code=RetCode.ARGUMENT_ERROR)
+        cleaned.append({
+            "index": idx,
+            "name": item.get("name") or f"subdoc-{idx + 1}",
+            "start_page": start,
+            "end_page": end,
+            "doc_type": item.get("doc_type", "unknown"),
+            "confidence": float(item.get("confidence", 0.0) or 0.0),
+            "title_hint": item.get("title_hint", ""),
+            "status": item.get("status", "ready"),
+        })
+
+    cleaned = sorted(cleaned, key=lambda d: (d["start_page"], d["end_page"]))
+
+    metadata = DocMetadataService.get_document_metadata(doc_id) or {}
+    metadata["_sub_docs"] = cleaned
+    metadata["_subdoc_splitter"] = {"version": 1, "mode": "manual"}
+
+    if not DocMetadataService.update_document_metadata(doc_id, metadata):
+        return get_data_error_result(message="Failed to save sub-document metadata.")
+
+    return get_json_result(data={"doc_id": doc_id, "sub_docs": cleaned})
 
 @manager.route("/set_meta", methods=["POST"])  # noqa: F821
 @login_required

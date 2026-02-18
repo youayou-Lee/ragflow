@@ -414,6 +414,7 @@ def get_parser_config(chunk_method, parser_config):
         "email": None,
         "picture": None,
         "interrogation": {"raptor": {"use_raptor": False}, "graphrag": {"use_graphrag": False}},
+        "indictment": {"raptor": {"use_raptor": False}, "graphrag": {"use_graphrag": False}},
     }
 
     default_config = key_mapping[chunk_method]
