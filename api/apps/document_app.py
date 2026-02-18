@@ -936,6 +936,8 @@ async def generate_subdocs():
 
         blob = await thread_pool_exec(settings.STORAGE_IMPL.get, doc.kb_id, doc.location)
         sub_docs = split_mixed_pdf(blob, doc.name)
+        for idx, sd in enumerate(sub_docs):
+            sd["sub_doc_id"] = sd.get("sub_doc_id") or f"{doc_id}-subdoc-{idx + 1}"
 
         metadata = DocMetadataService.get_document_metadata(doc_id) or {}
         metadata["_sub_docs"] = sub_docs
@@ -972,6 +974,7 @@ async def save_subdocs():
         if start <= 0 or end <= 0 or start > end:
             return get_json_result(data=False, message=f"Invalid page range at sub_docs[{idx}]", code=RetCode.ARGUMENT_ERROR)
         cleaned.append({
+            "sub_doc_id": item.get("sub_doc_id") or f"{doc_id}-subdoc-{idx + 1}",
             "index": idx,
             "name": item.get("name") or f"subdoc-{idx + 1}",
             "start_page": start,

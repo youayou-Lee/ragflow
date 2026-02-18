@@ -130,6 +130,58 @@ chunk_limiter = asyncio.Semaphore(MAX_CONCURRENT_CHUNK_BUILDERS)
 embed_limiter = asyncio.Semaphore(MAX_CONCURRENT_CHUNK_BUILDERS)
 minio_limiter = asyncio.Semaphore(MAX_CONCURRENT_MINIO)
 kg_limiter = asyncio.Semaphore(2)
+
+
+def _load_sub_docs(doc_id: str) -> list[dict]:
+    """Load sub-document definitions from document metadata."""
+    try:
+        metadata = DocMetadataService.get_document_metadata(doc_id) or {}
+        sub_docs = metadata.get("_sub_docs", [])
+        if not isinstance(sub_docs, list):
+            return []
+        normalized = []
+        for i, sd in enumerate(sub_docs):
+            if not isinstance(sd, dict):
+                continue
+            start = int(sd.get("start_page", 0) or 0)
+            end = int(sd.get("end_page", 0) or 0)
+            if start <= 0 or end <= 0 or start > end:
+                continue
+            normalized.append({
+                "sub_doc_id": sd.get("sub_doc_id") or f"{doc_id}-subdoc-{i + 1}",
+                "doc_type": sd.get("doc_type", "unknown"),
+                "name": sd.get("name", f"subdoc-{i + 1}"),
+                "start_page": start,
+                "end_page": end,
+            })
+        return normalized
+    except Exception as e:
+        logging.warning(f"Failed to load sub_docs for {doc_id}: {e}")
+        return []
+
+
+def _attach_sub_doc_fields(d: dict, sub_docs: list[dict]):
+    """Attach sub-document fields to chunk by page overlap."""
+    if not sub_docs:
+        return
+
+    page_range = d.get("page_range")
+    if not page_range or len(page_range) != 2:
+        pages = d.get("page_num_int") or []
+        if pages:
+            page_range = [min(pages), max(pages)]
+        else:
+            return
+
+    start, end = int(page_range[0]), int(page_range[1])
+    for sd in sub_docs:
+        if start >= sd["start_page"] and end <= sd["end_page"]:
+            d["sub_doc_id"] = sd["sub_doc_id"]
+            d["sub_doc_type_kwd"] = sd["doc_type"]
+            d["sub_doc_name_kwd"] = sd["name"]
+            d["sub_doc_page_range"] = [sd["start_page"], sd["end_page"]]
+            return
+
 WORKER_HEARTBEAT_TIMEOUT = int(os.environ.get("WORKER_HEARTBEAT_TIMEOUT", "120"))
 stop_event = threading.Event()
 
@@ -295,6 +347,7 @@ async def build_chunks(task, progress_callback):
 
     docs = []
     doc = {"doc_id": task["doc_id"], "kb_id": str(task["kb_id"])}
+    sub_docs = _load_sub_docs(task["doc_id"])
     if task["pagerank"]:
         doc[PAGERANK_FLD] = int(task["pagerank"])
     st = timer()
@@ -311,6 +364,7 @@ async def build_chunks(task, progress_callback):
             # Add criminal case RAG extension fields
             add_bbox_union(d)
             add_page_range(d)
+            _attach_sub_doc_fields(d, sub_docs)
 
             if d.get("img_id"):
                 docs.append(d)

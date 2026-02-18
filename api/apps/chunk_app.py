@@ -89,6 +89,9 @@ async def list_chunk():
                 "page_num_int": sres.field[id].get("page_num_int", []),
                 "block_refs": sres.field[id].get("block_refs", []),
                 "bbox_union": sres.field[id].get("bbox_union", []),
+                "sub_doc_id": sres.field[id].get("sub_doc_id", ""),
+                "sub_doc_type": sres.field[id].get("sub_doc_type_kwd", ""),
+                "sub_doc_page_range": sres.field[id].get("sub_doc_page_range", []),
             }
             assert isinstance(d["positions"], list)
             assert len(d["positions"]) == 0 or (isinstance(d["positions"][0], list) and len(d["positions"][0]) == 5)
@@ -366,6 +369,8 @@ async def retrieval_test():
                                code=RetCode.DATA_ERROR)
 
     doc_ids = req.get("doc_ids", [])
+    sub_doc_ids = req.get("sub_doc_ids", [])
+    sub_doc_type = req.get("sub_doc_type")
     use_kg = req.get("use_kg", False)
     top = int(req.get("top_k", 1024))
     langs = req.get("cross_languages", [])
@@ -446,6 +451,11 @@ async def retrieval_test():
             if ck["content_with_weight"]:
                 ranks["chunks"].insert(0, ck)
         ranks["chunks"] = settings.retriever.retrieval_by_children(ranks["chunks"], tenant_ids)
+
+        if sub_doc_ids:
+            ranks["chunks"] = [c for c in ranks["chunks"] if c.get("sub_doc_id") in sub_doc_ids]
+        if sub_doc_type:
+            ranks["chunks"] = [c for c in ranks["chunks"] if c.get("sub_doc_type") == sub_doc_type or c.get("sub_doc_type_kwd") == sub_doc_type]
 
         for c in ranks["chunks"]:
             c.pop("vector", None)

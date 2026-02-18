@@ -61,17 +61,19 @@ class Dealer:
 
     def get_filters(self, req):
         condition = dict()
-        for key, field in {"kb_ids": "kb_id", "doc_ids": "doc_id"}.items():
+        for key, field in {"kb_ids": "kb_id", "doc_ids": "doc_id", "sub_doc_ids": "sub_doc_id"}.items():
             if key in req and req[key] is not None:
                 condition[field] = req[key]
         # TODO(yzc): `available_int` is nullable however infinity doesn't support nullable columns.
         for key in ["knowledge_graph_kwd", "available_int", "entity_kwd", "from_entity_kwd", "to_entity_kwd",
-                    "removed_kwd", "doc_type_kwd"]:
+                    "removed_kwd", "doc_type_kwd", "sub_doc_type_kwd"]:
             if key in req and req[key] is not None:
                 condition[key] = req[key]
         # Support doc_type as alias for doc_type_kwd
         if "doc_type" in req and req["doc_type"] is not None:
             condition["doc_type_kwd"] = req["doc_type"]
+        if "sub_doc_type" in req and req["sub_doc_type"] is not None:
+            condition["sub_doc_type_kwd"] = req["sub_doc_type"]
         return condition
 
     async def search(self, req, idx_names: str | list[str],
@@ -96,7 +98,7 @@ class Dealer:
                        "doc_id", "page_num_int", "top_int", "create_timestamp_flt", "knowledge_graph_kwd",
                        "question_kwd", "question_tks", "doc_type_kwd",
                        "available_int", "content_with_weight", "mom_id", PAGERANK_FLD, TAG_FLD,
-                       "block_refs", "bbox_union"])
+                       "block_refs", "bbox_union", "sub_doc_id", "sub_doc_type_kwd", "sub_doc_page_range"])
         kwds = set([])
 
         qst = req.get("question", "")
@@ -482,6 +484,9 @@ class Dealer:
                 "page_num_int": chunk.get("page_num_int", []),
                 "block_refs": chunk.get("block_refs", []),
                 "bbox_union": chunk.get("bbox_union", []),
+                "sub_doc_id": chunk.get("sub_doc_id", ""),
+                "sub_doc_type": chunk.get("sub_doc_type_kwd", ""),
+                "sub_doc_page_range": chunk.get("sub_doc_page_range", []),
             }
             if highlight and sres.highlight:
                 if id in sres.highlight:

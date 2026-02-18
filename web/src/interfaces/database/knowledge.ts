@@ -138,6 +138,9 @@ export interface IChunk {
   chunk_type?: string; // "header" or "qa_pair"
   qa_index?: number; // Index of QA pair
   metadata?: IChunkMetadata; // LLM-extracted metadata
+  sub_doc_id?: string;
+  sub_doc_type?: string;
+  sub_doc_page_range?: number[];
 }
 
 export interface IChunkMetadata {
@@ -192,6 +195,9 @@ export interface ITestingChunk {
   positions: number[][];
   docnm_kwd: string;
   doc_type_kwd: string;
+  sub_doc_id?: string;
+  sub_doc_type?: string;
+  sub_doc_page_range?: number[];
 }
 
 export interface ITestingDocument {

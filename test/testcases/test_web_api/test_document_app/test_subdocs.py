@@ -39,6 +39,8 @@ class TestSubDocumentWorkflow:
         assert gen_res["code"] == 0, gen_res
         assert gen_res["data"]["doc_id"] == doc_id, gen_res
         assert isinstance(gen_res["data"]["sub_docs"], list), gen_res
+        if gen_res["data"]["sub_docs"]:
+            assert "sub_doc_id" in gen_res["data"]["sub_docs"][0], gen_res
 
         list_res = document_subdocs_list(WebApiAuth, {"doc_id": doc_id})
         assert list_res["code"] == 0, list_res
@@ -72,6 +74,7 @@ class TestSubDocumentWorkflow:
         list_res = document_subdocs_list(WebApiAuth, {"doc_id": doc_id})
         assert list_res["code"] == 0, list_res
         assert list_res["data"]["sub_docs"][0]["name"] == "manual-subdoc-1", list_res
+        assert list_res["data"]["sub_docs"][0]["sub_doc_id"].startswith(f"{doc_id}-subdoc-"), list_res
 
 
 @pytest.mark.p3
