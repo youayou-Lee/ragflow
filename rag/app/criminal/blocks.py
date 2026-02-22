@@ -22,8 +22,10 @@ Layer A: Extracts unified block structure from OCR output.
 
 import re
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 from enum import Enum
+
+from .ner import extract_lightweight_entities
 
 
 class BlockType(str, Enum):
@@ -148,3 +150,87 @@ def infer_block_type(
 
     # 6. Default: regular paragraph
     return BlockType.PARAGRAPH
+
+
+def _get_relative_position(index: int, total: int) -> str:
+    """
+    Determine relative position in document.
+
+    Args:
+        index: Current section index (0-based)
+        total: Total number of sections
+
+    Returns:
+        str: Position indicator ("first", "middle", or "last")
+    """
+    if total == 1:
+        return "first"
+    if index == 0:
+        return "first"
+    if index == total - 1:
+        return "last"
+    return "middle"
+
+
+def extract_universal_blocks(
+    sections: list,
+    doc_type_hint: Optional[str] = None
+) -> List[UniversalBlock]:
+    """
+    Extract universal blocks from OCR output sections.
+
+    This is the main Layer A function that transforms OCR output
+    into a unified block structure.
+
+    Args:
+        sections: OCR output sections, each being a tuple (content, tag)
+                  where tag is "@@page\tx0\tx1\ttop\tbottom##"
+        doc_type_hint: Optional document type hint (e.g., "interrogation")
+
+    Returns:
+        List of UniversalBlock objects
+    """
+    if not sections:
+        return []
+
+    blocks = []
+    total = len(sections)
+
+    for index, section in enumerate(sections):
+        # Handle different section formats
+        if isinstance(section, (list, tuple)):
+            if len(section) >= 2:
+                content = section[0] or ""
+                tag = section[1] or ""
+            else:
+                content = section[0] if section else ""
+                tag = ""
+        else:
+            content = str(section)
+            tag = ""
+
+        # Combine tag and content for parsing
+        text_with_tag = f"{tag}{content}" if tag else content
+
+        # Parse position tag
+        page_no, bbox, text = parse_position_tag(text_with_tag)
+
+        # Infer block type
+        position = _get_relative_position(index, total)
+        block_type = infer_block_type(text, position, doc_type_hint)
+
+        # Extract entities
+        entities = extract_lightweight_entities(text)
+
+        # Create block
+        block = UniversalBlock(
+            block_type=block_type,
+            text=text,
+            page_no=page_no,
+            bbox=bbox if bbox else (0.0, 0.0, 0.0, 0.0),
+            doc_type_hint=doc_type_hint,
+            entities=entities
+        )
+        blocks.append(block)
+
+    return blocks

@@ -152,3 +152,72 @@ class TestInferBlockType:
 
         assert infer_block_type("这是一段普通文本。", "middle") == BlockType.PARAGRAPH
         assert infer_block_type("普通内容", "middle") == BlockType.PARAGRAPH
+
+
+class TestExtractUniversalBlocks:
+    """Test main block extraction function."""
+
+    def test_extract_from_simple_sections(self):
+        """Test extraction from simple OCR sections."""
+        from rag.app.criminal.blocks import extract_universal_blocks
+
+        # Simulate OCR output format from by_paddleocr
+        sections = [
+            ("讯问笔录", "@@1\t10.0\t200.0\t20.0\t40.0##"),
+            ("问：你叫什么名字？", "@@1\t10.0\t200.0\t50.0\t70.0##"),
+            ("答：我叫张三", "@@1\t10.0\t200.0\t80.0\t100.0##"),
+        ]
+
+        blocks = extract_universal_blocks(sections, "interrogation")
+
+        assert len(blocks) == 3
+        assert blocks[0].block_type == BlockType.HEADER
+        assert blocks[1].block_type == BlockType.QA_PAIR
+        assert blocks[2].block_type == BlockType.QA_PAIR
+
+    def test_extract_with_entities(self):
+        """Test that entities are extracted."""
+        from rag.app.criminal.blocks import extract_universal_blocks
+
+        sections = [
+            ("2024年1月15日收到42000元", "@@1\t10.0\t200.0\t20.0\t40.0##"),
+        ]
+
+        blocks = extract_universal_blocks(sections)
+
+        assert len(blocks) == 1
+        assert blocks[0].entities is not None
+        assert "42000" in blocks[0].entities["amounts"]
+        assert "2024年1月15日" in blocks[0].entities["dates"]
+
+    def test_extract_positions(self):
+        """Test that positions are correctly extracted."""
+        from rag.app.criminal.blocks import extract_universal_blocks
+
+        sections = [
+            ("Test content", "@@2\t15.0\t180.0\t30.0\t50.0##"),
+        ]
+
+        blocks = extract_universal_blocks(sections)
+
+        assert blocks[0].page_no == 1  # Page 2 -> 0-indexed
+        assert blocks[0].bbox == (15.0, 30.0, 180.0, 50.0)
+
+    def test_extract_empty_sections(self):
+        """Test handling of empty sections."""
+        from rag.app.criminal.blocks import extract_universal_blocks
+
+        blocks = extract_universal_blocks([])
+        assert blocks == []
+
+    def test_doc_type_hint_propagated(self):
+        """Test that doc_type_hint is propagated to blocks."""
+        from rag.app.criminal.blocks import extract_universal_blocks
+
+        sections = [
+            ("内容", "@@1\t10.0\t200.0\t20.0\t40.0##"),
+        ]
+
+        blocks = extract_universal_blocks(sections, "indictment")
+
+        assert blocks[0].doc_type_hint == "indictment"
