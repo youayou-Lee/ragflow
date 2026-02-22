@@ -6,6 +6,6 @@ Architecture:
 - Layer B: Document-type specific plugins (plugins/)
 """
 
-from .blocks import UniversalBlock, BlockType, extract_universal_blocks
+from .blocks import UniversalBlock, BlockType
 
-__all__ = ["UniversalBlock", "BlockType", "extract_universal_blocks"]
+__all__ = ["UniversalBlock", "BlockType"]
