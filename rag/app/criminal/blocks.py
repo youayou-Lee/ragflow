@@ -104,3 +104,47 @@ def parse_position_tag(text: str) -> tuple[int, Optional[tuple], str]:
     bbox = (float(x0), float(top), float(x1), float(bottom))
 
     return first_page, bbox, content
+
+
+def infer_block_type(
+    text: str,
+    position: str,
+    doc_type_hint: Optional[str] = None
+) -> BlockType:
+    """
+    Infer block type from text content and position.
+
+    Uses rule-based pattern matching for layout element classification.
+
+    Args:
+        text: Text content of the block
+        position: Relative position in document ("first", "middle", "last")
+        doc_type_hint: Optional document type hint (not used in current rules)
+
+    Returns:
+        BlockType: Inferred block type
+    """
+    text = text.strip()
+
+    # 1. Seal/stamp detection (very short text with seal keywords)
+    if "印章" in text or (len(text) < 10 and "章" in text):
+        return BlockType.SEAL
+
+    # 2. Q/A pair detection (interrogation record pattern)
+    if text.startswith(("问：", "问:", "答：", "答:")):
+        return BlockType.QA_PAIR
+
+    # 3. List item detection (numbered items)
+    if re.match(r'^\s*[\d一二三四五六七八九十]+[\.、）]', text):
+        return BlockType.LIST
+
+    # 4. Header detection (first position, relatively short)
+    if position == "first" and len(text) < 500:
+        return BlockType.HEADER
+
+    # 5. Footer detection (last position, very short - typical page numbers)
+    if position == "last" and len(text) < 50:
+        return BlockType.FOOTER
+
+    # 6. Default: regular paragraph
+    return BlockType.PARAGRAPH

@@ -96,3 +96,59 @@ class TestParsePositionTag:
         assert page_no == 1  # Page 2 -> index 1
         assert bbox == (15.5, 30.2, 180.3, 60.8)
         assert content == "答：我是张三"
+
+
+class TestInferBlockType:
+    """Test block type inference from text content."""
+
+    def test_infer_seal(self):
+        """Test seal/stamp detection."""
+        from rag.app.criminal.blocks import infer_block_type
+
+        assert infer_block_type("（印章）", "middle") == BlockType.SEAL
+        assert infer_block_type("章", "middle") == BlockType.SEAL
+
+    def test_infer_qa_pair(self):
+        """Test Q/A pair detection."""
+        from rag.app.criminal.blocks import infer_block_type
+
+        assert infer_block_type("问：你叫什么名字？", "middle") == BlockType.QA_PAIR
+        assert infer_block_type("答：我叫张三", "middle") == BlockType.QA_PAIR
+        assert infer_block_type("问:今天几号?", "middle") == BlockType.QA_PAIR
+
+    def test_infer_list(self):
+        """Test list item detection."""
+        from rag.app.criminal.blocks import infer_block_type
+
+        assert infer_block_type("1. 第一项内容", "middle") == BlockType.LIST
+        assert infer_block_type("2、第二项内容", "middle") == BlockType.LIST
+        assert infer_block_type("一、基本情况", "middle") == BlockType.LIST
+
+    def test_infer_header(self):
+        """Test header detection based on position."""
+        from rag.app.criminal.blocks import infer_block_type
+
+        short_text = "讯问笔录"
+        assert infer_block_type(short_text, "first") == BlockType.HEADER
+
+        # Long text at first position is not header
+        long_text = "这是一段很长的内容" * 100
+        assert infer_block_type(long_text, "first") == BlockType.PARAGRAPH
+
+    def test_infer_footer(self):
+        """Test footer detection based on position."""
+        from rag.app.criminal.blocks import infer_block_type
+
+        short_text = "第 1 页 共 3 页"
+        assert infer_block_type(short_text, "last") == BlockType.FOOTER
+
+        # Long text at last position is not footer
+        long_text = "这是一段很长的内容" * 10
+        assert infer_block_type(long_text, "last") == BlockType.PARAGRAPH
+
+    def test_infer_paragraph_default(self):
+        """Test default paragraph type."""
+        from rag.app.criminal.blocks import infer_block_type
+
+        assert infer_block_type("这是一段普通文本。", "middle") == BlockType.PARAGRAPH
+        assert infer_block_type("普通内容", "middle") == BlockType.PARAGRAPH
