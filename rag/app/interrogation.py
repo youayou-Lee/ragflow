@@ -39,6 +39,8 @@ from typing import Optional
 
 from deepdoc.parser import PdfParser
 from rag.nlp import rag_tokenizer, add_positions, tokenize, add_bbox_union, add_page_range, add_block_refs
+from rag.app.criminal.blocks import extract_universal_blocks
+from rag.app.criminal.plugins.interrogation import InterrogationPlugin
 from strenum import StrEnum
 
 
@@ -386,16 +388,16 @@ def _build_qa_chunk(doc: dict, pdf_parser, q_parts: list, a_parts: list, qa_inde
 
 def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", callback=None, **kwargs):
     """
-    Main chunking function for interrogation records.
+    Main chunking function for interrogation records using Layer A + Layer B architecture.
+
+    Layer A: extract_universal_blocks - Universal block extraction
+    Layer B: InterrogationPlugin - Specialized interrogation processing
 
     Supports PDF files. The parser will:
-    1. Extract header section (before first "问：")
-    2. Split remaining content into QA pairs
-    3. Optionally split long answers into sub-chunks
-
-    OCR Backend Selection:
-    - Uses PaddleOCR by default (if configured) for cloud-based OCR with caching
-    - Falls back to local OCR (RAGFlowPdfParser) if PaddleOCR is not available
+    1. OCR the document using PaddleOCR
+    2. Extract universal blocks (Layer A)
+    3. Process with interrogation plugin (Layer B)
+    4. Add required fields for RAG
 
     Args:
         filename: Path to the file
@@ -409,12 +411,12 @@ def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", ca
             - tenant_id: Tenant ID for LLMBundle
             - kb_id: Knowledge base ID for OCR caching
             - doc_id: Document ID for OCR caching (extracted from parser_config)
+            - chat_mdl: Chat model for LLM processing
 
     Returns:
         list: List of chunk dictionaries
     """
     eng = lang.lower() == "english"
-    res = []
 
     doc = {"docnm_kwd": filename, "title_tks": rag_tokenizer.tokenize(re.sub(r"\.[a-zA-Z]+$", "", filename))}
 
@@ -428,12 +430,8 @@ def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", ca
     kb_id = kwargs.get("kb_id")
     doc_id = parser_config.get("doc_id", "")
 
-    # Try PaddleOCR first (supports OCR caching) by reusing naive.py's by_paddleocr
-    blocks = None
-    pdf_parser = None
-
+    # Step 1: OCR
     from rag.app.naive import by_paddleocr
-
     sections, tables, pdf_parser = by_paddleocr(
         filename=filename,
         binary=binary,
@@ -446,33 +444,27 @@ def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", ca
         kb_id=kb_id,
         doc_id=doc_id,
     )
+    callback(0.4, "OCR completed.")
 
-    # Convert sections to blocks format if PaddleOCR succeeded
-    if sections is not None:
-        blocks = _sections_to_blocks(sections)
-        callback(0.4, f"PaddleOCR extracted {len(blocks)} text blocks.")
+    # Step 2: Layer A - Extract universal blocks
+    blocks = extract_universal_blocks(sections, "interrogation")
+    callback(0.6, f"Extracted {len(blocks)} blocks.")
 
-    # Fallback to local OCR if PaddleOCR fails
-    if blocks is None:
-        logging.info("PaddleOCR not available, falling back to local OCR")
-        pdf_parser = Pdf()
-        blocks = pdf_parser(filename if not binary else binary, from_page=from_page, to_page=to_page, callback=callback)
-        callback(0.5, f"Local OCR extracted {len(blocks)} text blocks.")
+    # Step 3: Layer B - Plugin processing
+    plugin = InterrogationPlugin()
+    chunks = plugin.process(blocks, doc, chat_mdl=kwargs.get("chat_mdl"))
+    callback(0.8, f"Generated {len(chunks)} chunks.")
 
-    # Step 1: Extract header
-    header_chunks, remaining_blocks = extract_header_chunks(blocks, doc, pdf_parser, eng)
-    res.extend(header_chunks)
-    callback(0.6, "Header section extracted.")
+    # Step 4: Add required fields for RAG
+    for c in chunks:
+        content = c.get("content_with_weight", "")
+        tokenize(c, content, eng)
+        add_bbox_union(c)
+        add_page_range(c)
+        add_block_refs(c)
 
-    # Step 2: Split QA pairs
-    if remaining_blocks:
-        qa_chunks = split_qa_chunks(remaining_blocks, doc, pdf_parser, eng)
-        res.extend(qa_chunks)
-        callback(0.8, f"Extracted {len(qa_chunks)} QA pairs.")
-
-    callback(1.0, f"Completed. Total chunks: {len(res)}")
-
-    return res
+    callback(1.0, f"Completed. Total chunks: {len(chunks)}")
+    return chunks
 
 
 if __name__ == "__main__":
