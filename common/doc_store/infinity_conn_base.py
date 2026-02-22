@@ -263,13 +263,7 @@ class InfinityConnectionBase(DocStoreConnection):
             raise Exception(f"Mapping file not found at {fp_mapping}")
         schema = json.load(open(fp_mapping))
 
-        if parser_id is not None:
-            from common.constants import ParserType
-
-            if parser_id == ParserType.TABLE.value:
-                # Table parser: add chunk_data JSON column to store table-specific fields
-                schema["chunk_data"] = {"type": "json", "default": "{}"}
-                self.logger.info("Added chunk_data column for TABLE parser")
+        # Note: TABLE parser removed, no special schema handling needed
 
         vector_name = f"q_{vector_size}_vec"
         schema[vector_name] = {"type": f"vector,{vector_size},float"}

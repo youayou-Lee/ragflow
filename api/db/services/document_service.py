@@ -927,15 +927,13 @@ class DocumentService(CommonService):
 
         doc["tenant_id"] = tenant_id
         doc_parser = doc.get("parser_id", ParserType.NAIVE)
-        if doc_parser == ParserType.TABLE:
-            kb_id = doc.get("kb_id")
-            if not kb_id:
-                return
-            if kb_id not in kb_table_num_map:
-                count = DocumentService.count_by_kb_id(kb_id=kb_id, keywords="", run_status=[TaskStatus.DONE], types=[])
-                kb_table_num_map[kb_id] = count
-                if kb_table_num_map[kb_id] <= 0:
-                    KnowledgebaseService.delete_field_map(kb_id)
+        # Note: TABLE parser has been removed, keeping field map logic for backward compatibility
+        kb_id = doc.get("kb_id")
+        if kb_id and kb_id not in kb_table_num_map:
+            count = DocumentService.count_by_kb_id(kb_id=kb_id, keywords="", run_status=[TaskStatus.DONE], types=[])
+            kb_table_num_map[kb_id] = count
+            if kb_table_num_map[kb_id] <= 0:
+                KnowledgebaseService.delete_field_map(kb_id)
         if doc.get("pipeline_id", ""):
             queue_dataflow(tenant_id, flow_id=doc["pipeline_id"], task_id=get_uuid(), doc_id=doc["id"])
         else:
@@ -995,7 +993,7 @@ def doc_upload_and_parse(conversation_id, file_objs, user_id):
     from api.db.services.file_service import FileService
     from api.db.services.llm_service import LLMBundle
     from api.db.services.user_service import TenantService
-    from rag.app import audio, email, naive, picture, presentation
+    from rag.app import naive
 
     e, conv = ConversationService.get_by_id(conversation_id)
     if not e:
@@ -1019,12 +1017,6 @@ def doc_upload_and_parse(conversation_id, file_objs, user_id):
     def dummy(prog=None, msg=""):
         pass
 
-    FACTORY = {
-        ParserType.PRESENTATION.value: presentation,
-        ParserType.PICTURE.value: picture,
-        ParserType.AUDIO.value: audio,
-        ParserType.EMAIL.value: email
-    }
     parser_config = {"chunk_token_num": 4096, "delimiter": "\n!?;。；！？", "layout_recognize": "Plain Text", "table_context_size": 0, "image_context_size": 0}
     exe = ThreadPoolExecutor(max_workers=12)
     threads = []
@@ -1040,7 +1032,7 @@ def doc_upload_and_parse(conversation_id, file_objs, user_id):
             "tenant_id": kb.tenant_id,
             "lang": kb.language
         }
-        threads.append(exe.submit(FACTORY.get(d["parser_id"], naive).chunk, d["name"], blob, **kwargs))
+        threads.append(exe.submit(naive.chunk, d["name"], blob, **kwargs))
 
     for (docinfo, _), th in zip(files, threads):
         docs = []
@@ -1093,26 +1085,26 @@ def doc_upload_and_parse(conversation_id, file_objs, user_id):
     for doc_id in docids:
         cks = [c for c in docs if c["doc_id"] == doc_id]
 
-        if parser_ids[doc_id] != ParserType.PICTURE.value:
-            from rag.graphrag.general.mind_map_extractor import MindMapExtractor
-            mindmap = MindMapExtractor(llm_bdl)
-            try:
-                mind_map = asyncio.run(mindmap([c["content_with_weight"] for c in docs if c["doc_id"] == doc_id]))
-                mind_map = json.dumps(mind_map.output, ensure_ascii=False, indent=2)
-                if len(mind_map) < 32:
-                    raise Exception("Few content: " + mind_map)
-                cks.append({
-                    "id": get_uuid(),
-                    "doc_id": doc_id,
-                    "kb_id": [kb.id],
-                    "docnm_kwd": doc_nm[doc_id],
-                    "title_tks": rag_tokenizer.tokenize(re.sub(r"\.[a-zA-Z]+$", "", doc_nm[doc_id])),
-                    "content_ltks": rag_tokenizer.tokenize("summary summarize 总结 概况 file 文件 概括"),
-                    "content_with_weight": mind_map,
-                    "knowledge_graph_kwd": "mind_map"
-                })
-            except Exception:
-                logging.exception("Mind map generation error")
+        # Always generate mind map (PICTURE parser removed)
+        from rag.graphrag.general.mind_map_extractor import MindMapExtractor
+        mindmap = MindMapExtractor(llm_bdl)
+        try:
+            mind_map = asyncio.run(mindmap([c["content_with_weight"] for c in docs if c["doc_id"] == doc_id]))
+            mind_map = json.dumps(mind_map.output, ensure_ascii=False, indent=2)
+            if len(mind_map) < 32:
+                raise Exception("Few content: " + mind_map)
+            cks.append({
+                "id": get_uuid(),
+                "doc_id": doc_id,
+                "kb_id": [kb.id],
+                "docnm_kwd": doc_nm[doc_id],
+                "title_tks": rag_tokenizer.tokenize(re.sub(r"\.[a-zA-Z]+$", "", doc_nm[doc_id])),
+                "content_ltks": rag_tokenizer.tokenize("summary summarize 总结 概况 file 文件 概括"),
+                "content_with_weight": mind_map,
+                "knowledge_graph_kwd": "mind_map"
+            })
+        except Exception:
+            logging.exception("Mind map generation error")
 
         vectors = embedding(doc_id, [c["content_with_weight"] for c in cks])
         assert len(cks) == len(vectors)

@@ -39,7 +39,6 @@ from api.db.services.task_service import TaskService, queue_tasks, cancel_all_ta
 from common.metadata_utils import meta_filter, convert_conditions
 from api.utils.api_utils import check_duplicate_ids, construct_json_result, get_error_data_result, get_parser_config, get_result, server_error_response, token_required, \
     get_request_json
-from rag.app.qa import beAdoc, rmPrefix
 from rag.app.tag import label_question
 from rag.nlp import rag_tokenizer, search
 from rag.prompts.generator import cross_languages, keyword_extraction
@@ -1398,15 +1397,9 @@ async def update_chunk(tenant_id, dataset_id, document_id, chunk_id):
         d["position_int"] = req["positions"]
     embd_id = DocumentService.get_embd_id(document_id)
     embd_mdl = TenantLLMService.model_instance(tenant_id, LLMType.EMBEDDING.value, embd_id)
-    if doc.parser_id == ParserType.QA:
-        arr = [t for t in re.split(r"[\n\t]", d["content_with_weight"]) if len(t) > 1]
-        if len(arr) != 2:
-            return get_error_data_result(message="Q&A must be separated by TAB/ENTER key.")
-        q, a = rmPrefix(arr[0]), rmPrefix(arr[1])
-        d = beAdoc(d, arr[0], arr[1], not any([rag_tokenizer.is_chinese(t) for t in q + a]))
-
+    # Note: QA parser removed, using standard embedding calculation
     v, c = embd_mdl.encode([doc.name, d["content_with_weight"] if not d.get("question_kwd") else "\n".join(d["question_kwd"])])
-    v = 0.1 * v[0] + 0.9 * v[1] if doc.parser_id != ParserType.QA else v[1]
+    v = 0.1 * v[0] + 0.9 * v[1]
     d["q_%d_vec" % len(v)] = v.tolist()
     settings.docStoreConn.update({"id": chunk_id}, d, search.index_name(tenant_id), dataset_id)
     return get_result()

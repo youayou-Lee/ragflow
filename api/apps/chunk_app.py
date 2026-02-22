@@ -36,7 +36,6 @@ from api.utils.api_utils import (
     get_request_json,
 )
 from common.misc_utils import thread_pool_exec
-from rag.app.qa import beAdoc, rmPrefix
 from rag.app.tag import label_question
 from rag.nlp import rag_tokenizer, search
 from rag.prompts.generator import cross_languages, keyword_extraction
@@ -179,17 +178,9 @@ async def set():
                 return get_data_error_result(message="Document not found!")
 
             _d = d
-            if doc.parser_id == ParserType.QA:
-                arr = [
-                    t for t in re.split(
-                        r"[\n\t]",
-                        req["content_with_weight"]) if len(t) > 1]
-                q, a = rmPrefix(arr[0]), rmPrefix("\n".join(arr[1:]))
-                _d = beAdoc(d, q, a, not any(
-                    [rag_tokenizer.is_chinese(t) for t in q + a]))
-
+            # Note: QA parser removed, using standard embedding calculation
             v, c = embd_mdl.encode([doc.name, content_with_weight if not _d.get("question_kwd") else "\n".join(_d["question_kwd"])])
-            v = 0.1 * v[0] + 0.9 * v[1] if doc.parser_id != ParserType.QA else v[1]
+            v = 0.1 * v[0] + 0.9 * v[1]
             _d["q_%d_vec" % len(v)] = v.tolist()
             settings.docStoreConn.update({"id": req["chunk_id"]}, _d, search.index_name(tenant_id), doc.kb_id)
 

@@ -1097,8 +1097,8 @@ async def async_ask(question, kb_ids, tenant_id, chat_llm_name=None, search_conf
     kbs = KnowledgebaseService.get_by_ids(kb_ids)
     embedding_list = list(set([kb.embd_id for kb in kbs]))
 
-    is_knowledge_graph = all([kb.parser_id == ParserType.KG for kb in kbs])
-    retriever = settings.retriever if not is_knowledge_graph else settings.kg_retriever
+    # Note: KG parser removed, always use regular retriever
+    retriever = settings.retriever
 
     embd_mdl = LLMBundle(tenant_id, LLMType.EMBEDDING, embedding_list[0])
     chat_mdl = LLMBundle(tenant_id, LLMType.CHAT, chat_llm_name)

@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-RAGFlow 是一个基于深度文档理解的开源 RAG（检索增强生成）引擎。它是一个全栈应用，包括：
+本项目是基于 RAGFlow 二次开发的法律领域 RAG（检索增强生成）引擎。专注于法律文档的智能处理与检索，包括：
 - Python 后端（基于 Flask 的 API 服务器）
 - React/TypeScript 前端（使用 UmiJS 构建）
 - 微服务架构，Docker 部署
@@ -33,7 +33,8 @@ RAGFlow 是一个基于深度文档理解的开源 RAG（检索增强生成）�
 - **数据模型**: 数据库模型在 `api/db/db_models.py`
 
 ### 核心处理 (`/rag/`)
-- **文档处理**: `deepdoc/` - PDF 解析、OCR、布局分析
+- **文档处理**: 使用 PaddleOCR API 进行 OCR 识别，支持法律文书的精准解析
+- **法律文档解析**: `rag/app/criminal/` - 刑事案件文档专用解析器
 - **LLM 集成**: `rag/llm/` - 对话、嵌入、重排序的模型抽象
   - `chat_model.py` - 对话模型
   - `embedding_model.py` - 向量嵌入模型
@@ -47,22 +48,6 @@ RAGFlow 是一个基于深度文档理解的开源 RAG（检索增强生成）�
   - `hierarchical_merger/` - 层次合并器
 - **图 RAG**: `rag/graphrag/` - 知识图谱构建和查询
 - **高级 RAG**: `rag/advanced_rag/` - 高级检索增强生成功能
-
-### 智能体系统 (`/agent/`)
-- **组件**: 模块化工作流组件 (`agent/component/`)
-  - `base.py` - 组件基类
-  - `llm.py` - LLM 组件
-  - `retrieval.py` - 检索组件
-  - `categorize.py` - 分类组件
-  - `switch.py` - 条件分支
-  - `loop.py` - 循环控制
-  - `begin.py` - 开始组件
-  - `message.py` - 消息处理
-  - `exit_loop.py` - 退出循环
-- **画布**: `canvas.py` - 图形化工作流定义和执行
-- **工具**: 外部 API 集成（Tavily、Wikipedia、SQL 执行等）
-- **沙箱**: `sandbox/` - 安全的代码执行环境
-- **模板**: 预构建的智能体工作流
 
 ### 前端 (`/web/`)
 - React/TypeScript with UmiJS 框架
@@ -82,10 +67,8 @@ pre-commit install
 # 启动依赖服务
 docker compose -f docker/docker-compose-base.yml up -d
 
-# 运行后端（需要服务先运行）
-source .venv/bin/activate
-export PYTHONPATH=$(pwd)
-bash docker/launch_backend_service.sh
+# 运行后端
+./start_backend.sh
 
 # 运行测试
 uv run pytest
@@ -133,7 +116,7 @@ docker build --platform linux/amd64 -f Dockerfile -t infiniflow/ragflow:nightly 
 
 ## 数据库引擎
 
-RAGFlow 支持在 Elasticsearch（默认）和 Infinity 之间切换：
+支持在 Elasticsearch（默认）和 Infinity 之间切换：
 - 在 `docker/.env` 中设置 `DOC_ENGINE=infinity` 使用 Infinity
 - 需要重启容器：`docker compose down -v && docker compose up -d`
 

@@ -334,12 +334,8 @@ class InfinityConnection(InfinityConnectionBase):
                 raise ValueError("Cannot infer vector size from documents")
 
             # Determine parser_id from document structure
-            # Table parser documents have 'chunk_data' field
+            # Note: TABLE parser removed, using None for default schema
             parser_id = None
-            if "chunk_data" in documents[0] and isinstance(documents[0].get("chunk_data"), dict):
-                from common.constants import ParserType
-                parser_id = ParserType.TABLE.value
-                self.logger.debug("Detected TABLE parser from document structure")
 
             # Fallback: Create table with base schema (shouldn't normally happen as init_kb() creates it)
             self.logger.debug(f"Fallback: Creating table {table_name} with base schema, parser_id: {parser_id}")

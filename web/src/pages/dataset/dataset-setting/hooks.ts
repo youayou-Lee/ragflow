@@ -13,13 +13,8 @@ import { useParams, useSearchParams } from 'react-router';
 import { z } from 'zod';
 import { formSchema } from './form-schema';
 
-// The value that does not need to be displayed in the analysis method Select
-const HiddenFields = ['email', 'picture', 'audio'];
-
 export function useSelectChunkMethodList() {
-  const parserList = useSelectParserList();
-
-  return parserList.filter((x) => !HiddenFields.some((y) => y === x.value));
+  return useSelectParserList();
 }
 
 export function useSelectEmbeddingModelOptions() {

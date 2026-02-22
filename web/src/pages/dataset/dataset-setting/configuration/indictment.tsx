@@ -9,7 +9,7 @@ import {
 } from '../configuration-form-container';
 import { AutoMetadata } from './common-item';
 
-export function PaperConfiguration() {
+export function IndictmentConfiguration() {
   return (
     <MainContainer>
       <ConfigurationFormContainer>
@@ -21,9 +21,6 @@ export function PaperConfiguration() {
         <AutoKeywordsFormField></AutoKeywordsFormField>
         <AutoQuestionsFormField></AutoQuestionsFormField>
       </ConfigurationFormContainer>
-      {/* <ConfigurationFormContainer>
-        <TagItems></TagItems>
-      </ConfigurationFormContainer> */}
     </MainContainer>
   );
 }

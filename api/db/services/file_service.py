@@ -526,74 +526,47 @@ class FileService(CommonService):
 
     @staticmethod
     def parse(filename, blob, img_base64=True, tenant_id=None):
-        from rag.app import audio, email, naive, picture, presentation
+        from rag.app import naive
         from api.apps import current_user
 
         def dummy(prog=None, msg=""):
             pass
 
-        FACTORY = {ParserType.PRESENTATION.value: presentation, ParserType.PICTURE.value: picture, ParserType.AUDIO.value: audio, ParserType.EMAIL.value: email}
         parser_config = {"chunk_token_num": 16096, "delimiter": "\n!?;。；！？", "layout_recognize": "Plain Text"}
         kwargs = {"lang": "English", "callback": dummy, "parser_config": parser_config, "from_page": 0, "to_page": 100000, "tenant_id": current_user.id if current_user else tenant_id}
         file_type = filename_type(filename)
         if img_base64 and file_type == FileType.VISUAL.value:
             return GptV4.image2base64(blob)
-        cks = FACTORY.get(FileService.get_parser(filename_type(filename), filename, ""), naive).chunk(filename, blob, **kwargs)
+        cks = naive.chunk(filename, blob, **kwargs)
         return f"\n -----------------\nFile: {filename}\nContent as following: \n" + "\n".join([ck["content_with_weight"] for ck in cks])
 
     @staticmethod
     def get_parser(doc_type, filename, default):
-        if doc_type == FileType.VISUAL:
-            return ParserType.PICTURE.value
-        if doc_type == FileType.AURAL:
-            return ParserType.AUDIO.value
-        if re.search(r"\.(ppt|pptx|pages)$", filename):
-            return ParserType.PRESENTATION.value
-        if re.search(r"\.(msg|eml)$", filename):
-            return ParserType.EMAIL.value
+        # All specialized parsers removed, always use default
         return default
 
     @staticmethod
     def get_parser_with_classification(doc_type, filename, default, binary=None, tenant_id=None):
         """
-        Determine parser with automatic document classification.
+        Determine parser for document processing.
 
-        This method first checks for special file types (images, audio, etc.),
-        then uses DocumentClassifier for general documents to auto-detect
-        the appropriate parser based on content.
+        Note: Specialized parsers (PICTURE, AUDIO, PRESENTATION, EMAIL) and
+        classifier have been removed. Always returns the default parser.
 
         Args:
             doc_type: The file type from FileType enum.
             filename: The filename (used for extension-based hints).
             default: The default parser_id from knowledge base.
-            binary: The file content for classification (optional).
-            tenant_id: The tenant ID for LLM-based classification fallback (optional).
+            binary: The file content (unused, kept for API compatibility).
+            tenant_id: The tenant ID (unused, kept for API compatibility).
 
         Returns:
             Tuple of (parser_id, method, confidence):
-            - parser_id: The parser to use
-            - method: How classification was done ('filetype', 'rule', 'llm', 'fallback')
-            - confidence: Classification confidence (0.0 to 1.0)
+            - parser_id: The parser to use (always default or naive)
+            - method: Always 'default'
+            - confidence: Always 0.0
         """
-        # Step 1: Check for special file types that have fixed parsers
-        if doc_type == FileType.VISUAL:
-            return ParserType.PICTURE.value, "filetype", 1.0
-        if doc_type == FileType.AURAL:
-            return ParserType.AUDIO.value, "filetype", 1.0
-        if re.search(r"\.(ppt|pptx|pages)$", filename):
-            return ParserType.PRESENTATION.value, "filetype", 1.0
-        if re.search(r"\.(msg|eml)$", filename):
-            return ParserType.EMAIL.value, "filetype", 1.0
-
-        # Step 2: For general documents, use classifier for auto-detection
-        if binary:
-            try:
-                from rag.app.classifier import DocumentClassifier
-                return DocumentClassifier.classify(binary, filename, tenant_id=tenant_id)
-            except Exception as e:
-                logging.warning(f"Document classification failed, using default: {e}")
-
-        # Step 3: Fallback to default parser from knowledge base
+        # All specialized parsers removed, use default parser
         return default or ParserType.NAIVE.value, "default", 0.0
 
     @staticmethod
@@ -637,12 +610,12 @@ class FileService(CommonService):
                 if deleted_file_count > 0:
                     settings.STORAGE_IMPL.rm(b, n)
 
-                doc_parser = doc.parser_id
-                if doc_parser == ParserType.TABLE:
-                    kb_id = doc.kb_id
-                    if kb_id not in kb_table_num_map:
-                        counts = DocumentService.count_by_kb_id(kb_id=kb_id, keywords="", run_status=[TaskStatus.DONE], types=[])
-                        kb_table_num_map[kb_id] = counts
+                # Note: TABLE parser has been removed, keeping field map logic for backward compatibility
+                kb_id = doc.kb_id
+                if kb_id and kb_id not in kb_table_num_map:
+                    counts = DocumentService.count_by_kb_id(kb_id=kb_id, keywords="", run_status=[TaskStatus.DONE], types=[])
+                    kb_table_num_map[kb_id] = counts
+                if kb_id:
                     kb_table_num_map[kb_id] -= 1
                     if kb_table_num_map[kb_id] <= 0:
                         KnowledgebaseService.delete_field_map(kb_id)

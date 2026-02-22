@@ -114,20 +114,8 @@ export const useFetchTenantInfo = (
 
 const DEFAULT_PARSERS = [
   { value: 'naive', label: 'General' },
-  { value: 'qa', label: 'Q&A' },
-  { value: 'resume', label: 'Resume' },
-  { value: 'manual', label: 'Manual' },
-  { value: 'table', label: 'Table' },
-  { value: 'paper', label: 'Paper' },
-  { value: 'book', label: 'Book' },
-  { value: 'laws', label: 'Laws' },
-  { value: 'presentation', label: 'Presentation' },
-  { value: 'picture', label: 'Picture' },
-  { value: 'one', label: 'One' },
-  { value: 'audio', label: 'Audio' },
-  { value: 'email', label: 'Email' },
-  { value: 'tag', label: 'Tag' },
   { value: 'interrogation', label: 'Interrogation' },
+  { value: 'indictment', label: 'Indictment' },
 ];
 
 export const useSelectParserList = (): Array<{
