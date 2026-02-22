@@ -28,6 +28,7 @@ Features:
 - Paragraph splitting for long sections (>800 chars)
 - Optional evidence item extraction
 - Preserves position information for frontend highlighting
+- Layer A + Layer B architecture using extract_universal_blocks and IndictmentPlugin
 """
 
 import logging
@@ -38,6 +39,8 @@ from typing import Optional
 
 from deepdoc.parser import PdfParser
 from rag.nlp import rag_tokenizer, add_positions, tokenize, add_bbox_union, add_page_range, add_block_refs
+from rag.app.criminal.blocks import extract_universal_blocks
+from rag.app.criminal.plugins.indictment import IndictmentPlugin
 from strenum import StrEnum
 
 
@@ -358,12 +361,16 @@ def chunk(
     **kwargs
 ):
     """
-    Main chunking function for indictment documents.
+    Main chunking function for indictment documents using Layer A + Layer B architecture.
+
+    Layer A: extract_universal_blocks - Universal block extraction
+    Layer B: IndictmentPlugin - Specialized indictment processing
 
     Supports PDF files. The parser will:
-    1. Find section boundaries based on trigger phrases
-    2. Split sections into chunks
-    3. Optionally extract evidence items
+    1. OCR the document using PaddleOCR (with fallback to local OCR)
+    2. Extract universal blocks (Layer A)
+    3. Process with indictment plugin (Layer B)
+    4. Add required fields for RAG
 
     Args:
         filename: Path to the file
@@ -373,12 +380,17 @@ def chunk(
         lang: Language ("Chinese" or "English")
         callback: Progress callback function
         extract_evidence: Whether to extract evidence items (default: False)
+        **kwargs: Additional arguments including:
+            - parser_config: Parser configuration dict
+            - tenant_id: Tenant ID for LLMBundle
+            - kb_id: Knowledge base ID for OCR caching
+            - doc_id: Document ID for OCR caching (extracted from parser_config)
+            - chat_mdl: Chat model for LLM processing
 
     Returns:
         list: List of chunk dictionaries
     """
     eng = lang.lower() == "english"
-    res = []
 
     doc = {"docnm_kwd": filename, "title_tks": rag_tokenizer.tokenize(re.sub(r"\.[a-zA-Z]+$", "", filename))}
 
@@ -387,24 +399,55 @@ def chunk(
 
     callback(0.1, "Start to parse indictment document.")
 
-    # Parse PDF
-    pdf_parser = Pdf()
-    blocks = pdf_parser(filename if not binary else binary, from_page=from_page, to_page=to_page, callback=callback)
+    parser_config = kwargs.get("parser_config", {})
+    tenant_id = kwargs.get("tenant_id")
+    kb_id = kwargs.get("kb_id")
+    doc_id = parser_config.get("doc_id", "")
 
-    callback(0.5, f"Extracted {len(blocks)} text blocks.")
+    # Step 1: Try PaddleOCR first (same as interrogation)
+    from rag.app.naive import by_paddleocr
+    sections, tables, pdf_parser = by_paddleocr(
+        filename=filename,
+        binary=binary,
+        from_page=from_page,
+        to_page=to_page,
+        lang=lang,
+        callback=callback,
+        parser_config=parser_config,
+        tenant_id=tenant_id,
+        kb_id=kb_id,
+        doc_id=doc_id,
+    )
 
-    # Step 1: Find section boundaries
-    sections = find_section_boundaries(blocks, pdf_parser)
-    callback(0.6, f"Found {len(sections)} sections.")
+    # Fallback to local OCR if PaddleOCR fails
+    if sections is None:
+        logging.info("PaddleOCR not available, falling back to local OCR")
+        pdf_parser = Pdf()
+        blocks_raw = pdf_parser(filename if not binary else binary, from_page=from_page, to_page=to_page, callback=callback)
+        # Convert raw blocks to sections format: (content, tag)
+        sections = [(b, "") for b in blocks_raw]
 
-    # Step 2: Build chunks
-    chunks = build_section_chunks(blocks, doc, pdf_parser, sections, eng, extract_evidence)
-    res.extend(chunks)
-    callback(0.9, f"Generated {len(chunks)} chunks.")
+    callback(0.4, "OCR completed.")
 
-    callback(1.0, f"Completed. Total chunks: {len(res)}")
+    # Step 2: Layer A - Extract universal blocks
+    blocks = extract_universal_blocks(sections, "indictment")
+    callback(0.6, f"Extracted {len(blocks)} blocks.")
 
-    return res
+    # Step 3: Layer B - Plugin processing
+    plugin = IndictmentPlugin()
+    chunks = plugin.process(blocks, doc, chat_mdl=kwargs.get("chat_mdl"))
+    callback(0.8, f"Generated {len(chunks)} chunks.")
+
+    # Step 4: Add required fields for RAG
+    for c in chunks:
+        content = c.get("content_with_weight", "")
+        tokenize(c, content, eng)
+        add_bbox_union(c)
+        add_page_range(c)
+        add_block_refs(c)
+
+    callback(1.0, f"Completed. Total chunks: {len(chunks)}")
+    return chunks
 
 
 if __name__ == "__main__":
