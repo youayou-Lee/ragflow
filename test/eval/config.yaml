@@ -1,10 +1,4 @@
-# RAGFlow RAG 评测配置
-#
-# 职责边界：
-# - 评测模块：测量性能，不改变检索行为
-# - 服务端配置：处理 embedding 模型、分块、重排序等
-#
-# 配置优先级：命令行参数 > config.yaml > 服务端默认值
+# RAGFlow Eval 测试配置
 
 server:
   base_url: "http://127.0.0.1:9380"
@@ -23,83 +17,6 @@ dataset:
 chat:
   llm_model: "glm-4-flash@ZHIPU-AI"
 
-# 检索参数（可选）
-# 不配置则使用服务端默认值
-# 配置用于开发/调试目的，不是评测调参
-retrieval:
-  top_k: null              # null 表示使用服务端默认值
-  similarity_threshold: null
-
 test:
   parse_timeout: 300
   parse_interval: 5
-
-# 预置知识库ID（需手动创建并填入）
-# 用于解析测试和格式验证测试，避免每次重复创建
-prebuilt_datasets:
-  indictment_single: ""      # 起诉意见书测试库_单份
-  indictment_multiple: ""    # 起诉意见书测试库_多份
-  interrogation_single: ""   # 讯问笔录测试库_单份
-  interrogation_multiple: "" # 讯问笔录测试库_多份
-
-# 测试数据路径
-test_cases:
-  - name: "曾庆成危险驾驶案"
-    doc_type: "indictment"
-    path: "benchmark/起诉意见书/曾庆成危险驾驶案/原始数据/起诉意见书_sample.pdf"
-    question_dir: "benchmark/起诉意见书/曾庆成危险驾驶案"
-  - name: "陈明飞诈骗案"
-    doc_type: "interrogation"
-    path: "benchmark/讯问笔录/陈明飞诈骗案/原始数据/讯问笔录_sample.pdf"
-    question_dir: "benchmark/讯问笔录/陈明飞诈骗案"
-
-# 答案匹配配置（评测逻辑，不是调参）
-matching:
-  factual:
-    # 事实型题目：标准化后包含匹配
-    normalize_whitespace: true
-    case_sensitive: false
-  evidence:
-    # 证据集合型：覆盖率阈值
-    coverage_threshold: 0.5
-  gap:
-    # 冲突缺口型：否定关键词
-    negative_keywords:
-      # 中文关键词
-      - "材料未显示"
-      - "文档未提及"
-      - "无法确定"
-      - "未记载"
-      - "没有信息"
-      - "未找到"
-      - "无法从材料中得知"
-      - "材料中没有"
-      - "未提供"
-      - "没有明确提及"
-      - "未在文档中"
-      - "文档中没有"
-      - "没有在文档中提及"
-      - "未知"
-      - "不明确"
-      - "没有相关信息"
-      - "信息不详"
-      - "未提及"
-      - "不清楚"
-      - "无法确认"
-      - "没有记载"
-      - "不详"
-      - "忘记了"
-      - "忘记"
-      - "不提供"
-      - "没有列出"
-      # 英文关键词 (LLM 可能返回英文)
-      - "not found"
-      - "no relevant content"
-      - "not in the dataset"
-      - "not provided"
-      - "does not contain"
-      - "not available"
-      - "unable to"
-      - "cannot find"
-      - "sorry"
-      - "does not provide"
