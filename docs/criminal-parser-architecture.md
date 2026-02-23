@@ -182,6 +182,459 @@ SECTION_TRIGGERS = [
 - `section` - 完整章节
 - `paragraph` - 长章节分割后的段落
 
+## 如何扩展专用解析方案
+
+本节描述如何为新文书类型设计专用解析方案。
+
+### 第一步：分析文书结构
+
+#### 1.1 收集示例文书
+
+收集 3-5 份同类型的真实文书（脱敏后），分析其共同特征：
+
+```markdown
+# 文书分析模板
+
+## 基本信息
+- 文书类型：起诉书 / 判决书 / 证据清单 / ...
+- 典型长度：X-Y 页
+- 结构复杂度：低 / 中 / 高
+
+## 版面特征
+- 是否有固定表头？
+- 是否有问答结构（问：/答：）？
+- 是否有编号列表？
+- 是否有表格？
+- 是否有印章/签名区？
+
+## 语义结构
+- 主要章节有哪些？（如：当事人信息、案件事实、证据清单、法律依据、结论）
+- 章节之间是否有固定边界词？（如"经审理查明"、"本院认为"）
+- 是否有需要特殊提取的字段？（如案号、金额、日期）
+
+## PRD 约束检查
+- 哪些数值需要精确定位？（金额、数量）
+- 哪些日期需要提取？
+- 哪些内容需要支持"精确定位引用"？
+```
+
+#### 1.2 分析示例
+
+**以起诉意见书为例**：
+
+```
+文书结构：
+├── 头部（标题 + 基本信息）
+│   └── "起诉意见书" / 犯罪嫌疑人信息 / 案由
+├── 案件事实
+│   └── 触发词："经依法侦查查明"
+├── 证据清单
+│   └── 触发词："认定上述犯罪事实的证据如下"
+│   └── 编号项：（一）（二）（三）或 1. 2. 3.
+├── 法律依据
+│   └── 触发词："综上所述" / "本院认为"
+└── 结尾
+    └── 触发词："此致"
+
+版面特征：
+- 无问答结构
+- 有编号列表（证据项）
+- 章节边界清晰（有固定触发词）
+```
+
+### 第二步：设计解析方案
+
+#### 2.1 评估是否需要专用方案
+
+| 条件 | 需要 Layer B 专用插件 | 可直接用 Layer A |
+|------|----------------------|------------------|
+| 有固定章节结构 | ✅ | ❌ |
+| 需要合并/拆分 blocks | ✅ | ❌ |
+| 有特殊 chunk 类型 | ✅ | ❌ |
+| 只需要简单分块 | ❌ | ✅ |
+| 文书结构简单且无特殊需求 | ❌ | ✅ |
+
+#### 2.2 设计 Chunk 类型
+
+根据文书语义结构定义 chunk 类型：
+
+```python
+class MyDocChunkType(StrEnum):
+    """文书特定的 chunk 类型"""
+    HEADER = "header"           # 文书头部
+    PARTY_INFO = "party_info"   # 当事人信息
+    FACTS = "facts"             # 案件事实
+    EVIDENCE = "evidence"       # 证据清单
+    LEGAL_BASIS = "legal_basis" # 法律依据
+    CONCLUSION = "conclusion"   # 结论
+```
+
+#### 2.3 设计解析规则
+
+**规则类型**：
+
+| 规则类型 | 适用场景 | 示例 |
+|----------|----------|------|
+| Trigger Phrases | 章节边界识别 | `"经审理查明"` 开始新章节 |
+| Pattern Matching | 编号项识别 | `^（\d+）|^(\d+)\.` 匹配证据编号 |
+| Block 合并 | 连续相关内容 | 连续 问/答 合并为 QA_PAIR |
+| Block 拆分 | 长内容分段 | >800 字符按自然段拆分 |
+| 字段提取 | 结构化信息 | 提取案号、金额、日期 |
+
+### 第三步：实现插件
+
+#### 3.1 插件模板
+
+```python
+# rag/app/criminal/plugins/my_doc_type.py
+
+import re
+from typing import List
+from copy import deepcopy
+
+from .base import ParserPlugin
+from ..blocks import UniversalBlock, BlockType
+
+
+# 1. 定义章节触发词
+SECTION_TRIGGERS = [
+    r"触发词1",
+    r"触发词2",
+    # ...
+]
+SECTION_TRIGGER_PATTERN = re.compile("|".join(f"({t})" for t in SECTION_TRIGGERS))
+
+# 2. 定义其他解析规则
+MAX_SECTION_LENGTH = 800  # 长章节拆分阈值
+
+
+class MyDocTypePlugin(ParserPlugin):
+    """文书类型解析插件"""
+
+    @property
+    def doc_type(self) -> str:
+        return "my_doc_type"
+
+    def process(
+        self,
+        blocks: List[UniversalBlock],
+        doc: dict,
+        chat_mdl=None,
+        **kwargs
+    ) -> List[dict]:
+        """处理 blocks 生成 chunks"""
+        if not blocks:
+            return []
+
+        chunks = []
+
+        # 策略1: 按章节边界分组
+        sections = self._find_sections(blocks)
+
+        # 策略2: 对每个章节生成 chunk
+        for start_idx, end_idx, trigger in sections:
+            section_blocks = blocks[start_idx:end_idx]
+            section_chunks = self._process_section(section_blocks, doc, trigger)
+            chunks.extend(section_chunks)
+
+        return chunks
+
+    def _find_sections(self, blocks: List[UniversalBlock]) -> List[tuple]:
+        """根据触发词识别章节边界"""
+        sections = []
+        current_start = 0
+        current_trigger = "header"
+
+        for i, block in enumerate(blocks):
+            match = SECTION_TRIGGER_PATTERN.search(block.text)
+            if match:
+                if i > current_start:
+                    sections.append((current_start, i, current_trigger))
+                current_start = i
+                current_trigger = match.group(0)
+
+        if current_start < len(blocks):
+            sections.append((current_start, len(blocks), current_trigger))
+
+        return sections
+
+    def _process_section(
+        self,
+        blocks: List[UniversalBlock],
+        doc: dict,
+        trigger: str
+    ) -> List[dict]:
+        """处理单个章节"""
+        total_length = sum(len(b.text) for b in blocks)
+
+        # 长章节需要拆分
+        if total_length > MAX_SECTION_LENGTH:
+            return self._split_section(blocks, doc, trigger)
+
+        return [self._make_chunk(blocks, doc, trigger, "section")]
+
+    def _make_chunk(
+        self,
+        blocks: List[UniversalBlock],
+        doc: dict,
+        trigger: str,
+        chunk_type: str
+    ) -> dict:
+        """创建 chunk"""
+        d = deepcopy(doc)
+        d["chunk_type"] = chunk_type
+        d["section_trigger"] = trigger
+
+        # 合并文本
+        d["content_with_weight"] = "\n".join(b.text for b in blocks)
+
+        # 位置信息（取第一个 block）
+        d["page_no"] = blocks[0].page_no
+        d["bbox"] = list(blocks[0].bbox)
+
+        # 合并实体
+        entities = self._merge_entities(blocks)
+        if entities:
+            d["entities"] = entities
+
+        return d
+
+    def _merge_entities(self, blocks: List[UniversalBlock]) -> dict:
+        """合并多个 block 的实体"""
+        merged = {"amounts": [], "dates": []}
+        for block in blocks:
+            if block.entities:
+                merged["amounts"].extend(block.entities.get("amounts", []))
+                merged["dates"].extend(block.entities.get("dates", []))
+        merged["amounts"] = list(set(merged["amounts"]))
+        merged["dates"] = list(set(merged["dates"]))
+        return merged if (merged["amounts"] or merged["dates"]) else {}
+```
+
+#### 3.2 入口函数模板
+
+```python
+# rag/app/my_doc_type.py
+
+from rag.app.criminal.blocks import extract_universal_blocks
+from rag.app.criminal.plugins.my_doc_type import MyDocTypePlugin
+from rag.nlp import rag_tokenizer, tokenize, add_bbox_union, add_page_range, add_block_refs
+import re
+
+def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", callback=None, **kwargs):
+    """
+    文书类型解析入口
+
+    Args:
+        filename: 文件路径
+        binary: 二进制内容
+        from_page: 起始页
+        to_page: 结束页
+        lang: 语言
+        callback: 进度回调
+
+    Returns:
+        list: chunk 列表
+    """
+    eng = lang.lower() == "english"
+
+    # 基础文档信息
+    doc = {
+        "docnm_kwd": filename,
+        "title_tks": rag_tokenizer.tokenize(re.sub(r"\.[a-zA-Z]+$", "", filename))
+    }
+
+    # 检查文件格式
+    if not re.search(r"\.pdf$", filename, re.IGNORECASE):
+        raise NotImplementedError("仅支持 PDF 格式")
+
+    callback(0.1, "开始解析...")
+
+    # Step 1: OCR
+    from rag.app.naive import by_paddleocr
+    parser_config = kwargs.get("parser_config", {})
+
+    sections, tables, pdf_parser = by_paddleocr(
+        filename=filename,
+        binary=binary,
+        from_page=from_page,
+        to_page=to_page,
+        lang=lang,
+        callback=callback,
+        parser_config=parser_config,
+        tenant_id=kwargs.get("tenant_id"),
+        kb_id=kwargs.get("kb_id"),
+        doc_id=parser_config.get("doc_id", ""),
+    )
+
+    callback(0.4, "OCR 完成")
+
+    # Step 2: Layer A - 通用 Block 抽取
+    blocks = extract_universal_blocks(sections, "my_doc_type")
+    callback(0.6, f"提取 {len(blocks)} 个 blocks")
+
+    # Step 3: Layer B - 专用解析
+    plugin = MyDocTypePlugin()
+    chunks = plugin.process(blocks, doc, chat_mdl=kwargs.get("chat_mdl"))
+    callback(0.8, f"生成 {len(chunks)} 个 chunks")
+
+    # Step 4: 添加 RAG 所需字段
+    for c in chunks:
+        content = c.get("content_with_weight", "")
+        tokenize(c, content, eng)
+        add_bbox_union(c)
+        add_page_range(c)
+        add_block_refs(c)
+
+    callback(1.0, f"完成，共 {len(chunks)} 个 chunks")
+    return chunks
+```
+
+### 第四步：测试验证
+
+#### 4.1 单元测试
+
+```python
+# test/unit/test_my_doc_type_plugin.py
+
+import pytest
+from rag.app.criminal.plugins.my_doc_type import MyDocTypePlugin
+from rag.app.criminal.blocks import UniversalBlock, BlockType
+
+
+class TestMyDocTypePlugin:
+    def test_doc_type(self):
+        plugin = MyDocTypePlugin()
+        assert plugin.doc_type == "my_doc_type"
+
+    def test_process_empty(self):
+        plugin = MyDocTypePlugin()
+        chunks = plugin.process([], {})
+        assert chunks == []
+
+    def test_section_boundaries(self):
+        """测试章节边界识别"""
+        plugin = MyDocTypePlugin()
+        blocks = [
+            UniversalBlock(BlockType.HEADER, "文书标题", 0, (0, 0, 100, 50)),
+            UniversalBlock(BlockType.PARAGRAPH, "触发词1 后的内容", 0, (0, 50, 100, 100)),
+        ]
+        chunks = plugin.process(blocks, {})
+        assert len(chunks) >= 1
+
+    def test_entities_preserved(self):
+        """测试实体保留"""
+        plugin = MyDocTypePlugin()
+        blocks = [
+            UniversalBlock(
+                BlockType.PARAGRAPH,
+                "涉案金额42000元，日期2024年1月15日",
+                0, (0, 0, 100, 50),
+                entities={"amounts": ["42000"], "dates": ["2024年1月15日"]}
+            ),
+        ]
+        chunks = plugin.process(blocks, {})
+        assert chunks[0]["entities"] is not None
+```
+
+#### 4.2 集成测试
+
+```python
+# test/unit/test_my_doc_type_integration.py
+
+from rag.app.criminal.blocks import extract_universal_blocks
+from rag.app.criminal.plugins.my_doc_type import MyDocTypePlugin
+
+
+def test_full_pipeline():
+    """测试完整流水线"""
+    sections = [
+        ("文书标题", "@@1\t10.0\t200.0\t20.0\t40.0##"),
+        ("正常内容段落", "@@1\t10.0\t200.0\t50.0\t70.0##"),
+        ("触发词1后的内容", "@@1\t10.0\t200.0\t80.0\t100.0##"),
+    ]
+
+    # Layer A
+    blocks = extract_universal_blocks(sections, "my_doc_type")
+
+    # Layer B
+    plugin = MyDocTypePlugin()
+    chunks = plugin.process(blocks, {})
+
+    assert len(chunks) >= 1
+    assert "section_trigger" in chunks[0]
+```
+
+#### 4.3 真实文档测试
+
+```bash
+# 使用真实 PDF 测试
+uv run python -c "
+from rag.app.my_doc_type import chunk
+
+def callback(prog=None, msg=''):
+    print(f'[{prog:.0%}] {msg}' if prog else msg)
+
+result = chunk('path/to/real_document.pdf', callback=callback)
+print(f'Total chunks: {len(result)}')
+for i, c in enumerate(result[:5]):
+    print(f'[{i}] {c.get(\"chunk_type\")}: {c.get(\"content_with_weight\", \"\")[:50]}...')
+"
+```
+
+### 第五步：文档和提交
+
+1. 更新本文档的"目录结构"部分
+2. 更新本文档的"测试文件"部分
+3. 提交代码：
+   ```bash
+   git add rag/app/criminal/plugins/my_doc_type.py \
+           rag/app/my_doc_type.py \
+           test/unit/test_my_doc_type_plugin.py \
+           test/unit/test_my_doc_type_integration.py
+
+   git commit -m "feat(criminal): add MyDocType parser plugin
+
+   - Implement MyDocTypePlugin for Layer B parsing
+   - Add chunk() entry function
+   - Add unit and integration tests
+   - Support section-based parsing with trigger phrases"
+   ```
+
+---
+
+## 快速新增文书类型（简化版）
+
+如果文书结构简单，不需要复杂的章节识别：
+
+```python
+# rag/app/criminal/plugins/simple_doc.py
+
+from .base import ParserPlugin
+from ..blocks import UniversalBlock
+
+class SimpleDocPlugin(ParserPlugin):
+    @property
+    def doc_type(self) -> str:
+        return "simple_doc"
+
+    def process(self, blocks, doc, **kwargs):
+        """简单处理：每个 block 生成一个 chunk"""
+        return [
+            {
+                "chunk_type": "paragraph",
+                "content_with_weight": b.text,
+                "page_no": b.page_no,
+                "bbox": list(b.bbox),
+                "entities": b.entities or {},
+                **doc
+            }
+            for b in blocks
+        ]
+```
+
+---
+
 ## 如何新增文书类型
 
 ### 1. 实现 ParserPlugin
