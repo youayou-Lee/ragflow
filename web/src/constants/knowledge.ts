@@ -78,8 +78,6 @@ export enum DocumentType {
 
 export enum DocumentParserType {
   Naive = 'naive',
-  Interrogation = 'interrogation',
-  Indictment = 'indictment',
 }
 
 export const TagRenameId = 'tagRename';
