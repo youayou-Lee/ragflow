@@ -41,11 +41,13 @@ rag/app/criminal/
     ├── __init__.py        # 插件模块入口
     ├── base.py            # ParserPlugin 基类
     ├── interrogation.py   # 讯问笔录插件
-    └── indictment.py      # 起诉意见书插件
+    ├── indictment.py      # 起诉意见书插件
+    └── scene_investigation.py  # 现场勘验检查笔录插件
 
 rag/app/
-├── interrogation.py       # 讯问笔录入口，使用 Layer A + Layer B
-└── indictment.py          # 起诉意见书入口，使用 Layer A + Layer B
+├── interrogation.py       # 讯问笔录入口
+├── indictment.py          # 起诉意见书入口
+└── scene_investigation.py # 现场勘验检查笔录入口
 ```
 
 ## Layer A: 通用 Block 抽取
@@ -711,7 +713,9 @@ test/unit/
 ├── test_interrogation_chunker.py     # 讯问笔录向后兼容测试
 ├── test_indictment_plugin.py         # 起诉意见书插件测试
 ├── test_indictment_integration.py    # 起诉意见书集成测试
-└── test_indictment_chunker.py        # 起诉意见书向后兼容测试
+├── test_indictment_chunker.py        # 起诉意见书向后兼容测试
+├── test_scene_investigation_plugin.py      # 现场勘验笔录插件测试
+└── test_scene_investigation_integration.py # 现场勘验笔录集成测试
 ```
 
 ### 运行测试
@@ -735,4 +739,5 @@ uv run pytest test/unit/test_blocks.py test/unit/test_ner.py test/unit/test_plug
 
 | 日期 | 版本 | 变更内容 |
 |------|------|----------|
+| 2025-02-23 | 1.1 | 添加现场勘验检查笔录 (scene_investigation) 解析插件 |
 | 2025-02-22 | 1.0 | 初始版本，完成 Phase 1-3 迁移 |
