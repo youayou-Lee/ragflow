@@ -52,19 +52,42 @@ class InterrogationPlugin(ParserPlugin):
         """
         Process blocks into chunks.
 
-        1. Extract header blocks -> single header chunk
-        2. Merge consecutive Q/A blocks -> QA pair chunks
+        Structure of interrogation record:
+        [basicInfo blocks] [问：...] [答：...] [问：...] [答：...] ...
+                            ↑
+                      First "问：" position
+
+        1. Find first "问：" position
+        2. Everything before = basicInfo (single chunk)
+        3. Everything after = QA pairs (multiple chunks)
         """
+        if not blocks:
+            return []
+
         chunks = []
 
-        # 1. Process header blocks
-        header_blocks = self.get_header_blocks(blocks)
-        if header_blocks:
-            header_chunk = self._make_header_chunk(header_blocks, doc)
-            chunks.append(header_chunk)
+        # 1. Find first question position
+        first_q_index = None
+        for i, block in enumerate(blocks):
+            if block.text.startswith(("问：", "问:", "问；", "问;")):
+                first_q_index = i
+                break
 
-        # 2. Process QA blocks
-        qa_blocks = self.get_qa_blocks(blocks)
+        # 2. Process basicInfo (everything before first "问：")
+        if first_q_index is not None:
+            if first_q_index > 0:
+                header_blocks = blocks[:first_q_index]
+                header_chunk = self._make_header_chunk(header_blocks, doc)
+                chunks.append(header_chunk)
+            # QA section starts from first question
+            qa_blocks = blocks[first_q_index:]
+        else:
+            # No "问：" found - all content is basicInfo
+            header_chunk = self._make_header_chunk(blocks, doc)
+            chunks.append(header_chunk)
+            qa_blocks = []
+
+        # 3. Process QA pairs (maintaining original order)
         if qa_blocks:
             qa_chunks = self._merge_qa_pairs(qa_blocks, doc)
             chunks.extend(qa_chunks)
@@ -76,18 +99,22 @@ class InterrogationPlugin(ParserPlugin):
         d = deepcopy(doc)
         d["chunk_type"] = "header"
 
-        # Combine text
-        text = "\n".join(b.text for b in blocks)
+        # Combine text (filter empty blocks)
+        text = "\n".join(b.text.strip() for b in blocks if b.text.strip())
         d["content_with_weight"] = text
 
-        # Extract and add position information for frontend highlighting
-        poss = self._extract_positions(blocks)
-        if poss:
-            add_positions(d, poss)
+        # Filter blocks with valid bbox for position extraction
+        valid_blocks = [b for b in blocks if b.bbox and b.text.strip()]
 
-        # Use first block's position as fallback
-        d["page_no"] = blocks[0].page_no
-        d["bbox"] = json.dumps(list(blocks[0].bbox))
+        # Extract and add position information for frontend highlighting
+        if valid_blocks:
+            poss = self._extract_positions(valid_blocks)
+            if poss:
+                add_positions(d, poss)
+
+            # Use first block's position as fallback
+            d["page_no"] = valid_blocks[0].page_no
+            d["bbox"] = json.dumps(list(valid_blocks[0].bbox))
 
         # Merge entities
         entities = self._merge_entities(blocks)
@@ -104,13 +131,17 @@ class InterrogationPlugin(ParserPlugin):
         qa_index = 0
 
         for block in blocks:
-            text = block.text
+            text = block.text.strip()
+            if not text:
+                continue  # Skip empty blocks
+
             if text.startswith(("问：", "问:", "问；", "问;")):
                 # Save previous QA pair
                 if current_q:
                     chunk = self._make_qa_chunk(current_q, current_a_blocks, doc, qa_index)
-                    chunks.append(chunk)
-                    qa_index += 1
+                    if chunk and chunk.get("content_with_weight", "").strip():
+                        chunks.append(chunk)
+                        qa_index += 1
                 current_q = block
                 current_a_blocks = []
             elif text.startswith(("答：", "答:", "答；", "答;")):
@@ -119,7 +150,8 @@ class InterrogationPlugin(ParserPlugin):
         # Save last QA pair
         if current_q:
             chunk = self._make_qa_chunk(current_q, current_a_blocks, doc, qa_index)
-            chunks.append(chunk)
+            if chunk and chunk.get("content_with_weight", "").strip():
+                chunks.append(chunk)
 
         return chunks
 
