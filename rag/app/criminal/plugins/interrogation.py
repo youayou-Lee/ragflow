@@ -22,12 +22,17 @@ and produces semantic chunks for indexing.
 """
 
 import json
+import re
 from typing import List
 from copy import deepcopy
 
 from .base import ParserPlugin
 from ..blocks import UniversalBlock, BlockType
 from rag.nlp import add_positions
+
+# Pattern for detecting question start (at beginning or after newline)
+# Handles OCR merging multiple lines into one block
+QUESTION_START_PATTERN = re.compile(r'(^|\n)\s*问\s*[：:；;]')
 
 
 class InterrogationPlugin(ParserPlugin):
@@ -57,7 +62,10 @@ class InterrogationPlugin(ParserPlugin):
                             ↑
                       First "问：" position
 
-        1. Find first "问：" position
+        Note: "问：" may appear at block start OR after newline within a block
+        (due to OCR merging multiple lines into one block).
+
+        1. Find first "问：" position (at start or after newline)
         2. Everything before = basicInfo (single chunk)
         3. Everything after = QA pairs (multiple chunks)
         """
@@ -67,20 +75,64 @@ class InterrogationPlugin(ParserPlugin):
         chunks = []
 
         # 1. Find first question position
+        # Check both startswith and newline-prefixed patterns
         first_q_index = None
+        first_q_offset = 0  # Character offset within block if "问：" is not at start
+
         for i, block in enumerate(blocks):
-            if block.text.startswith(("问：", "问:", "问；", "问;")):
+            text = block.text.strip()
+            # Check if block starts with "问："
+            if text.startswith(("问：", "问:", "问；", "问;")):
                 first_q_index = i
+                first_q_offset = 0
+                break
+            # Check if "问：" appears after newline (OCR merged lines)
+            match = QUESTION_START_PATTERN.search(text)
+            if match:
+                first_q_index = i
+                first_q_offset = match.start() if match.group(1) == '\n' else 0
                 break
 
         # 2. Process basicInfo (everything before first "问：")
         if first_q_index is not None:
             if first_q_index > 0:
+                # All previous blocks are pure basicInfo
                 header_blocks = blocks[:first_q_index]
-                header_chunk = self._make_header_chunk(header_blocks, doc)
-                chunks.append(header_chunk)
-            # QA section starts from first question
+
+                # Handle the block containing "问：" - split it if needed
+                split_block = blocks[first_q_index]
+                if first_q_offset > 0:
+                    # Extract basicInfo portion from the split block
+                    basicInfo_part = split_block.text[:first_q_offset].strip()
+                    if basicInfo_part:
+                        # Create a new block for the basicInfo part
+                        header_blocks.append(UniversalBlock(
+                            block_type=split_block.block_type,
+                            text=basicInfo_part,
+                            page_no=split_block.page_no,
+                            bbox=split_block.bbox,
+                        ))
+
+                if header_blocks:
+                    header_chunk = self._make_header_chunk(header_blocks, doc)
+                    chunks.append(header_chunk)
+
+            # QA section starts from the block containing "问："
             qa_blocks = blocks[first_q_index:]
+
+            # If the first QA block was split, create a new block with only QA portion
+            if first_q_offset > 0 and qa_blocks:
+                split_block = qa_blocks[0]
+                qa_part = split_block.text[first_q_offset:].strip()
+                if qa_part:
+                    qa_blocks[0] = UniversalBlock(
+                        block_type=split_block.block_type,
+                        text=qa_part,
+                        page_no=split_block.page_no,
+                        bbox=split_block.bbox,
+                    )
+                else:
+                    qa_blocks = qa_blocks[1:]  # Remove empty block
         else:
             # No "问：" found - all content is basicInfo
             header_chunk = self._make_header_chunk(blocks, doc)
