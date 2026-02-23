@@ -21,11 +21,13 @@ Layer B plugin that processes UniversalBlock sequences from interrogation record
 and produces semantic chunks for indexing.
 """
 
+import json
 from typing import List
 from copy import deepcopy
 
 from .base import ParserPlugin
 from ..blocks import UniversalBlock, BlockType
+from rag.nlp import add_positions
 
 
 class InterrogationPlugin(ParserPlugin):
@@ -78,14 +80,19 @@ class InterrogationPlugin(ParserPlugin):
         text = "\n".join(b.text for b in blocks)
         d["content_with_weight"] = text
 
-        # Use first block's position
+        # Extract and add position information for frontend highlighting
+        poss = self._extract_positions(blocks)
+        if poss:
+            add_positions(d, poss)
+
+        # Use first block's position as fallback
         d["page_no"] = blocks[0].page_no
-        d["bbox"] = list(blocks[0].bbox)
+        d["bbox"] = json.dumps(list(blocks[0].bbox))
 
         # Merge entities
         entities = self._merge_entities(blocks)
         if entities:
-            d["entities"] = entities
+            d["entities"] = json.dumps(entities)
 
         return d
 
@@ -133,15 +140,20 @@ class InterrogationPlugin(ParserPlugin):
         a_text = "\n".join(b.text for b in a_blocks)
         d["content_with_weight"] = f"{q_text}\t{a_text}"
 
-        # Use question block's position
+        # Extract and add position information from all blocks (question + answers)
+        all_blocks = [q_block] + a_blocks
+        poss = self._extract_positions(all_blocks)
+        if poss:
+            add_positions(d, poss)
+
+        # Use question block's position as fallback
         d["page_no"] = q_block.page_no
-        d["bbox"] = list(q_block.bbox)
+        d["bbox"] = json.dumps(list(q_block.bbox))
 
         # Merge entities
-        all_blocks = [q_block] + a_blocks
         entities = self._merge_entities(all_blocks)
         if entities:
-            d["entities"] = entities
+            d["entities"] = json.dumps(entities)
 
         return d
 
@@ -155,3 +167,24 @@ class InterrogationPlugin(ParserPlugin):
         merged["amounts"] = list(set(merged["amounts"]))
         merged["dates"] = list(set(merged["dates"]))
         return merged if (merged["amounts"] or merged["dates"]) else {}
+
+    def _extract_positions(self, blocks: List[UniversalBlock]) -> list:
+        """
+        Extract position information from UniversalBlock list.
+
+        UniversalBlock.bbox format: (x0, y0, x1, y1) where y0=top, y1=bottom
+        add_positions expects: [(page, left, right, top, bottom), ...]
+
+        Args:
+            blocks: List of UniversalBlock objects
+
+        Returns:
+            List of position tuples for add_positions()
+        """
+        poss = []
+        for block in blocks:
+            if block.bbox:
+                x0, y0, x1, y1 = block.bbox
+                # Convert to (page, left, right, top, bottom)
+                poss.append((block.page_no, x0, x1, y0, y1))
+        return poss
