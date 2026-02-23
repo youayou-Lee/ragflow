@@ -48,7 +48,7 @@ class TestSceneInvestigationSectionBoundaries:
         plugin = SceneInvestigationPlugin()
         blocks = [
             UniversalBlock(BlockType.HEADER, "勘查号：K4418025400002021020012", 0, (0, 0, 100, 50)),
-            UniversalBlock(BlockType.PARAGRAPH, "现场勘验单位：清远市公安局下廓派出所", 0, (0, 50, 100, 100)),
+            UniversalBlock(BlockType.PARAGRAPH, "勘验时间：2021年2月1日", 0, (0, 50, 100, 100)),
             UniversalBlock(BlockType.PARAGRAPH, "普通内容段落", 0, (0, 100, 100, 150)),
         ]
 
@@ -56,31 +56,31 @@ class TestSceneInvestigationSectionBoundaries:
 
         assert len(sections) >= 2
         assert sections[0][2] == "header"
-        assert "现场勘验单位" in sections[1][2]
+        assert "勘验时间" in sections[1][2]
 
     def test_find_sections_with_multiple_triggers(self):
         """Test detection with multiple trigger patterns."""
         plugin = SceneInvestigationPlugin()
         blocks = [
             UniversalBlock(BlockType.HEADER, "勘查号：K123", 0, (0, 0, 100, 50)),
-            UniversalBlock(BlockType.PARAGRAPH, "现场勘验情况：详情描述", 0, (0, 50, 100, 100)),
-            UniversalBlock(BlockType.PARAGRAPH, "现场勘验人员：张三", 0, (0, 100, 100, 150)),
+            UniversalBlock(BlockType.PARAGRAPH, "现场勘验检查情况：详情描述", 0, (0, 50, 100, 100)),
+            UniversalBlock(BlockType.PARAGRAPH, "勘验人员：张三", 0, (0, 100, 100, 150)),
         ]
 
         sections = plugin._find_sections(blocks)
 
         assert len(sections) == 3
         triggers = [s[2] for s in sections]
-        assert "勘查号：" in triggers[0]
-        assert "现场勘验情况：" in triggers[1]
-        assert "现场勘验人员：" in triggers[2]
+        assert "header" in triggers[0]
+        assert "现场勘验检查情况" in triggers[1]
+        assert "勘验人员" in triggers[2]
 
     def test_process_creates_chunks_by_section(self):
         """Test that process creates chunks based on sections."""
         plugin = SceneInvestigationPlugin()
         blocks = [
             UniversalBlock(BlockType.HEADER, "勘查号：K4418025400002021020012", 0, (0, 0, 100, 50)),
-            UniversalBlock(BlockType.PARAGRAPH, "现场勘验单位：清远市公安局", 0, (0, 50, 100, 100)),
+            UniversalBlock(BlockType.PARAGRAPH, "勘验时间：2021年2月1日", 0, (0, 50, 100, 100)),
             UniversalBlock(BlockType.PARAGRAPH, "普通内容", 0, (0, 100, 100, 150)),
         ]
 
