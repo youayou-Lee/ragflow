@@ -67,9 +67,8 @@ from api.db.services.task_service import TaskService, has_canceled, CANVAS_DEBUG
 from api.db.services.file2document_service import File2DocumentService
 from common.versions import get_ragflow_version
 from api.db.db_models import close_connection
-from rag.app import naive, interrogation, indictment
+from rag.app import naive
 from rag.nlp import search, rag_tokenizer, add_positions, add_bbox_union, add_page_range
-from rag.nlp.interrogation_extractor import async_enhance_chunk_with_metadata
 from rag.raptor import RecursiveAbstractiveProcessing4TreeOrganizedRetrieval as Raptor
 from common.token_utils import num_tokens_from_string, truncate
 from rag.utils.redis_conn import REDIS_CONN, RedisDistributedLock
@@ -84,8 +83,6 @@ BATCH_SIZE = 64
 FACTORY = {
     "general": naive,
     ParserType.NAIVE.value: naive,
-    ParserType.INTERROGATION.value: interrogation,
-    ParserType.INDICTMENT.value: indictment,
 }
 
 TASK_TYPE_TO_PIPELINE_TASK_TYPE = {
@@ -395,45 +392,6 @@ async def build_chunks(task, progress_callback):
             await asyncio.gather(*tasks, return_exceptions=True)
             raise
         progress_callback(msg="Question generation {} chunks completed in {:.2f}s".format(len(docs), timer() - st))
-
-    # Interrogation-specific LLM enhancement
-    if task["parser_id"].lower() == "interrogation":
-        st = timer()
-        progress_callback(msg="Start to extract metadata for interrogation record ...")
-        chat_mdl = LLMBundle(task["tenant_id"], LLMType.CHAT, llm_name=task["llm_id"], lang=task["language"])
-
-        async def interrogation_metadata_task(chat_mdl, d):
-            if has_canceled(task["id"]):
-                progress_callback(-1, msg="Task has been canceled.")
-                return
-            async with chat_limiter:
-                await async_enhance_chunk_with_metadata(d, chat_mdl)
-
-        tasks = []
-        for d in docs:
-            tasks.append(asyncio.create_task(interrogation_metadata_task(chat_mdl, d)))
-        try:
-            await asyncio.gather(*tasks, return_exceptions=False)
-        except Exception as e:
-            logging.error("Error in interrogation metadata extraction: {}".format(e))
-            for t in tasks:
-                t.cancel()
-            await asyncio.gather(*tasks, return_exceptions=True)
-            raise
-
-        # Collect metadata from chunks and update document metadata
-        # Keep chunk-level metadata for display, also aggregate to document level
-        metadata = {}
-        for d in docs:
-            if "metadata" in d:
-                metadata = update_metadata_to(metadata, d["metadata"])
-                # Don't delete chunk-level metadata, keep it for display
-        if metadata:
-            existing_meta = DocMetadataService.get_document_metadata(task["doc_id"])
-            existing_meta = existing_meta if isinstance(existing_meta, dict) else {}
-            metadata = update_metadata_to(metadata, existing_meta)
-            DocMetadataService.update_document_metadata(task["doc_id"], metadata)
-        progress_callback(msg="Interrogation metadata extraction completed in {:.2f}s".format(timer() - st))
 
     if task["parser_config"].get("enable_metadata", False) and task["parser_config"].get("metadata"):
         st = timer()
