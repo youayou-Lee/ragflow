@@ -100,10 +100,7 @@ export default defineConfig(({ mode, command }) => {
       assetsInlineLimit: 4096,
       experimentalMinChunkSize: 30 * 1024,
       chunkSizeWarningLimit: 1000,
-      // 限制并发数，避免 CPU 飙升
-      maxParallelismOps: 2,
       rollupOptions: {
-        maxParallelFileOps: 2,
         onwarn(warning, warn) {
           if (warning.code === 'EMPTY_BUNDLE') {
             return;
@@ -147,23 +144,7 @@ export default defineConfig(({ mode, command }) => {
         plugins: [],
         treeshake: true,
       },
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true, // delete console
-          drop_debugger: true, // delete debugger
-          pure_funcs: ['console.log'],
-        },
-        mangle: {
-          // properties: {
-          //   regex: /^_/,
-          // },
-          properties: false,
-        },
-        format: {
-          comments: false, // Delete comments
-        },
-      },
+      minify: 'esbuild',
       sourcemap: true,
       cssCodeSplit: true,
       target: 'es2015',

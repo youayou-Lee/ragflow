@@ -5,9 +5,9 @@
   "author": "bill",
   "type": "module",
   "scripts": {
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' vite build --mode production",
+    "build": "UV_THREADPOOL_SIZE=2 NODE_OPTIONS='--max-old-space-size=4096' vite build --mode production",
     "build-storybook": "storybook build",
-    "dev": "NODE_OPTIONS='--max-old-space-size=2048' vite --host",
+    "dev": "UV_THREADPOOL_SIZE=2 NODE_OPTIONS='--max-old-space-size=2048' vite --host",
     "lint": "eslint src --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "prepare": "cd .. && husky web/.husky",
     "preview": "vite preview",
