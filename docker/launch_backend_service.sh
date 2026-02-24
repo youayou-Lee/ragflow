@@ -38,6 +38,9 @@ if [[ -z "$WS" || $WS -lt 1 ]]; then
   WS=1
 fi
 
+# Stagger delay between process starts (seconds) to reduce CPU spike
+STAGGER_DELAY=${STAGGER_DELAY:-3}
+
 # Maximum number of retries for each task executor and server
 MAX_RETRIES=5
 
@@ -73,7 +76,8 @@ task_exe(){
     local retry_count=0
     while ! $STOP && [ $retry_count -lt $MAX_RETRIES ]; do
         echo "Starting task_executor.py for task $task_id (Attempt $((retry_count+1)))"
-        LD_PRELOAD=$JEMALLOC_PATH $PY rag/svr/task_executor.py "$task_id"
+        # Use nice to lower priority and limit CPU usage
+        LD_PRELOAD=$JEMALLOC_PATH nice -n 10 $PY rag/svr/task_executor.py "$task_id"
         EXIT_CODE=$?
         if [ $EXIT_CODE -eq 0 ]; then
             echo "task_executor.py for task $task_id exited successfully."
@@ -96,7 +100,8 @@ run_server(){
     local retry_count=0
     while ! $STOP && [ $retry_count -lt $MAX_RETRIES ]; do
         echo "Starting ragflow_server.py (Attempt $((retry_count+1)))"
-        $PY api/ragflow_server.py
+        # Use nice to lower priority and limit CPU usage
+        nice -n 10 $PY api/ragflow_server.py
         EXIT_CODE=$?
         if [ $EXIT_CODE -eq 0 ]; then
             echo "ragflow_server.py exited successfully."
@@ -114,12 +119,21 @@ run_server(){
     fi
 }
 
-# Start task executors
+# Start task executors with stagger delay
 for ((i=0;i<WS;i++))
 do
   task_exe "$i" &
   PIDS+=($!)
+  # Stagger process starts to reduce CPU spike
+  if [ $i -lt $((WS-1)) ]; then
+    echo "Waiting ${STAGGER_DELAY}s before starting next task executor..."
+    sleep $STAGGER_DELAY
+  fi
 done
+
+# Wait before starting main server
+echo "Waiting ${STAGGER_DELAY}s before starting main server..."
+sleep $STAGGER_DELAY
 
 # Start the main server
 run_server &
