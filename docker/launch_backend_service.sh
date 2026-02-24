@@ -41,6 +41,9 @@ fi
 # Stagger delay between process starts (seconds) to reduce CPU spike
 STAGGER_DELAY=${STAGGER_DELAY:-3}
 
+# Server initialization delay (seconds) - wait for ragflow_server to establish connections
+SERVER_INIT_DELAY=${SERVER_INIT_DELAY:-8}
+
 # Maximum number of retries for each task executor and server
 MAX_RETRIES=5
 
@@ -119,7 +122,17 @@ run_server(){
     fi
 }
 
-# Start task executors with stagger delay
+# Start the main server FIRST (to establish Infinity connection)
+# This prevents connection storm to Infinity when using infinity as doc engine
+run_server &
+PIDS+=($!)
+
+# Wait for server to be ready before starting task executors
+# This prevents connection storm to Infinity
+echo "Waiting ${SERVER_INIT_DELAY}s for ragflow_server to initialize..."
+sleep $SERVER_INIT_DELAY
+
+# Start task executors AFTER server is ready, with stagger delay
 for ((i=0;i<WS;i++))
 do
   task_exe "$i" &
@@ -130,14 +143,6 @@ do
     sleep $STAGGER_DELAY
   fi
 done
-
-# Wait before starting main server
-echo "Waiting ${STAGGER_DELAY}s before starting main server..."
-sleep $STAGGER_DELAY
-
-# Start the main server
-run_server &
-PIDS+=($!)
 
 # Wait for all background processes to finish
 wait
