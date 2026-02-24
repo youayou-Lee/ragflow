@@ -18,5 +18,12 @@
 
 from .base import DocumentPlugin, Chunk, plugin_registry
 from .generic_chunker import GenericChunker
+from .interrogation_plugin import InterrogationPlugin
 
-__all__ = ["DocumentPlugin", "Chunk", "plugin_registry", "GenericChunker"]
+__all__ = [
+    "DocumentPlugin",
+    "Chunk",
+    "plugin_registry",
+    "GenericChunker",
+    "InterrogationPlugin",
+]
