@@ -23,13 +23,14 @@ Recognizes Q/A patterns and groups them into qa_pair chunks.
 import logging
 from typing import List
 
-from .base import Chunk, DocumentPlugin
+from .base import Chunk, DocumentPlugin, plugin_registry
 from rag.app.naive import UniversalBlock, BlockType
 
 
 logger = logging.getLogger(__name__)
 
 
+@plugin_registry.register("interrogation_record")
 class InterrogationPlugin(DocumentPlugin):
     """Plugin for handling interrogation record documents."""
 

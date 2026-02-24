@@ -23,7 +23,7 @@ Implements section-based chunking with key trigger phrases.
 import logging
 from typing import List
 
-from .base import Chunk, DocumentPlugin
+from .base import Chunk, DocumentPlugin, plugin_registry
 from rag.app.naive import UniversalBlock, BlockType
 
 
@@ -44,6 +44,7 @@ MAX_CHUNK_SIZE = 1500
 MIN_CHUNK_SIZE = 50
 
 
+@plugin_registry.register("indictment_opinion")
 class IndictmentPlugin(DocumentPlugin):
     """Plugin for handling indictment opinion documents."""
 

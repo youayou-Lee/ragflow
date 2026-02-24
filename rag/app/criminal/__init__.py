@@ -16,6 +16,23 @@
 
 """Criminal document parsing module."""
 
-from .plugins import plugin_registry, DocumentPlugin, Chunk
+from .plugins import (
+    plugin_registry,
+    DocumentPlugin,
+    Chunk,
+    GenericChunker,
+    InterrogationPlugin,
+    IndictmentPlugin,
+)
+from .router import route_to_plugin, get_chunker_for_doc_type
 
-__all__ = ["plugin_registry", "DocumentPlugin", "Chunk"]
+__all__ = [
+    "plugin_registry",
+    "DocumentPlugin",
+    "Chunk",
+    "GenericChunker",
+    "InterrogationPlugin",
+    "IndictmentPlugin",
+    "route_to_plugin",
+    "get_chunker_for_doc_type",
+]
