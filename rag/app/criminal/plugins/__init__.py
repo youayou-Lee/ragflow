@@ -17,5 +17,6 @@
 """Layer B plugins for document type-specific chunking."""
 
 from .base import DocumentPlugin, Chunk, plugin_registry
+from .generic_chunker import GenericChunker
 
-__all__ = ["DocumentPlugin", "Chunk", "plugin_registry"]
+__all__ = ["DocumentPlugin", "Chunk", "plugin_registry", "GenericChunker"]
