@@ -112,11 +112,7 @@ export const useFetchTenantInfo = (
   return { data, loading };
 };
 
-const DEFAULT_PARSERS = [
-  { value: 'naive', label: 'General' },
-  { value: 'interrogation', label: 'Interrogation' },
-  { value: 'indictment', label: 'Indictment' },
-];
+const DEFAULT_PARSERS = [{ value: 'naive', label: 'General' }];
 
 export const useSelectParserList = (): Array<{
   value: string;
