@@ -149,8 +149,6 @@ export default defineConfig(({ mode, command }) => {
       },
       minify: 'terser',
       terserOptions: {
-        // 限制 terser 并发数
-        parallel: 2,
         compress: {
           drop_console: true, // delete console
           drop_debugger: true, // delete debugger
