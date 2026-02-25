@@ -128,13 +128,16 @@ def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", ca
         d = copy.deepcopy(doc)
         tokenize(d, chunk.text, is_english)
 
-        # Try to get real position from pdf_parser
+        # Try to get image and position from pdf_parser
         position_added = False
         if pdf_parser and chunk.raw_text:
             try:
                 result = pdf_parser.crop(chunk.raw_text, need_position=True)
                 if result is not None:
-                    _, poss = result
+                    img, poss = result
+                    # Add image to chunk for PDF highlighting
+                    if img:
+                        d["image"] = img
                     if poss:
                         add_positions(d, poss)
                         position_added = True

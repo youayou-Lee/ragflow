@@ -128,8 +128,25 @@ def chunk(filename, binary=None, from_page=0, to_page=100000, lang="Chinese", ca
         d = copy.deepcopy(doc)
         tokenize(d, chunk.text, is_english)
 
-        # Add standard position info (required by schema)
-        add_positions(d, [[ii] * 5])
+        # Try to get image and position from pdf_parser
+        position_added = False
+        if pdf_parser and chunk.raw_text:
+            try:
+                result = pdf_parser.crop(chunk.raw_text, need_position=True)
+                if result is not None:
+                    img, poss = result
+                    # Add image to chunk for PDF highlighting
+                    if img:
+                        d["image"] = img
+                    if poss:
+                        add_positions(d, poss)
+                        position_added = True
+            except Exception as e:
+                logger.warning(f"Failed to get position for chunk {ii}: {e}")
+
+        # Fallback to index-based position
+        if not position_added:
+            add_positions(d, [[ii] * 5])
 
         res.append(d)
 
