@@ -98,7 +98,8 @@ class PaddleOCRConfig:
     api_url: str = ""
     access_token: Optional[str] = None
     algorithm: AlgorithmType = "PaddleOCR-VL"
-    request_timeout: int = 600
+    request_timeout: int = 180  # 3 minutes max (was 600s = 10min, too long)
+    max_retries: int = 3  # Number of retries on API failure
     prettify_markdown: bool = True
     show_formula_number: bool = True
     visualize: bool = False
@@ -194,7 +195,8 @@ class PaddleOCRParser(RAGFlowPdfParser):
         access_token: Optional[str] = None,
         algorithm: AlgorithmType = "PaddleOCR-VL",
         *,
-        request_timeout: int = 600,
+        request_timeout: int = 180,  # 3 minutes max
+        max_retries: int = 3,
     ):
         """Initialize PaddleOCR parser."""
         super().__init__()
@@ -203,6 +205,7 @@ class PaddleOCRParser(RAGFlowPdfParser):
         self.access_token = access_token or os.getenv("PADDLEOCR_ACCESS_TOKEN")
         self.algorithm = algorithm
         self.request_timeout = request_timeout
+        self.max_retries = max_retries
         self.logger = logging.getLogger(self.__class__.__name__)
 
         # Force PDF file type
@@ -286,11 +289,11 @@ class PaddleOCRParser(RAGFlowPdfParser):
         # Process response
         sections = self._transfer_to_sections(result, algorithm=cfg.algorithm, parse_method=parse_method)
         if callback:
-            callback(0.9, f"[PaddleOCR] done, sections: {len(sections)}")
+            callback(0.4, f"[PaddleOCR] done, sections: {len(sections)}")
 
         tables = self._transfer_to_tables(result)
         if callback:
-            callback(1.0, f"[PaddleOCR] done, tables: {len(tables)}")
+            callback(0.5, f"[PaddleOCR] done, tables: {len(tables)}")
 
         return sections, tables
 
@@ -347,11 +350,11 @@ class PaddleOCRParser(RAGFlowPdfParser):
         # Process cached result
         sections = self._transfer_to_sections(cached_result, algorithm=algo, parse_method=parse_method)
         if callback:
-            callback(0.9, f"[PaddleOCR] done from cache, sections: {len(sections)}")
+            callback(0.4, f"[PaddleOCR] done from cache, sections: {len(sections)}")
 
         tables = self._transfer_to_tables(cached_result)
         if callback:
-            callback(1.0, f"[PaddleOCR] done from cache, tables: {len(tables)}")
+            callback(0.5, f"[PaddleOCR] done from cache, tables: {len(tables)}")
 
         # Store the result
         self._last_api_result = cached_result
@@ -403,7 +406,9 @@ class PaddleOCRParser(RAGFlowPdfParser):
         return payload
 
     def _send_request(self, data: bytes, config: PaddleOCRConfig, callback: Optional[Callable[[float, str], None]]) -> dict[str, Any]:
-        """Send request to PaddleOCR API and parse response."""
+        """Send request to PaddleOCR API and parse response with retry logic."""
+        import time
+
         # Build payload
         payload = self._build_payload(data, self.file_type, config)
 
@@ -412,35 +417,56 @@ class PaddleOCRParser(RAGFlowPdfParser):
         if config.access_token:
             headers["Authorization"] = f"token {config.access_token}"
 
-        self.logger.info("[PaddleOCR] invoking API")
-        if callback:
-            callback(0.1, "[PaddleOCR] submitting request")
+        max_retries = getattr(config, 'max_retries', self.max_retries)
+        last_exception = None
 
-        # Send request
-        try:
-            resp = requests.post(config.api_url, json=payload, headers=headers, timeout=self.request_timeout)
-            resp.raise_for_status()
-        except Exception as exc:
+        for attempt in range(max_retries):
+            self.logger.info(f"[PaddleOCR] invoking API (attempt {attempt + 1}/{max_retries})")
             if callback:
-                callback(-1, f"[PaddleOCR] request failed: {exc}")
-            raise RuntimeError(f"[PaddleOCR] request failed: {exc}")
+                callback(0.1, f"[PaddleOCR] submitting request (attempt {attempt + 1}/{max_retries})")
 
-        # Parse response
-        try:
-            response_data = resp.json()
-        except Exception as exc:
-            raise RuntimeError(f"[PaddleOCR] response is not JSON: {exc}") from exc
+            # Send request with timeout
+            try:
+                resp = requests.post(config.api_url, json=payload, headers=headers, timeout=self.request_timeout)
+                resp.raise_for_status()
+            except requests.Timeout:
+                last_exception = RuntimeError(f"[PaddleOCR] request timed out after {self.request_timeout}s")
+                self.logger.warning(f"[PaddleOCR] attempt {attempt + 1} timed out")
+                if attempt < max_retries - 1:
+                    time.sleep(2)  # Wait before retry
+                    continue
+            except requests.HTTPError as exc:
+                last_exception = RuntimeError(f"[PaddleOCR] HTTP error: {exc}")
+                self.logger.warning(f"[PaddleOCR] attempt {attempt + 1} failed with HTTP error: {exc}")
+                if attempt < max_retries - 1:
+                    time.sleep(2)  # Wait before retry
+                    continue
+            except Exception as exc:
+                last_exception = RuntimeError(f"[PaddleOCR] request failed: {exc}")
+                self.logger.warning(f"[PaddleOCR] attempt {attempt + 1} failed: {exc}")
+                if attempt < max_retries - 1:
+                    time.sleep(2)  # Wait before retry
+                    continue
+            else:
+                # Success - parse response
+                try:
+                    response_data = resp.json()
+                except Exception as exc:
+                    raise RuntimeError(f"[PaddleOCR] response is not JSON: {exc}") from exc
 
+                if callback:
+                    callback(0.8, "[PaddleOCR] response received")
+
+                # Validate response format
+                if response_data.get("errorCode") != 0 or not isinstance(response_data.get("result"), dict):
+                    raise RuntimeError(f"[PaddleOCR] invalid response format: errorCode={response_data.get('errorCode')}")
+
+                return response_data["result"]
+
+        # All retries exhausted
         if callback:
-            callback(0.8, "[PaddleOCR] response received")
-
-        # Validate response format
-        if response_data.get("errorCode") != 0 or not isinstance(response_data.get("result"), dict):
-            if callback:
-                callback(-1, "[PaddleOCR] invalid response format")
-            raise RuntimeError("[PaddleOCR] invalid response format")
-
-        return response_data["result"]
+            callback(-1, f"[PaddleOCR] all {max_retries} attempts failed")
+        raise last_exception or RuntimeError(f"[PaddleOCR] all {max_retries} attempts failed")
 
     def _transfer_to_sections(self, result: dict[str, Any], algorithm: AlgorithmType, parse_method: str) -> list[SectionTuple]:
         """Convert API response to section tuples."""

@@ -475,6 +475,11 @@ class DocumentService(CommonService):
         unfinished_task_query = Task.select(Task.doc_id).where(
             (Task.progress >= 0) & (Task.progress < 1)
         )
+        # Also include documents with RUNNING status to sync their final status
+        # when tasks complete (progress == 1)
+        completed_task_query = Task.select(Task.doc_id).where(
+            Task.progress == 1
+        )
 
         docs = cls.model.select(*fields) \
             .where(
@@ -482,7 +487,8 @@ class DocumentService(CommonService):
             ~(cls.model.type == FileType.VIRTUAL.value),
             ((cls.model.run.is_null(True)) | (cls.model.run != TaskStatus.CANCEL.value)),
             (((cls.model.progress < 1) & (cls.model.progress > 0)) |
-             (cls.model.id.in_(unfinished_task_query)))) # including unfinished tasks like GraphRAG, RAPTOR and Mindmap
+             (cls.model.id.in_(unfinished_task_query)) |
+             ((cls.model.run == TaskStatus.RUNNING.value) & (cls.model.id.in_(completed_task_query))))) # including unfinished tasks like GraphRAG, RAPTOR and Mindmap
         return list(docs.dicts())
 
     @classmethod
@@ -789,7 +795,8 @@ class DocumentService(CommonService):
                     task_type = (t.task_type or "").lower()
                     if task_type in PIPELINE_SPECIAL_PROGRESS_FREEZE_TASK_TYPES:
                         special_task_running = True
-                    if 0 <= t.progress < 1:
+                    # Task is not finished if progress is None (still running) or between 0 and 1
+                    if t.progress is None or (0 <= t.progress < 1):
                         finished = False
                     if t.progress == -1:
                         bad += 1

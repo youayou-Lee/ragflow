@@ -36,5 +36,15 @@
 	"removed_kwd": {"type": "varchar", "default": "", "analyzer": "whitespace-#"},
 	"doc_type_kwd": {"type": "varchar", "default": "", "analyzer": "whitespace-#"},
 	"toc_kwd": {"type": "varchar", "default": "", "analyzer": "whitespace-#"},
-	"raptor_kwd": {"type": "varchar", "default": "", "analyzer": "whitespace-#"}
+	"raptor_kwd": {"type": "varchar", "default": "", "analyzer": "whitespace-#"},
+	"bbox_union": {"type": "varchar", "default": "[]", "comment": "[x1, y1, x2, y2] bounding box union for criminal case chunks"},
+	"block_refs": {"type": "varchar", "default": "[]", "comment": "[{page_index, block_id}] references to original parsed blocks"},
+	"page_range": {"type": "varchar", "default": "[]", "comment": "[start_page, end_page] page span for chunks"},
+	"chunk_type": {"type": "varchar", "default": "", "comment": "Type of chunk: header, qa_pair, section, paragraph, etc."},
+	"section_trigger": {"type": "varchar", "default": "", "comment": "Trigger phrase that started this section"},
+	"qa_index": {"type": "integer", "default": 0, "comment": "Index of QA pair in interrogation records"},
+	"evidence_index": {"type": "integer", "default": 0, "comment": "Index of evidence item in indictment"},
+	"page_no": {"type": "integer", "default": 0, "comment": "Page number where chunk starts"},
+	"bbox": {"type": "varchar", "default": "[]", "comment": "[x0, y0, x1, y1] bounding box"},
+	"entities": {"type": "varchar", "default": "{}", "comment": "Extracted entities: {amounts: [], dates: []}"}
 }
