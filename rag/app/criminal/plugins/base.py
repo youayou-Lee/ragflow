@@ -36,7 +36,8 @@ class Chunk:
         doc_type: Document type (e.g., "interrogation_record")
         chunk_id: Unique chunk identifier
         chunk_type: Type of chunk (paragraph, qa_pair, section, table, image)
-        text: Text content
+        text: Text content (without position tags)
+        raw_text: Text content with position tags (for pdf_parser.crop)
         page_range: [start_page, end_page] (1-indexed)
         bbox_union: Bounding box union [x0, y0, x1, y1]
         block_refs: List of block references [{"page_index": 1, "block_id": "xxx"}]
@@ -49,9 +50,10 @@ class Chunk:
     chunk_id: str
     chunk_type: str
     text: str
-    page_range: List[int]
-    bbox_union: List[float]
-    block_refs: List[Dict[str, Any]]
+    raw_text: str = ""  # Text with position tags for pdf_parser.crop
+    page_range: List[int] = field(default_factory=list)
+    bbox_union: List[float] = field(default_factory=list)
+    block_refs: List[Dict[str, Any]] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 

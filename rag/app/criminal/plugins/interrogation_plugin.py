@@ -17,7 +17,9 @@
 """
 Interrogation Record Plugin - Handles police interrogation transcripts.
 
-Recognizes Q/A patterns and groups them into qa_pair chunks.
+Output structure:
+1. header_info chunk: All content from document start to first Q/A pair
+2. qa_pair chunks: Each Q/A pair as a separate chunk
 """
 
 import logging
@@ -44,34 +46,70 @@ class InterrogationPlugin(DocumentPlugin):
 
     def transform(self, blocks: List[UniversalBlock]) -> List[Chunk]:
         """
-        Transform blocks into qa_pair chunks.
+        Transform blocks into header_info and qa_pair chunks.
 
-        Grouping logic:
-        - Each "问：" starts a new QA pair
-        - Following "答：" blocks are merged with the question
-        - Multiple "答：" blocks are concatenated
+        Output structure:
+        1. header_info (1 chunk): All content before the first Q/A pair
+           - Document title, time, location, participants, rights notice, etc.
+        2. qa_pair (N chunks): Each Q/A pair as a separate chunk
 
         Args:
             blocks: List of UniversalBlock from Layer A
 
         Returns:
-            List of Chunk objects with chunk_type="qa_pair"
+            List of Chunk objects: [header_info, qa_pair, qa_pair, ...]
         """
         if not blocks:
             return []
 
         chunks = []
-        current_qa_blocks: List[UniversalBlock] = []
-        current_qa_text = ""
-        header_text = ""
+
+        # Phase 1: Collect header_info blocks (before first "问：")
+        header_blocks: List[UniversalBlock] = []
+        first_qa_found = False
 
         for block in blocks:
             text = block.text.strip()
 
-            # Handle header blocks
-            if block.block_type == BlockType.HEADER:
-                header_text = text
+            # Skip empty blocks
+            if not text:
                 continue
+
+            # Check if this starts a Q/A section
+            if text.startswith(("问：", "问:")):
+                first_qa_found = True
+                break
+
+            # Collect header info blocks
+            header_blocks.append(block)
+
+        # Create header_info chunk if there's content
+        if header_blocks:
+            header_chunk = self._create_chunk(
+                header_blocks,
+                "header_info"
+            )
+            if header_chunk:
+                chunks.append(header_chunk)
+
+        # Phase 2: Process Q/A pairs
+        if not first_qa_found:
+            return chunks
+
+        # Find the index where Q/A section starts
+        qa_start_idx = 0
+        for i, block in enumerate(blocks):
+            text = block.text.strip()
+            if text.startswith(("问：", "问:")):
+                qa_start_idx = i
+                break
+
+        # Process Q/A pairs from qa_start_idx
+        current_qa_blocks: List[UniversalBlock] = []
+        current_qa_text = ""
+
+        for block in blocks[qa_start_idx:]:
+            text = block.text.strip()
 
             # Skip empty blocks
             if not text:
@@ -81,11 +119,7 @@ class InterrogationPlugin(DocumentPlugin):
             if text.startswith(("问：", "问:")):
                 # Flush previous QA pair
                 if current_qa_blocks:
-                    chunk = self._create_qa_chunk(
-                        current_qa_blocks,
-                        current_qa_text,
-                        header_text
-                    )
+                    chunk = self._create_qa_chunk(current_qa_blocks, current_qa_text)
                     if chunk:
                         chunks.append(chunk)
 
@@ -105,25 +139,45 @@ class InterrogationPlugin(DocumentPlugin):
 
         # Flush final QA pair
         if current_qa_blocks:
-            chunk = self._create_qa_chunk(
-                current_qa_blocks,
-                current_qa_text,
-                header_text
-            )
+            chunk = self._create_qa_chunk(current_qa_blocks, current_qa_text)
             if chunk:
                 chunks.append(chunk)
 
         return chunks
 
-    def _create_qa_chunk(
+    def _create_chunk(
         self,
         blocks: List[UniversalBlock],
-        text: str,
-        header: str = ""
+        chunk_type: str,
+        text_override: str = None
     ) -> Chunk | None:
-        """Create a qa_pair chunk from blocks."""
-        if not blocks or not text:
+        """Create a chunk from blocks."""
+        if not blocks:
             return None
+
+        # Build text from blocks if not provided
+        if text_override:
+            text = text_override
+        else:
+            text_parts = []
+            for b in blocks:
+                t = b.text.strip()
+                if t:
+                    text_parts.append(t)
+            text = "\n".join(text_parts)
+
+        if not text:
+            return None
+
+        # Build raw_text with position tags (for pdf_parser.crop)
+        raw_text_parts = []
+        for b in blocks:
+            if b.raw_text:
+                raw_text_parts.append(b.raw_text)
+            else:
+                # Fallback: construct from text and position
+                raw_text_parts.append(b.text)
+        raw_text = "\n".join(raw_text_parts)
 
         # Calculate page range
         pages = sorted(set(b.page_no for b in blocks))
@@ -141,19 +195,24 @@ class InterrogationPlugin(DocumentPlugin):
             for b in blocks
         ]
 
-        metadata = {}
-        if header:
-            metadata["doc_title"] = header
-
         return Chunk(
             case_id="",
             doc_id="",
             doc_type=self.doc_type,
             chunk_id="",
-            chunk_type="qa_pair",
+            chunk_type=chunk_type,
             text=text.strip(),
+            raw_text=raw_text,
             page_range=page_range,
             bbox_union=[x0, y0, x1, y1],
             block_refs=block_refs,
-            metadata=metadata,
+            metadata={},
         )
+
+    def _create_qa_chunk(
+        self,
+        blocks: List[UniversalBlock],
+        text: str
+    ) -> Chunk | None:
+        """Create a qa_pair chunk from blocks."""
+        return self._create_chunk(blocks, "qa_pair", text)

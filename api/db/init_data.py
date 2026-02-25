@@ -121,7 +121,7 @@ def init_llm_factory():
     TenantLLMService.filter_update([TenantLLMService.model.llm_factory == "QAnything"], {"llm_factory": "Youdao"})
     TenantLLMService.filter_update([TenantLLMService.model.llm_factory == "cohere"], {"llm_factory": "Cohere"})
     TenantService.filter_update([1 == 1], {
-        "parser_ids": "naive:General"})
+        "parser_ids": "naive:General,interrogation:讯问笔录,indictment:起诉意见书"})
     ## insert openai two embedding models to the current openai user.
     # print("Start to insert 2 OpenAI embedding models...")
     tenant_ids = set([row["tenant_id"] for row in TenantLLMService.get_openai_models()])

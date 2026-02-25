@@ -309,12 +309,38 @@ def tokenize_chunks(chunks, doc, eng, pdf_parser=None, child_delimiters_pattern=
         d = copy.deepcopy(doc)
         if pdf_parser:
             try:
-                d["image"], poss = pdf_parser.crop(ck, need_position=True)
-                add_positions(d, poss)
+                result = pdf_parser.crop(ck, need_position=True)
+                if result is not None:
+                    d["image"], poss = result
+                    if poss:
+                        add_positions(d, poss)
+                else:
+                    # Fallback: try to extract positions from text directly
+                    if hasattr(pdf_parser, 'extract_positions'):
+                        raw_poss = pdf_parser.extract_positions(ck)
+                        if raw_poss:
+                            # Convert from ([pages], left, right, top, bottom) to (page, left, right, top, bottom)
+                            normalized_poss = []
+                            for pns, left, right, top, bottom in raw_poss:
+                                if isinstance(pns, list):
+                                    for pn in pns:
+                                        normalized_poss.append((pn, left, right, top, bottom))
+                                else:
+                                    normalized_poss.append((pns, left, right, top, bottom))
+                            if normalized_poss:
+                                add_positions(d, normalized_poss)
                 ck = pdf_parser.remove_tag(ck)
             except NotImplementedError:
                 pass
-        else:
+            except Exception as e:
+                logging.warning(f"tokenize_chunks: pdf_parser.crop failed: {e}")
+
+        # Skip if content is empty after removing position tags
+        if len(ck.strip()) == 0:
+            continue
+
+        # Ensure position_int is set even if pdf_parser failed
+        if "position_int" not in d:
             add_positions(d, [[ii] * 5])
 
         if child_delimiters_pattern:
@@ -1144,8 +1170,9 @@ def naive_merge(sections: str | list, chunk_token_num=128, delimiter="\n。；�
         tnum = num_tokens_from_string(t)
         if not pos:
             pos = ""
-        if tnum < 8:
-            pos = ""
+        # NOTE: We keep position tags for all chunks to ensure proper PDF highlighting
+        # Previously, short texts (< 8 tokens) lost their position tags, causing issues
+        # with PDF page navigation. Now we preserve all position information.
         # Ensure that the length of the merged chunk does not exceed chunk_token_num
         if cks[-1] == "" or tk_nums[-1] > chunk_token_num * (100 - overlapped_percent) / 100.:
             if cks:
@@ -1200,8 +1227,9 @@ def naive_merge_with_images(texts, images, chunk_token_num=128, delimiter="\n。
         tnum = num_tokens_from_string(t)
         if not pos:
             pos = ""
-        if tnum < 8:
-            pos = ""
+        # NOTE: We keep position tags for all chunks to ensure proper PDF highlighting
+        # Previously, short texts (< 8 tokens) lost their position tags, causing issues
+        # with PDF page navigation. Now we preserve all position information.
         # Ensure that the length of the merged chunk does not exceed chunk_token_num
         if cks[-1] == "" or tk_nums[-1] > chunk_token_num * (100 - overlapped_percent) / 100.:
             if cks:

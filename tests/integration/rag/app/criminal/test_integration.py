@@ -48,9 +48,16 @@ class TestTwoLayerIntegration:
         # Layer B: Route to plugin
         chunks = route_to_plugin(blocks, "interrogation_record")
 
-        # Verify output
-        assert len(chunks) == 2  # Two QA pairs
-        assert all(c.chunk_type == "qa_pair" for c in chunks)
+        # Verify output: 1 header_info + 2 qa_pairs = 3 chunks
+        assert len(chunks) == 3
+
+        # First chunk should be header_info
+        assert chunks[0].chunk_type == "header_info"
+        assert "讯问笔录" in chunks[0].text
+
+        # Remaining chunks should be qa_pair
+        assert chunks[1].chunk_type == "qa_pair"
+        assert chunks[2].chunk_type == "qa_pair"
 
     def test_indictment_opinion_pipeline(self):
         """Test complete pipeline for indictment opinion."""
@@ -153,17 +160,23 @@ class TestTwoLayerIntegration:
         blocks = extract_universal_blocks(sections, doc_type_hint="interrogation_record")
         chunks = route_to_plugin(blocks, "interrogation_record")
 
-        # Should have 2 QA pairs
-        assert len(chunks) == 2
+        # Should have 3 chunks: 1 header_info + 2 qa_pairs
+        assert len(chunks) == 3
 
-        # First QA pair should have question and answer
-        assert "问：问题一？" in chunks[0].text
-        assert "答：回答一。" in chunks[0].text
+        # First chunk is header_info
+        assert chunks[0].chunk_type == "header_info"
+        assert "讯问笔录" in chunks[0].text
 
-        # Second QA pair should have question, answer, and supplementary answer
-        assert "问：问题二？" in chunks[1].text
-        assert "答：回答二。" in chunks[1].text
-        assert "答：补充回答。" in chunks[1].text
+        # Second chunk is first QA pair
+        assert chunks[1].chunk_type == "qa_pair"
+        assert "问：问题一？" in chunks[1].text
+        assert "答：回答一。" in chunks[1].text
+
+        # Third chunk is second QA pair (with supplementary answer)
+        assert chunks[2].chunk_type == "qa_pair"
+        assert "问：问题二？" in chunks[2].text
+        assert "答：回答二。" in chunks[2].text
+        assert "答：补充回答。" in chunks[2].text
 
     def test_indictment_section_boundaries(self):
         """Test that indictment plugin detects section boundaries."""

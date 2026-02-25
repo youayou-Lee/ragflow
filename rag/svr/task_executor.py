@@ -68,6 +68,8 @@ from api.db.services.file2document_service import File2DocumentService
 from common.versions import get_ragflow_version
 from api.db.db_models import close_connection
 from rag.app import naive
+from rag.app import interrogation
+from rag.app import indictment
 from rag.nlp import search, rag_tokenizer, add_positions, add_bbox_union, add_page_range
 from rag.raptor import RecursiveAbstractiveProcessing4TreeOrganizedRetrieval as Raptor
 from common.token_utils import num_tokens_from_string, truncate
@@ -83,6 +85,8 @@ BATCH_SIZE = 64
 FACTORY = {
     "general": naive,
     ParserType.NAIVE.value: naive,
+    ParserType.INTERROGATION.value: interrogation,
+    ParserType.INDICTMENT.value: indictment,
 }
 
 TASK_TYPE_TO_PIPELINE_TASK_TYPE = {

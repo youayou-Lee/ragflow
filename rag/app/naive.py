@@ -88,9 +88,10 @@ class UniversalBlock:
 
     Attributes:
         block_type: Layout element type
-        text: Text content
+        text: Text content (without position tag)
         page_no: Page number (0-indexed)
         bbox: Bounding box (x0, y0, x1, y1)
+        raw_text: Original text with position tag (for position extraction)
         doc_type_hint: Optional document type hint (e.g., "interrogation")
         entities: Optional lightweight NER results (amounts, dates)
     """
@@ -102,6 +103,7 @@ class UniversalBlock:
     bbox: tuple[float, float, float, float]
 
     # Optional fields
+    raw_text: str = ""  # Original text with position tag
     doc_type_hint: Optional[str] = None
     entities: Optional[dict] = None
 
@@ -327,12 +329,13 @@ def extract_universal_blocks(
         # Extract entities
         entities = extract_lightweight_entities(text)
 
-        # Create block
+        # Create block with raw_text for position extraction
         block = UniversalBlock(
             block_type=block_type,
             text=text,
             page_no=page_no,
             bbox=bbox if bbox else (0.0, 0.0, 0.0, 0.0),
+            raw_text=text_with_tag,  # Keep original text with position tag
             doc_type_hint=doc_type_hint,
             entities=entities
         )

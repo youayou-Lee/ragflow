@@ -198,7 +198,7 @@ def init_settings():
 
     global PARSERS
     PARSERS = llm_settings.get(
-        "parsers", "naive:General"
+        "parsers", "naive:General,interrogation:讯问笔录,indictment:起诉意见书"
     )
 
     global CHAT_MDL, EMBEDDING_MDL, RERANK_MDL, ASR_MDL, IMAGE2TEXT_MDL
