@@ -210,3 +210,11 @@ backup
 # Added by cargo
 
 /target
+
+# Local development files
+docker/ragflow.db
+test_real_data.py
+test_interrogation_e2e.py
+
+# Benchmark test data
+benchmark/**/原始数据/
