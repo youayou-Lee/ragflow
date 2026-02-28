@@ -480,6 +480,8 @@ class Dealer:
                 "doc_type_kwd": chunk.get("doc_type_kwd", ""),
                 "mom_id": chunk.get("mom_id", ""),
                 "page_num_int": chunk.get("page_num_int", []),
+                "sub_doc_type": chunk.get("sub_doc_type", chunk.get("doc_type_kwd", "")),
+                "sub_doc_id": chunk.get("sub_doc_id", did),
                 "block_refs": chunk.get("block_refs", []),
                 "bbox_union": chunk.get("bbox_union", []),
             }

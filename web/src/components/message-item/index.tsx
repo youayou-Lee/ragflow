@@ -11,6 +11,7 @@ import { memo, useCallback, useMemo } from 'react';
 import { IRegenerateMessage, IRemoveMessageById } from '@/hooks/logic-hooks';
 import { cn } from '@/lib/utils';
 import MarkdownContent from '../markdown-content';
+import { ReferenceCitationList } from '../next-message-item/reference-citation-list';
 import { ReferenceDocumentList } from '../next-message-item/reference-document-list';
 import { ReferenceImageList } from '../next-message-item/reference-image-list';
 import { UploadedMessageFiles } from '../next-message-item/uploaded-message-files';
@@ -172,6 +173,22 @@ const MessageItem = ({
                 ></MarkdownContent>
               </div>
             )}
+            {isAssistant && reference?.has_sufficient_evidence === false && (
+              <p className="text-xs text-text-sub-title-invert">
+                {reference?.no_evidence_statement ||
+                  '未检索到足够证据支持当前回答。'}
+              </p>
+            )}
+
+            {isAssistant &&
+              Array.isArray(reference?.chunks) &&
+              reference.chunks.length > 0 && (
+                <ReferenceCitationList
+                  list={reference.chunks}
+                  clickDocumentButton={clickDocumentButton}
+                ></ReferenceCitationList>
+              )}
+
             {isAssistant && (
               <ReferenceImageList
                 referenceChunks={reference.chunks}

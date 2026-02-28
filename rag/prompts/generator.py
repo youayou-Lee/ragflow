@@ -40,21 +40,35 @@ def get_value(d, k1, k2):
 def chunks_format(reference):
     if not reference or not isinstance(reference, dict):
         return []
+
+    def _first_non_empty(chunk, keys, default=None):
+        for key in keys:
+            value = chunk.get(key)
+            if value is not None and value != "":
+                return value
+        return default
+
     return [
-        {
-            "id": get_value(chunk, "chunk_id", "id"),
+        ({
+            "chunk_id": _first_non_empty(chunk, ["chunk_id", "id"]),
+            "id": _first_non_empty(chunk, ["id", "chunk_id"]),
             "content": get_value(chunk, "content", "content_with_weight"),
             "document_id": get_value(chunk, "doc_id", "document_id"),
-            "document_name": get_value(chunk, "docnm_kwd", "document_name"),
+            "document_name": _first_non_empty(chunk, ["document_name", "docnm_kwd", "doc_name"], ""),
+            "doc_name": _first_non_empty(chunk, ["doc_name", "document_name", "docnm_kwd"], ""),
             "dataset_id": get_value(chunk, "kb_id", "dataset_id"),
             "image_id": get_value(chunk, "image_id", "img_id"),
-            "positions": get_value(chunk, "positions", "position_int"),
+            "positions": _first_non_empty(chunk, ["positions", "position_int"], []),
+            "position_int": _first_non_empty(chunk, ["position_int", "positions"], []),
+            "page_num_int": chunk.get("page_num_int", []),
+            "sub_doc_type": _first_non_empty(chunk, ["sub_doc_type", "doc_type", "doc_type_kwd"], ""),
+            "sub_doc_id": _first_non_empty(chunk, ["sub_doc_id", "doc_id", "document_id"], ""),
             "url": chunk.get("url"),
             "similarity": chunk.get("similarity"),
             "vector_similarity": chunk.get("vector_similarity"),
             "term_similarity": chunk.get("term_similarity"),
             "doc_type": get_value(chunk, "doc_type_kwd", "doc_type"),
-        }
+        })
         for chunk in reference.get("chunks", [])
     ]
 
