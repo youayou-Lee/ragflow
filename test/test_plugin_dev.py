@@ -240,6 +240,75 @@ def run_layer_b(blocks: list, doc_type: str) -> list:
     return chunks
 
 
+def format_result(pdf_path: Path, doc_type: str, chunks: list, using_cache: bool) -> dict:
+    """
+    Format chunks into a result dict.
+
+    Args:
+        pdf_path: PDF file path
+        doc_type: Document type
+        chunks: List of Chunk objects
+        using_cache: Whether cache was used
+
+    Returns:
+        Result dict
+    """
+    chunk_list = []
+    for i, chunk in enumerate(chunks, 1):
+        chunk_data = {
+            "chunk_id": str(i),
+            "chunk_type": getattr(chunk, "chunk_type", "unknown"),
+            "page_range": getattr(chunk, "page_range", []),
+            "text": getattr(chunk, "text", ""),
+        }
+        chunk_list.append(chunk_data)
+
+    return {
+        "pdf_path": pdf_path.name,
+        "doc_type": doc_type,
+        "total_chunks": len(chunks),
+        "using_cache": using_cache,
+        "chunks": chunk_list
+    }
+
+
+def format_output_human(result: dict) -> str:
+    """Format result as human-readable text."""
+    lines = [
+        "=== Plugin Test Result ===",
+        f"PDF: {result['pdf_path']}",
+        f"Doc Type: {result['doc_type']}",
+        f"Total Chunks: {result['total_chunks']}",
+        f"Using Cache: {result['using_cache']}",
+        ""
+    ]
+
+    for chunk in result["chunks"]:
+        page_range = chunk["page_range"]
+        if page_range:
+            if len(page_range) >= 2 and page_range[0] != page_range[1]:
+                pages_str = f"{page_range[0]}-{page_range[1]}"
+            else:
+                pages_str = str(page_range[0]) if page_range else "N/A"
+        else:
+            pages_str = "N/A"
+
+        lines.extend([
+            f"--- Chunk {chunk['chunk_id']} [{chunk['chunk_type']}] ---",
+            f"Pages: {pages_str}",
+            f"Text:",
+            chunk["text"],
+            ""
+        ])
+
+    return "\n".join(lines)
+
+
+def format_output_json(result: dict) -> str:
+    """Format result as JSON string."""
+    return json.dumps(result, ensure_ascii=False, indent=2)
+
+
 def main():
     """Main entry point."""
     args = parse_args()
