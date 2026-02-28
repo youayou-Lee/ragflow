@@ -42,10 +42,19 @@ Examples:
     uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --refresh
 """
 
+# =============================================================================
+# IMPORTANT: Disable all proxies before any imports to avoid ollama connection issues
+# =============================================================================
+import os
+# Clear all proxy settings before any library imports
+for proxy_var in ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY",
+                   "all_proxy", "ALL_PROXY", "socks_proxy", "SOCKS_PROXY"]:
+    os.environ.pop(proxy_var, None)
+os.environ["NO_PROXY"] = "*"
+
 import argparse
 import json
 import logging
-import os
 import sys
 from pathlib import Path
 from typing import Any, Optional
@@ -56,6 +65,10 @@ SAMPLE_PATHS = {
     "interrogation": SAMPLE_DATA_ROOT / "interrogation",
     "indictment": SAMPLE_DATA_ROOT / "indictment",
 }
+
+# PaddleOCR API configuration (from docker/.env)
+PADDLEOCR_API_URL = "https://lbxcbea0u3qdpcpe.aistudio-app.com/layout-parsing"
+PADDLEOCR_ACCESS_TOKEN = "5d5004a26c83d0d9451c754d016a55494a0b3955"
 
 # Add project root to path for imports
 project_root = Path(__file__).parent.parent
@@ -206,12 +219,15 @@ def call_ocr_api(pdf_path: Path) -> dict:
     # Lazy import to avoid loading dependencies unnecessarily
     from deepdoc.parser.paddleocr_parser import PaddleOCRParser
 
-    api_url = os.getenv("PADDLEOCR_API_URL", "")
+    # Use configured API URL and token (fallback to env vars if not set)
+    api_url = PADDLEOCR_API_URL or os.getenv("PADDLEOCR_API_URL", "")
+    access_token = PADDLEOCR_ACCESS_TOKEN or os.getenv("PADDLEOCR_ACCESS_TOKEN", "")
+
     if not api_url:
-        raise RuntimeError("PADDLEOCR_API_URL environment variable not set")
+        raise RuntimeError("PADDLEOCR_API_URL not configured")
 
     logger.info(f"Calling PaddleOCR API for: {pdf_path}")
-    parser = PaddleOCRParser(api_url=api_url)
+    parser = PaddleOCRParser(api_url=api_url, access_token=access_token)
 
     # Parse PDF (this calls the API)
     sections, tables = parser.parse_pdf(str(pdf_path))
@@ -265,9 +281,8 @@ def run_layer_a(cached_result: dict, doc_type: Optional[str] = None) -> list:
 
     logger.info("Running Layer A: Extracting universal blocks...")
 
-    # Create a temporary parser to use parse_from_cached_result
-    api_url = os.getenv("PADDLEOCR_API_URL", "")
-    parser = PaddleOCRParser(api_url=api_url)
+    # Create a temporary parser to use parse_from_cached_result (no API call needed)
+    parser = PaddleOCRParser(api_url="")
 
     # Get sections from cached result
     sections, _ = parser.parse_from_cached_result(
