@@ -6,6 +6,7 @@ import {
   VisibilityState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -35,6 +36,7 @@ import { useMemo } from 'react';
 import { ShowManageMetadataModalProps } from '../components/metedata/interface';
 import ProcessLogModal from '../process-log-modal';
 import { useShowLog } from './hooks';
+import { SubDocumentListRow } from './subdoc-correction/subdoc-list';
 import { useChangeDocumentParser } from './use-change-document-parser';
 import { useDatasetTableColumns } from './use-dataset-table-columns';
 import { useRenameDocument } from './use-rename-document';
@@ -112,6 +114,7 @@ export function DatasetTable({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     manualPagination: true, //we're doing manual "server-side" pagination
@@ -149,20 +152,30 @@ export function DatasetTable({
         <TableBody className="relative">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-                className="group"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className={cell.column.columnDef.meta?.cellClassName}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
+              <React.Fragment key={row.id}>
+                <TableRow
+                  data-state={row.getIsSelected() && 'selected'}
+                  className="group"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className={cell.column.columnDef.meta?.cellClassName}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+                {row.getIsExpanded() && (
+                  <SubDocumentListRow
+                    document={row.original}
+                    colSpan={row.getVisibleCells().length}
+                  />
+                )}
+              </React.Fragment>
             ))
           ) : (
             <TableRow>

@@ -49,6 +49,12 @@ const {
   check_embedding,
   kbUpdateMetaData,
   documentUpdateMetaData,
+  sub_document_list,
+  sub_document_version_list,
+  sub_document_correct,
+  sub_document_merge,
+  sub_document_split,
+  sub_document_rerun,
 } = api;
 
 const methods = {
@@ -224,6 +230,30 @@ const methods = {
     url: documentUpdateMetaData,
     method: 'post',
   },
+  sub_document_list: {
+    url: sub_document_list,
+    method: 'post',
+  },
+  sub_document_version_list: {
+    url: sub_document_version_list,
+    method: 'post',
+  },
+  sub_document_correct: {
+    url: sub_document_correct,
+    method: 'post',
+  },
+  sub_document_merge: {
+    url: sub_document_merge,
+    method: 'post',
+  },
+  sub_document_split: {
+    url: sub_document_split,
+    method: 'post',
+  },
+  sub_document_rerun: {
+    url: sub_document_rerun,
+    method: 'post',
+  },
   // getMetaData: {
   //   url: getMetaData,
   //   method: 'get',
@@ -299,5 +329,34 @@ export function deletePipelineTask({
 }) {
   return request.delete(api.unbindPipelineTask({ kb_id, type }));
 }
+
+export const listSubDocuments = (doc_id: string) =>
+  request.post(api.sub_document_list, { data: { doc_id } });
+
+export const listSubDocumentVersions = (sub_document_id: string) =>
+  request.post(api.sub_document_version_list, { data: { sub_document_id } });
+
+export const correctSubDocument = (params: {
+  doc_id: string;
+  sub_document_id: string;
+  start_page: number;
+  end_page: number;
+  type: string;
+}) => request.post(api.sub_document_correct, { data: params });
+
+export const mergeSubDocuments = (params: {
+  doc_id: string;
+  sub_document_ids: string[];
+  type?: string;
+}) => request.post(api.sub_document_merge, { data: params });
+
+export const splitSubDocument = (params: {
+  doc_id: string;
+  sub_document_id: string;
+  split_page: number;
+}) => request.post(api.sub_document_split, { data: params });
+
+export const rerunSubDocuments = (doc_id: string) =>
+  request.post(api.sub_document_rerun, { data: { doc_id } });
 
 export default kbService;

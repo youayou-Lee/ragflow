@@ -14,7 +14,12 @@ import { cn } from '@/lib/utils';
 import { useDataSourceInfo } from '@/pages/user-setting/data-source/constant';
 import { formatDate } from '@/utils/date';
 import { ColumnDef } from '@tanstack/table-core';
-import { ArrowUpDown, MonitorUp } from 'lucide-react';
+import {
+  ArrowUpDown,
+  ChevronDown,
+  ChevronRight,
+  MonitorUp,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { MetadataType } from '../components/metedata/constant';
 import { ShowManageMetadataModalProps } from '../components/metedata/interface';
@@ -61,6 +66,25 @@ export function useDatasetTableColumns({
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
         />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      id: 'expand',
+      header: '',
+      cell: ({ row }) => (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => row.toggleExpanded()}
+        >
+          {row.getIsExpanded() ? (
+            <ChevronDown className="h-4 w-4" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
+          )}
+        </Button>
       ),
       enableSorting: false,
       enableHiding: false,
