@@ -16,6 +16,13 @@
 
 """Unit tests for InterrogationPlugin."""
 
+# Disable all proxies before any imports to avoid ollama connection issues
+import os
+for proxy_var in ["http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY",
+                   "all_proxy", "ALL_PROXY", "socks_proxy", "SOCKS_PROXY"]:
+    os.environ.pop(proxy_var, None)
+os.environ["NO_PROXY"] = "*"
+
 import pytest
 from rag.app.criminal.plugins.interrogation_plugin import InterrogationPlugin
 from rag.app.naive import UniversalBlock, BlockType
@@ -92,3 +99,64 @@ class TestInterrogationPlugin:
         plugin = InterrogationPlugin()
         chunks = plugin.transform([])
         assert chunks == []
+
+
+class TestInterrogationPluginTextCleaning:
+    """Tests for text cleaning in InterrogationPlugin."""
+
+    def test_clean_text_removes_underline_fillers(self):
+        """Plugin should remove ___ filler patterns."""
+        plugin = InterrogationPlugin()
+        text = "地点___ 清远市公安局"
+        result = plugin._clean_text(text)
+        assert "___" not in result
+        assert "清远市公安局" in result
+
+    def test_clean_text_removes_multiple_underline_groups(self):
+        """Plugin should remove multiple groups of underlines."""
+        plugin = InterrogationPlugin()
+        text = "讯问人（签名）___、___、___"
+        result = plugin._clean_text(text)
+        assert "___" not in result
+
+    def test_clean_text_preserves_single_underscore(self):
+        """Plugin should preserve single underscore in identifiers."""
+        plugin = InterrogationPlugin()
+        text = "微信ID: wxid_wb67ftqi5p9722"
+        result = plugin._clean_text(text)
+        assert "wxid_wb67ftqi5p9722" in result
+
+    def test_clean_text_removes_standalone_underline_lines(self):
+        """Plugin should remove standalone underline lines."""
+        plugin = InterrogationPlugin()
+        text = "正文内容\n___\n\n___\n更多内容"
+        result = plugin._clean_text(text)
+        assert result.count("___") == 0
+
+    def test_clean_text_removes_duplicate_segments(self):
+        """Plugin should remove consecutive duplicate text segments (OCR re-scan issue)."""
+        plugin = InterrogationPlugin()
+        # Simulate OCR re-scan issue: same paragraph appears twice
+        text = "办理学位的费用是成功办理小孩入读小学之后才收钱。办理学位的费用是成功办理小孩入读小学之后才收钱。这是后续内容。"
+        result = plugin._clean_text(text)
+        # Should have only one occurrence after dedup (sentence-based)
+        assert result.count("办理学位的费用是成功办理小孩入读小学之后才收钱") == 1
+
+    def test_clean_text_preserves_intentional_repetition(self):
+        """Plugin should preserve intentional short repetition."""
+        plugin = InterrogationPlugin()
+        text = "问：你是否同意？答：是是是。"
+        result = plugin._clean_text(text)
+        assert "是是是" in result
+
+    def test_transform_applies_cleaning(self):
+        """Transform should apply text cleaning to all chunks."""
+        plugin = InterrogationPlugin()
+        blocks = [
+            make_block("问：你叫什么名字？"),
+            make_block("答：我叫张三第 6 页 共 8 页307。"),
+        ]
+        chunks = plugin.transform(blocks)
+        # Page number and line number should be removed
+        assert "第 6 页 共 8 页" not in chunks[0].text
+        # Note: 307 might be kept if not on its own line, which is expected behavior

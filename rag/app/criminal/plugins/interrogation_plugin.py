@@ -23,10 +23,12 @@ Output structure:
 """
 
 import logging
+import re
 from typing import List
 
 from .base import Chunk, DocumentPlugin, plugin_registry
 from rag.app.naive import UniversalBlock, BlockType
+from rag.app.criminal.text_cleaner import TextCleaner
 
 
 logger = logging.getLogger(__name__)
@@ -36,6 +38,16 @@ logger = logging.getLogger(__name__)
 class InterrogationPlugin(DocumentPlugin):
     """Plugin for handling interrogation record documents."""
 
+    # Underline filler pattern: 2 or more consecutive underscores
+    UNDERLINE_FILLER_PATTERN = re.compile(r'_{2,}')
+
+    # Minimum length for duplicate detection (chars)
+    # Shorter phrases might be intentional repetition
+    MIN_DUPLICATE_LENGTH = 15
+
+    def __init__(self):
+        self._base_cleaner = TextCleaner()
+
     @property
     def doc_type(self) -> str:
         return "interrogation_record"
@@ -43,6 +55,77 @@ class InterrogationPlugin(DocumentPlugin):
     @property
     def priority(self) -> int:
         return 10  # High priority
+
+    def _clean_text(self, text: str) -> str:
+        """
+        Clean text with plugin-specific rules.
+
+        Applies:
+        1. Base TextCleaner (Layer A rules)
+        2. Plugin-specific rules (underline fillers, duplicate detection)
+
+        Args:
+            text: Raw text to clean
+
+        Returns:
+            Cleaned text
+        """
+        if not text:
+            return text
+
+        # Apply base cleaning (Layer A)
+        text = self._base_cleaner.clean(text)
+
+        # Remove underline fillers (___)
+        text = self.UNDERLINE_FILLER_PATTERN.sub('', text)
+
+        # Remove duplicate text (OCR re-scan issue)
+        text = self._remove_duplicates(text)
+
+        # Clean up resulting whitespace
+        text = re.sub(r'[^\S\n]+', ' ', text)
+        text = re.sub(r'\n{3,}', '\n\n', text)
+
+        return text.strip()
+
+    def _remove_duplicates(self, text: str) -> str:
+        """
+        Remove consecutive duplicate text segments.
+
+        This handles OCR issues where the same text is recognized multiple times.
+        Only removes duplicates longer than MIN_DUPLICATE_LENGTH to preserve
+        intentional repetition.
+
+        Args:
+            text: Text to process
+
+        Returns:
+            Text with consecutive duplicates removed
+        """
+        if len(text) < self.MIN_DUPLICATE_LENGTH * 2:
+            return text
+
+        # Split into sentences (keep delimiter with the sentence)
+        # Pattern: split before each sentence-ending punctuation
+        sentences = re.split(r'(?<=[。！？\n])', text)
+
+        result = []
+        prev_sentence = ""
+
+        for sentence in sentences:
+            stripped = sentence.strip()
+            if not stripped:
+                continue
+
+            # Skip if same as previous (and long enough to be OCR error)
+            if (len(stripped) >= self.MIN_DUPLICATE_LENGTH and
+                stripped == prev_sentence):
+                continue
+
+            result.append(sentence)
+            prev_sentence = stripped
+
+        return ''.join(result)
 
     def transform(self, blocks: List[UniversalBlock]) -> List[Chunk]:
         """
@@ -151,17 +234,17 @@ class InterrogationPlugin(DocumentPlugin):
         chunk_type: str,
         text_override: str = None
     ) -> Chunk | None:
-        """Create a chunk from blocks."""
+        """Create a chunk from blocks with text cleaning."""
         if not blocks:
             return None
 
         # Build text from blocks if not provided
         if text_override:
-            text = text_override
+            text = self._clean_text(text_override)
         else:
             text_parts = []
             for b in blocks:
-                t = b.text.strip()
+                t = self._clean_text(b.text).strip()
                 if t:
                     text_parts.append(t)
             text = "\n".join(text_parts)

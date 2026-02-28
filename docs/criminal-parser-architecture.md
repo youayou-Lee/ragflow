@@ -184,6 +184,33 @@ SECTION_TRIGGERS = [
 - `section` - 完整章节
 - `paragraph` - 长章节分割后的段落
 
+## Text Cleaning
+
+### Two-Layer Cleaning Architecture
+
+| Layer | Location | Purpose | Rules |
+|-------|----------|---------|-------|
+| Layer A | `text_cleaner.py` | Universal rules | Page numbers, OCR line numbers, LaTeX, whitespace |
+| Layer B | Plugin `_clean_text()` | Document-specific | Underline fillers, duplicate detection |
+
+### TextCleaner (Layer A)
+
+Located at `rag/app/criminal/text_cleaner.py`.
+
+**Cleaning rules:**
+1. Page numbers: `第 X 页 共 Y 页` → removed
+2. OCR line numbers: standalone 3-digit numbers → removed
+3. LaTeX formatting: `$ \underline{\text{...}} $` → plain text
+4. Whitespace: normalized to single spaces
+
+### Plugin-Specific Cleaning (Layer B)
+
+Each plugin can override `_clean_text()` for document-specific rules.
+
+**InterrogationPlugin rules:**
+1. Underline fillers: `___` → removed
+2. Duplicate text: consecutive duplicates >15 chars → removed
+
 ## 如何扩展专用解析方案
 
 本节描述如何为新文书类型设计专用解析方案。

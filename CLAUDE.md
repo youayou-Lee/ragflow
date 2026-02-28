@@ -41,7 +41,6 @@
   - `rerank_model.py` - 重排序模型
   - `ocr_model.py` - OCR 模型
   - `cv_model.py` - 计算机视觉模型
-  - `tts_model.py` - 文本转语音模型
 - **RAG 流水线**: `rag/flow/` - 分块、解析、分词
   - `extractor/` - 信息提取器
   - `tokenizer/` - 分词器
@@ -88,18 +87,6 @@ bun run lint       # ESLint
 bun run test       # Jest 测试
 ```
 
-### Docker 开发
-```bash
-# Docker 完整栈
-cd docker
-docker compose -f docker-compose.yml up -d
-
-# 检查服务器状态
-docker logs -f ragflow-server
-
-# 重新构建镜像
-docker build --platform linux/amd64 -f Dockerfile -t infiniflow/ragflow:nightly .
-```
 
 ## 关键配置文件
 
@@ -114,11 +101,6 @@ docker build --platform linux/amd64 -f Dockerfile -t infiniflow/ragflow:nightly 
 - **前端**: Jest + React Testing Library
 - **API 测试**: `test/` 和 `sdk/python/test/` 中的 HTTP API 和 SDK 测试
 
-## 数据库引擎
-
-支持在 Elasticsearch（默认）和 Infinity 之间切换：
-- 在 `docker/.env` 中设置 `DOC_ENGINE=infinity` 使用 Infinity
-- 需要重启容器：`docker compose down -v && docker compose up -d`
 
 ## 开发环境要求
 
@@ -143,14 +125,11 @@ uv run python test/test_plugin_dev.py --sample indictment --doc-type indictment_
 # 列出可用样本
 uv run python test/test_plugin_dev.py --list-samples
 
-# 使用自定义 PDF 文件
+# 使用指定 PDF 文件
 uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type>
 
 # JSON 输出（便于 AI 解析）
 uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --json
-
-# 强制刷新缓存（重新调用 OCR API）
-uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --refresh
 ```
 
 ### 样本文件位置

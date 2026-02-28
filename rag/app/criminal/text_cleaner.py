@@ -41,14 +41,14 @@ class TextCleaner:
         r'(?:^|\n)\s*\d{3}\s*(?=\n|$)'
     )
 
-    # LaTeX underline patterns
-    # Pattern 1: $ \underline{\text{content}} $
-    LATEX_UNDERLINE_DOLLAR = re.compile(
-        r'\$\s*\\underline\s*\{\\text\s*\{([^}]+)\}\}\s*\$'
+    # LaTeX underline patterns - simplified approach
+    # Pattern 1: $ \underline{\text{content}} $ (with variable backslashes)
+    LATEX_DOLLAR_FULL = re.compile(
+        r'\$\s*\\{1,2}underline\s*\\{0,2}\{\\{0,2}text\s*\\{0,2}\{([^}]+)\}\\{0,2}\}\\{0,2}\}\s*\$'
     )
-    # Pattern 2: \( \underline{\text{content}} \)
-    LATEX_UNDERLINE_PAREN = re.compile(
-        r'\\\(\s*\\underline\s*\{\\text\s*\{([^}]+)\}\}\s*\\\)'
+    # Pattern 2: \( \underline{\text{content}} \) (with variable backslashes)
+    LATEX_PAREN_FULL = re.compile(
+        r'\\{1,2}\(\s*\\{1,2}underline\s*\\{0,2}\{\\{0,2}text\s*\\{0,2}\{([^}]+)\}\\{0,2}\}\\{0,2}\}\s*\\{1,2}\)'
     )
 
     def clean(self, text: str) -> str:
@@ -91,9 +91,10 @@ class TextCleaner:
         Handles:
         - $ \\underline{\\text{content}} $ -> content
         - \\(\\underline{\\text{content}}\\) -> content
+        - Variants with single or double backslashes
         """
-        text = self.LATEX_UNDERLINE_DOLLAR.sub(r'\1', text)
-        text = self.LATEX_UNDERLINE_PAREN.sub(r'\1', text)
+        text = self.LATEX_DOLLAR_FULL.sub(r'\1', text)
+        text = self.LATEX_PAREN_FULL.sub(r'\1', text)
         return text
 
     def _normalize_whitespace(self, text: str) -> str:
