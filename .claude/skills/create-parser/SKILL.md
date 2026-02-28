@@ -9,7 +9,7 @@ description: Use when user wants to create a specialized parser for a new docume
 
 为新的文书类型创建专用解析方案的标准化流程。
 
-**核心原则**：分析 → 设计 → TDD 实现 → 验证
+**核心原则**：分析 → 设计 → TDD 实现 → **迭代测试** → 验证
 
 **开始时声明**："I'm using the create-parser skill to design and implement a new document parser."
 
@@ -31,7 +31,8 @@ description: Use when user wants to create a specialized parser for a new docume
 
 | 参数 | 必须 | 说明 |
 |------|------|------|
-| `pdf_path` | 是 | 示例 PDF 文件路径 |
+| `pdf_path` | 是 | 示例 PDF 文件路径，或使用 `--sample <type>` |
+| `--sample` | 否 | 使用内置样本文件（interrogation/indictment） |
 | `--type` | 否 | 文书类型名称，默认从内容推断 |
 | `--llm` | 否 | 强制启用 LLM 增强 |
 
@@ -44,7 +45,7 @@ digraph create_parser {
 
     "Phase 1: 分析准备" [shape=box, style=filled, fillcolor=lightblue];
     "1.1 阅读架构文档" [shape=box];
-    "1.2 调用 PaddleOCR" [shape=box];
+    "1.2 运行测试工具获取 OCR" [shape=box];
     "1.3 分析文书结构" [shape=box];
 
     "Phase 2: 方案设计" [shape=box, style=filled, fillcolor=lightblue];
@@ -57,14 +58,16 @@ digraph create_parser {
     "Phase 3: 实现开发" [shape=box, style=filled, fillcolor=lightblue];
     "3.1 创建 worktree" [shape=box];
     "3.2 TDD 实现" [shape=box];
+    "3.3 迭代测试反馈" [shape=box, style=filled, fillcolor=lightyellow];
 
     "Phase 4: 验证提交" [shape=box, style=filled, fillcolor=lightblue];
-    "4.1 verification" [shape=box];
-    "4.2 提交代码" [shape=box];
+    "4.1 运行测试工具验证" [shape=box];
+    "4.2 运行单元测试" [shape=box];
+    "4.3 提交代码" [shape=box];
 
     "Phase 1: 分析准备" -> "1.1 阅读架构文档";
-    "1.1 阅读架构文档" -> "1.2 调用 PaddleOCR";
-    "1.2 调用 PaddleOCR" -> "1.3 分析文书结构";
+    "1.1 阅读架构文档" -> "1.2 运行测试工具获取 OCR";
+    "1.2 运行测试工具获取 OCR" -> "1.3 分析文书结构";
     "1.3 分析文书结构" -> "Phase 2: 方案设计";
 
     "Phase 2: 方案设计" -> "2.1 判断是否需要专用方案";
@@ -79,12 +82,37 @@ digraph create_parser {
     "2.5 writing-plans" -> "Phase 3: 实现开发";
     "Phase 3: 实现开发" -> "3.1 创建 worktree";
     "3.1 创建 worktree" -> "3.2 TDD 实现";
-    "3.2 TDD 实现" -> "Phase 4: 验证提交";
+    "3.2 TDD 实现" -> "3.3 迭代测试反馈";
+    "3.3 迭代测试反馈" -> "3.2 TDD 实现" [label="需要修改"];
+    "3.3 迭代测试反馈" -> "Phase 4: 验证提交" [label="通过"];
 
-    "Phase 4: 验证提交" -> "4.1 verification";
-    "4.1 verification" -> "4.2 提交代码";
+    "Phase 4: 验证提交" -> "4.1 运行测试工具验证";
+    "4.1 运行测试工具验证" -> "4.2 运行单元测试";
+    "4.2 运行单元测试" -> "4.3 提交代码";
 }
 ```
+
+## 测试工具
+
+**核心工具**：`test/test_plugin_dev.py` - 快速验证 Plugin 解析结果
+
+```bash
+# 使用样本文件（推荐）
+uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record
+
+# 使用自定义 PDF
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type>
+
+# JSON 输出（便于 AI 分析）
+uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --json
+
+# 强制刷新 OCR 缓存
+uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --refresh
+```
+
+**输出格式**：
+- 默认：人类可读的 chunk 列表
+- `--json`：结构化 JSON，便于 AI 解析和迭代
 
 ## Phase 1: 分析准备
 
@@ -95,21 +123,24 @@ digraph create_parser {
 Read: docs/criminal-parser-architecture.md
 ```
 
-### 1.2 调用 PaddleOCR
+### 1.2 运行测试工具获取 OCR 结果
 
 ```bash
-# 修改脚本中的 file_path 为用户提供的 PDF
-# 运行 OCR 脚本
-python scripts/paddle_VL_1_5_full.py
+# 使用测试工具获取 OCR 结果（自动缓存）
+# 首次运行会调用 PaddleOCR API，后续使用缓存
 
-# 输出文件：
-# - layout.json      # 完整 JSON 结果
-# - output/doc_X.md  # 每页 Markdown
+# 使用样本文件
+uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --json
+
+# 或使用用户提供的 PDF
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type> --json
+
+# OCR 缓存位置：<pdf_dir>/<pdf_stem>.ocr.json
 ```
 
 ### 1.3 分析文书结构
 
-分析 Markdown 和 JSON 输出，生成分析报告：
+分析测试工具输出的 chunks，生成分析报告：
 
 ```markdown
 # 文书结构分析报告
@@ -190,44 +221,85 @@ feature/parser-panjue-shu
 5. 入口函数测试 → 实现 `chunk()`
 6. 集成测试 → 验证完整 pipeline
 
+### 3.3 迭代测试反馈循环 🔁
+
+**每次代码修改后，运行测试工具验证：**
+
+```bash
+# 1. 运行测试工具查看 chunk 输出
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type>
+
+# 2. 分析输出，检查：
+#    - chunk 数量是否合理
+#    - chunk_type 是否正确
+#    - 文本内容是否完整
+#    - page_range 是否准确
+
+# 3. 如果有问题，修改代码后重新运行
+
+# 4. 使用 JSON 输出进行详细分析
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type> --json | jq '.chunks[] | {chunk_type, page_range}'
+```
+
+**迭代检查清单**：
+- [ ] chunk 数量合理（不是过多或过少）
+- [ ] chunk_type 分类正确
+- [ ] 每个chunk内容完整
+- [ ] page_range 准确
+- [ ] header_info 正确提取
+- [ ] 问答对正确分组（如有）
+- [ ] 章节边界正确识别
+
 **文件输出**：
 ```
 rag/app/criminal/plugins/
-└── {doc_type}.py              # ParserPlugin 实现
+└── {doc_type}_plugin.py        # ParserPlugin 实现
 
 rag/app/
-└── {doc_type}.py              # 入口函数
+└── {doc_type}.py               # 入口函数（如需要）
 
-test/unit/
-├── test_{doc_type}_plugin.py  # 单元测试
-└── test_{doc_type}_integration.py  # 集成测试
+test/unit_test/rag/app/criminal/plugins/
+├── test_{doc_type}_plugin.py   # 单元测试
 ```
 
 ## Phase 4: 验证提交
 
-### 4.1 验证
+### 4.1 运行测试工具验证
 
-**REQUIRED SUB-SKILL:** 使用 `/verification-before-completion` 验证：
-- 所有新测试通过
-- 原有 parser 测试无回归
-- 总测试数增加
+```bash
+# 使用样本文件进行最终验证
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type> --json
 
-### 4.2 提交代码
+# 检查输出是否符合预期
+# - Total Chunks 数量合理
+# - chunk_type 分布正确
+# - 每个chunk内容完整
+```
+
+### 4.2 运行单元测试
+
+```bash
+# 运行新 Plugin 的单元测试
+uv run pytest test/unit_test/rag/app/criminal/plugins/test_{doc_type}_plugin.py -v
+
+# 运行所有 criminal 相关测试确保无回归
+uv run pytest test/unit_test/rag/app/criminal/ -v
+```
+
+### 4.3 提交代码
 
 ```bash
 # 更新架构文档
 # 添加新文书类型到目录结构说明
 
-git add rag/app/criminal/plugins/{doc_type}.py \
-        rag/app/{doc_type}.py \
-        test/unit/test_{doc_type}_*.py \
+git add rag/app/criminal/plugins/{doc_type}_plugin.py \
+        test/unit_test/rag/app/criminal/plugins/test_{doc_type}_plugin.py \
         docs/criminal-parser-architecture.md
 
 git commit -m "feat(criminal): add {doc_type} parser plugin
 
 - Implement {DocType}Plugin for Layer B parsing
-- Add chunk() entry function with PaddleOCR support
-- Add unit and integration tests
+- Add unit tests
 - Support section-based parsing with trigger phrases
 
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
@@ -240,7 +312,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 | `writing-plans` | 2.5 | 生成详细实现计划 |
 | `using-git-worktrees` | 3.1 | 创建隔离工作区 |
 | `test-driven-development` | 3.2 | TDD 流程实现 |
-| `verification-before-completion` | 4.1 | 完成前验证 |
+| `verification-before-completion` | 4.2 | 完成前验证 |
 
 ## Example Usage
 
@@ -251,7 +323,7 @@ Claude: I'm using the create-parser skill to design and implement a new document
 
 Phase 1: 分析准备
 - 阅读架构文档 ✓
-- 调用 OCR 脚本... ✓
+- 运行测试工具获取 OCR... ✓
 - 分析文书结构...
 
 📋 文书结构分析报告
@@ -278,9 +350,29 @@ Phase 1: 分析准备
 
 用户: 确认
 
-Claude: [继续 Phase 2.5 - writing-plans]
-        [继续 Phase 3 - worktree + TDD]
-        [继续 Phase 4 - verification + commit]
+Claude: [Phase 2.5 - writing-plans]
+        [Phase 3.1 - 创建 worktree]
+        [Phase 3.2 - TDD 实现]
+
+        [Phase 3.3 - 迭代测试]
+        运行: uv run python test/test_plugin_dev.py SampleData/起诉书_sample.pdf --doc-type indictment_opinion
+
+        输出:
+        === Plugin Test Result ===
+        PDF: 起诉书_sample.pdf
+        Total Chunks: 8
+        Using Cache: True
+
+        --- Chunk 1 [header_info] ---
+        Pages: 1
+        Text: 起诉书...
+
+        检查点:
+        ✅ chunk 数量合理
+        ✅ chunk_type 正确
+        ✅ 内容完整
+
+        [Phase 4 - verification + commit]
 ```
 
 ## Common Mistakes
@@ -290,6 +382,7 @@ Claude: [继续 Phase 2.5 - writing-plans]
 | 跳过架构文档阅读 | 必须先阅读了解 Layer A/B 设计 |
 | 直接写代码 | 必须先分析、设计、生成计划 |
 | 不用 TDD | 必须使用 test-driven-development |
+| **写完不测试** | **每次修改后运行测试工具验证** |
 | 忘记更新文档 | 提交前必须更新架构文档 |
 | 忽视回归测试 | 必须运行原有 parser 测试 |
 
@@ -300,6 +393,7 @@ Claude: [继续 Phase 2.5 - writing-plans]
 - 跳过用户确认直接实现
 - 不用 worktree 隔离开发
 - 跳过 TDD 直接实现
+- **写完代码不运行测试工具**
 - 不运行回归测试就提交
 
 **Always:**
@@ -307,4 +401,5 @@ Claude: [继续 Phase 2.5 - writing-plans]
 - 生成分析报告并确认
 - 使用 worktree 隔离
 - 使用 TDD 流程
+- **每次修改后运行测试工具验证 chunk 输出**
 - 验证无回归后提交
