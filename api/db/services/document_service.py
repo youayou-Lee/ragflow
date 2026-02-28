@@ -928,6 +928,38 @@ class DocumentService(CommonService):
         }
 
     @classmethod
+    @DB.connection_context()
+    def list_sub_docs(cls, doc_id: str, status: str = None, doc_type: str = None):
+        from api.db.services.subdoc_service import SubDocService
+
+        return SubDocService.list(doc_id=doc_id, status=status, doc_type=doc_type)
+
+    @classmethod
+    @DB.connection_context()
+    def get_sub_doc_by_id(cls, sub_doc_id: str):
+        from api.db.services.subdoc_service import SubDocService
+
+        return SubDocService.get_by_id(sub_doc_id)
+
+    @classmethod
+    @DB.connection_context()
+    def replace_sub_docs(cls, doc_id: str, sub_docs, created_by: str = ""):
+        from api.db.services.subdoc_service import SubDocService
+
+        return SubDocService.bulk_replace(doc_id=doc_id, sub_docs=sub_docs, created_by=created_by)
+
+    @classmethod
+    @DB.connection_context()
+    def delete_sub_docs_by_doc_id(cls, doc_id: str):
+        from api.db.services.subdoc_service import SubDocService
+        from api.db.services.subdoc_version_service import SubDocVersionService
+
+        sub_doc_ids = [d.id for d in SubDocService.list(doc_id=doc_id)]
+        if sub_doc_ids:
+            SubDocVersionService.delete_by_sub_doc_ids(sub_doc_ids)
+        return SubDocService.delete_by_doc_id(doc_id)
+
+    @classmethod
     def run(cls, tenant_id:str, doc:dict, kb_table_num_map:dict):
         from api.db.services.task_service import queue_dataflow, queue_tasks
         from api.db.services.file2document_service import File2DocumentService

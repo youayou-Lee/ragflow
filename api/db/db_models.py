@@ -890,6 +890,32 @@ class Document(DataBaseModel):
         db_table = "document"
 
 
+class DocumentSubDoc(DataBaseModel):
+    id = CharField(max_length=32, primary_key=True)
+    doc_id = CharField(max_length=32, null=False, index=True)
+    name = CharField(max_length=255, null=False, index=True)
+    start_page = IntegerField(default=1)
+    end_page = IntegerField(default=1)
+    doc_type = CharField(max_length=64, null=False, index=True)
+    confidence = FloatField(default=0)
+    status = CharField(max_length=1, null=False, default="1", index=True)
+    created_by = CharField(max_length=32, null=False, index=True)
+
+    class Meta:
+        db_table = "document_subdoc"
+
+
+class SubDocVersion(DataBaseModel):
+    id = CharField(max_length=32, primary_key=True)
+    sub_doc_id = CharField(max_length=32, null=False, index=True)
+    version_no = IntegerField(default=1, index=True)
+    change_summary = TextField(null=True, default="")
+    payload_json = JSONField(null=False, default={})
+
+    class Meta:
+        db_table = "document_subdoc_version"
+
+
 class File(DataBaseModel):
     id = CharField(max_length=32, primary_key=True)
     parent_id = CharField(max_length=32, null=False, help_text="parent folder id", index=True)
@@ -1334,6 +1360,14 @@ def alter_db_rename_column(migrator, table_name, old_column_name, new_column_nam
         # logging.critical(f"Failed to rename {settings.DATABASE_TYPE.upper()}.{table_name} column {old_column_name} to {new_column_name}, error: {ex}")
         pass
 
+
+
+def alter_db_add_index(table_name, index_name, columns):
+    try:
+        DB.execute_sql(f"CREATE INDEX {index_name} ON {table_name} ({', '.join(columns)})")
+    except Exception:
+        pass
+
 def migrate_db():
     logging.disable(logging.ERROR)
     migrator = DatabaseMigrator[settings.DATABASE_TYPE.upper()].value(DB)
@@ -1384,4 +1418,8 @@ def migrate_db():
     alter_db_add_column(migrator, "api_4_conversation", "exp_user_id", CharField(max_length=255, null=True, help_text="exp_user_id", index=True))
     # Migrate system_settings.value from CharField to TextField for longer sandbox configs
     alter_db_column_type(migrator, "system_settings", "value", TextField(null=False, help_text="Configuration value (JSON, string, etc.)"))
+    alter_db_add_index("document_subdoc", "idx_document_subdoc_doc_id", ["doc_id"])
+    alter_db_add_index("document_subdoc", "idx_document_subdoc_status", ["status"])
+    alter_db_add_index("document_subdoc", "idx_document_subdoc_doc_type", ["doc_type"])
+    alter_db_add_index("document_subdoc_version", "idx_subdoc_version_sub_doc_id", ["sub_doc_id"])
     logging.disable(logging.NOTSET)
