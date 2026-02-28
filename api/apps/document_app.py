@@ -26,6 +26,8 @@ from api.db import VALID_FILE_TYPES, FileType
 from api.db.db_models import Task
 from api.db.services import duplicate_name
 from api.db.services.document_service import DocumentService, doc_upload_and_parse
+from api.db.services.document_subdoc_service import DocumentSubdocService
+from api.db.services.document_subdoc_version_service import DocumentSubdocVersionService
 from api.db.services.doc_metadata_service import DocMetadataService
 from common.metadata_utils import meta_filter, convert_conditions, turn2jsonschema
 from api.db.services.file2document_service import File2DocumentService
@@ -34,6 +36,12 @@ from api.db.services.knowledgebase_service import KnowledgebaseService
 from api.db.services.task_service import TaskService, cancel_all_task_of
 from api.db.services.user_service import UserTenantService
 from common.misc_utils import get_uuid, thread_pool_exec
+from api.utils.validation_utils import (
+    DocumentSubdocListReq,
+    DocumentSubdocCorrectReq,
+    DocumentSubdocReparseReq,
+    validate_and_parse_json_request,
+)
 from api.utils.api_utils import (
     get_data_error_result,
     get_json_result,
@@ -933,3 +941,179 @@ async def upload_info():
         return get_json_result(data=FileService.upload_info(current_user.id, file, request.args.get("url")))
     except Exception as e:
         return  server_error_response(e)
+
+
+def _format_subdoc(item: dict) -> dict:
+    return {
+        "sub_doc_id": item.get("id"),
+        "doc_type": item.get("doc_type"),
+        "start_page": item.get("start_page"),
+        "end_page": item.get("end_page"),
+        "status": item.get("status"),
+        "confidence": item.get("confidence"),
+        "version_no": item.get("version_no"),
+    }
+
+
+@manager.route("/subdocs/list", methods=["POST"])  # noqa: F821
+@login_required
+async def list_subdocs():
+    req, err = await validate_and_parse_json_request(request, DocumentSubdocListReq)
+    if err:
+        return get_json_result(data=False, message=err, code=RetCode.ARGUMENT_ERROR)
+
+    doc_id = req["doc_id"]
+    if not DocumentService.accessible(doc_id, current_user.id):
+        return get_json_result(data=False, message="No authorization.", code=RetCode.AUTHENTICATION_ERROR)
+
+    subdocs = DocumentSubdocService.list_by_doc_id(doc_id)
+    return get_json_result(data=[_format_subdoc(item) for item in subdocs])
+
+
+@manager.route("/subdocs/correct", methods=["POST"])  # noqa: F821
+@login_required
+async def correct_subdocs():
+    req, err = await validate_and_parse_json_request(request, DocumentSubdocCorrectReq)
+    if err:
+        return get_json_result(data=False, message=err, code=RetCode.ARGUMENT_ERROR)
+
+    doc_id = req["doc_id"]
+    if not DocumentService.accessible(doc_id, current_user.id):
+        return get_json_result(data=False, message="No authorization.", code=RetCode.AUTHENTICATION_ERROR)
+
+    e, doc = DocumentService.get_by_id(doc_id)
+    if not e:
+        return get_data_error_result(message="Document not found!")
+
+    current_subdocs = {item["id"]: item for item in DocumentSubdocService.list_by_doc_id(doc_id)}
+    next_version_no = DocumentSubdocService.get_max_version_no(doc_id) + 1
+
+    try:
+        for edit in req["edits"]:
+            op = edit["operation"]
+            if op == "split":
+                origin = current_subdocs.get(edit["sub_doc_id"])
+                if not origin:
+                    return get_data_error_result(message=f"Subdoc not found: {edit['sub_doc_id']}")
+                if not (origin["start_page"] <= edit["start_page"] <= edit["end_page"] <= origin["end_page"]):
+                    return get_data_error_result(message="Split range must be inside original range")
+
+                left = origin.copy()
+                left["id"] = get_uuid()
+                left["end_page"] = edit["start_page"] - 1
+                right = origin.copy()
+                right["id"] = get_uuid()
+                right["start_page"] = edit["end_page"] + 1
+                middle = origin.copy()
+                middle["id"] = get_uuid()
+                middle["start_page"] = edit["start_page"]
+                middle["end_page"] = edit["end_page"]
+                middle["doc_type"] = edit.get("doc_type") or origin["doc_type"]
+
+                DocumentSubdocService.delete_by_id(origin["id"])
+                current_subdocs.pop(origin["id"], None)
+                for part in (left, middle, right):
+                    if part["start_page"] > part["end_page"]:
+                        continue
+                    part["version_no"] = next_version_no
+                    part["status"] = "NEED_REVIEW"
+                    DocumentSubdocService.insert(**part)
+                    current_subdocs[part["id"]] = part
+
+            elif op == "merge":
+                targets = [current_subdocs.get(sub_id) for sub_id in edit["sub_doc_ids"]]
+                if any(item is None for item in targets):
+                    return get_data_error_result(message="Some sub_doc_ids do not exist")
+                targets.sort(key=lambda x: x["start_page"])
+                merged = targets[0].copy()
+                merged["id"] = get_uuid()
+                merged["start_page"] = targets[0]["start_page"]
+                merged["end_page"] = targets[-1]["end_page"]
+                merged["status"] = "NEED_REVIEW"
+                merged["version_no"] = next_version_no
+
+                for item in targets:
+                    DocumentSubdocService.delete_by_id(item["id"])
+                    current_subdocs.pop(item["id"], None)
+                DocumentSubdocService.insert(**merged)
+                current_subdocs[merged["id"]] = merged
+
+            elif op == "adjust":
+                target = current_subdocs.get(edit["sub_doc_id"])
+                if not target:
+                    return get_data_error_result(message=f"Subdoc not found: {edit['sub_doc_id']}")
+                update_data = {
+                    "start_page": edit["start_page"],
+                    "end_page": edit["end_page"],
+                    "version_no": next_version_no,
+                    "status": "NEED_REVIEW",
+                }
+                if edit.get("doc_type"):
+                    update_data["doc_type"] = edit["doc_type"]
+                DocumentSubdocService.update_by_id(target["id"], update_data)
+                target.update(update_data)
+
+            elif op == "retag":
+                target = current_subdocs.get(edit["sub_doc_id"])
+                if not target:
+                    return get_data_error_result(message=f"Subdoc not found: {edit['sub_doc_id']}")
+                update_data = {
+                    "doc_type": edit["doc_type"],
+                    "version_no": next_version_no,
+                    "status": "READY",
+                }
+                DocumentSubdocService.update_by_id(target["id"], update_data)
+                target.update(update_data)
+
+            DocumentSubdocVersionService.insert(
+                doc_id=doc_id,
+                sub_doc_id=edit.get("sub_doc_id") or get_uuid(),
+                operation=op,
+                payload=edit,
+                version_no=next_version_no,
+                created_by=current_user.id,
+            )
+
+        subdocs = sorted(current_subdocs.values(), key=lambda x: (x["start_page"], x["end_page"]))
+        for item in subdocs:
+            if item["status"] != "READY":
+                DocumentSubdocService.update_by_id(item["id"], {"status": "NEED_REVIEW"})
+                item["status"] = "NEED_REVIEW"
+
+        return get_json_result(data=[_format_subdoc(item) for item in subdocs])
+    except Exception as e:
+        return server_error_response(e)
+
+
+@manager.route("/subdocs/reparse", methods=["POST"])  # noqa: F821
+@login_required
+async def reparse_subdocs():
+    req, err = await validate_and_parse_json_request(request, DocumentSubdocReparseReq)
+    if err:
+        return get_json_result(data=False, message=err, code=RetCode.ARGUMENT_ERROR)
+
+    subdocs = DocumentSubdocService.list_by_ids(req["sub_doc_ids"])
+    if len(subdocs) != len(req["sub_doc_ids"]):
+        return get_data_error_result(message="Some sub_doc_ids do not exist")
+
+    doc_ids = sorted(set(item["doc_id"] for item in subdocs))
+    for doc_id in doc_ids:
+        if not DocumentService.accessible(doc_id, current_user.id):
+            return get_json_result(data=False, message="No authorization.", code=RetCode.AUTHENTICATION_ERROR)
+
+    kb_table_num_map = {}
+    for subdoc in subdocs:
+        e, doc = DocumentService.get_by_id(subdoc["doc_id"])
+        if not e:
+            return get_data_error_result(message=f"Document not found: {subdoc['doc_id']}")
+
+        tenant_id = DocumentService.get_tenant_id(doc.id)
+        doc_dict = doc.to_dict()
+        parser_config = dict(doc_dict.get("parser_config") or {})
+        parser_config["pages"] = [[subdoc["start_page"], subdoc["end_page"]]]
+        doc_dict["parser_config"] = parser_config
+        DocumentService.run(tenant_id, doc_dict, kb_table_num_map)
+        DocumentSubdocService.update_by_id(subdoc["id"], {"status": "NEED_REVIEW"})
+
+    refreshed = DocumentSubdocService.list_by_ids(req["sub_doc_ids"])
+    return get_json_result(data=[_format_subdoc(item) for item in refreshed])

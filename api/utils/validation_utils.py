@@ -725,3 +725,90 @@ class BaseListReq(BaseModel):
 
 
 class ListDatasetReq(BaseListReq): ...
+
+class DocumentSubdocListReq(Base):
+    doc_id: Annotated[str, Field(...)]
+
+    @field_validator("doc_id", mode="before")
+    @classmethod
+    def validate_doc_id(cls, v: Any) -> str:
+        return validate_uuid1_hex(v)
+
+
+class SubdocEdit(Base):
+    operation: Annotated[Literal["split", "merge", "adjust", "retag"], Field(...)]
+    sub_doc_id: Annotated[str | None, Field(default=None)]
+    sub_doc_ids: Annotated[list[str] | None, Field(default=None)]
+    doc_type: Annotated[str | None, StringConstraints(strip_whitespace=True, min_length=1, max_length=128), Field(default=None)]
+    start_page: Annotated[int | None, Field(default=None, ge=1)]
+    end_page: Annotated[int | None, Field(default=None, ge=1)]
+
+    @field_validator("sub_doc_id", mode="before")
+    @classmethod
+    def validate_sub_doc_id(cls, v: Any) -> str | None:
+        if v is None:
+            return None
+        return validate_uuid1_hex(v)
+
+    @field_validator("sub_doc_ids", mode="after")
+    @classmethod
+    def validate_sub_doc_ids(cls, v: list[str] | None) -> list[str] | None:
+        if v is None:
+            return None
+        ids = [validate_uuid1_hex(item) for item in v]
+        dup = [item for item, c in Counter(ids).items() if c > 1]
+        if dup:
+            raise PydanticCustomError("duplicate_uuids", "Duplicate sub_doc_ids: '{duplicate_ids}'", {"duplicate_ids": ", ".join(dup)})
+        return ids
+
+    @model_validator(mode="after")
+    def validate_op_payload(self) -> "SubdocEdit":
+        if self.operation in {"split", "adjust"}:
+            if self.sub_doc_id is None:
+                raise PydanticCustomError("missing_field", "sub_doc_id is required for operation {op}", {"op": self.operation})
+            if self.start_page is None or self.end_page is None:
+                raise PydanticCustomError("missing_field", "start_page and end_page are required for operation {op}", {"op": self.operation})
+            if self.start_page > self.end_page:
+                raise PydanticCustomError("invalid_page_range", "start_page must be <= end_page")
+        if self.operation == "merge":
+            if not self.sub_doc_ids or len(self.sub_doc_ids) < 2:
+                raise PydanticCustomError("missing_field", "sub_doc_ids with at least two items are required for operation merge")
+        if self.operation == "retag":
+            if self.sub_doc_id is None:
+                raise PydanticCustomError("missing_field", "sub_doc_id is required for operation retag")
+            if self.doc_type is None:
+                raise PydanticCustomError("missing_field", "doc_type is required for operation retag")
+        return self
+
+
+class DocumentSubdocCorrectReq(DocumentSubdocListReq):
+    edits: Annotated[list[SubdocEdit], Field(..., min_length=1)]
+
+    @model_validator(mode="after")
+    def validate_no_overlap(self) -> "DocumentSubdocCorrectReq":
+        ranges = []
+        for edit in self.edits:
+            if edit.start_page is None or edit.end_page is None:
+                continue
+            ranges.append((edit.start_page, edit.end_page))
+
+        ranges.sort(key=lambda x: (x[0], x[1]))
+        for i in range(1, len(ranges)):
+            prev = ranges[i - 1]
+            cur = ranges[i]
+            if cur[0] <= prev[1]:
+                raise PydanticCustomError("page_overlap", "Page ranges in edits must not overlap")
+        return self
+
+
+class DocumentSubdocReparseReq(Base):
+    sub_doc_ids: Annotated[list[str], Field(..., min_length=1)]
+
+    @field_validator("sub_doc_ids", mode="after")
+    @classmethod
+    def validate_reparse_sub_doc_ids(cls, v: list[str]) -> list[str]:
+        ids = [validate_uuid1_hex(item) for item in v]
+        dup = [item for item, c in Counter(ids).items() if c > 1]
+        if dup:
+            raise PydanticCustomError("duplicate_uuids", "Duplicate sub_doc_ids: '{duplicate_ids}'", {"duplicate_ids": ", ".join(dup)})
+        return ids

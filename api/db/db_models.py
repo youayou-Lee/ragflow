@@ -890,6 +890,33 @@ class Document(DataBaseModel):
         db_table = "document"
 
 
+class DocumentSubdoc(DataBaseModel):
+    id = CharField(max_length=32, primary_key=True)
+    doc_id = CharField(max_length=32, null=False, index=True)
+    doc_type = CharField(max_length=128, null=False, default="unknown", index=True)
+    start_page = IntegerField(default=1, index=True)
+    end_page = IntegerField(default=1, index=True)
+    status = CharField(max_length=32, null=False, default="NEED_REVIEW", index=True)
+    confidence = FloatField(default=0.0)
+    version_no = IntegerField(default=1, index=True)
+
+    class Meta:
+        db_table = "document_subdoc"
+
+
+class DocumentSubdocVersion(DataBaseModel):
+    id = CharField(max_length=32, primary_key=True)
+    doc_id = CharField(max_length=32, null=False, index=True)
+    sub_doc_id = CharField(max_length=32, null=False, index=True)
+    operation = CharField(max_length=32, null=False, default="adjust", index=True)
+    payload = JSONField(null=False, default={})
+    version_no = IntegerField(default=1, index=True)
+    created_by = CharField(max_length=32, null=False, index=True)
+
+    class Meta:
+        db_table = "document_subdoc_version"
+
+
 class File(DataBaseModel):
     id = CharField(max_length=32, primary_key=True)
     parent_id = CharField(max_length=32, null=False, help_text="parent folder id", index=True)
