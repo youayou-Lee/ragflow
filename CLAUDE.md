@@ -136,18 +136,28 @@ docker build --platform linux/amd64 -f Dockerfile -t infiniflow/ragflow:nightly 
 使用 `test/test_plugin_dev.py` 快速验证 Plugin 解析结果：
 
 ```bash
-# 首次运行（调用 OCR API，自动缓存到 .ocr.json）
-uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type>
+# 使用样本文件（推荐，无需指定路径）
+uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record
+uv run python test/test_plugin_dev.py --sample indictment --doc-type indictment_opinion
 
-# 后续运行（使用缓存，秒出结果）
+# 列出可用样本
+uv run python test/test_plugin_dev.py --list-samples
+
+# 使用自定义 PDF 文件
 uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type>
 
 # JSON 输出（便于 AI 解析）
-uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type> --json
+uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --json
 
-# 强制刷新缓存
-uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type> --refresh
+# 强制刷新缓存（重新调用 OCR API）
+uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --refresh
 ```
+
+### 样本文件位置
+
+样本文件存放在 `/home/you/cs/proj/Superyou/SampleData/` 目录：
+- `interrogation/` - 讯问笔录样本（1.pdf - 5.pdf）
+- `indictment/` - 起诉意见书样本
 
 ### 支持的文书类型
 
@@ -164,7 +174,7 @@ uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type> --refresh
 
 ### 开发新 Plugin 流程
 
-1. 准备样本 PDF 文件
+1. 准备样本 PDF 文件（放入 `SampleData/<type>/` 目录）
 2. 运行测试工具获取当前输出
 3. 修改 Plugin 代码
 4. 再次运行测试工具验证修改效果
