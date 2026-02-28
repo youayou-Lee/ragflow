@@ -21,20 +21,25 @@ A command-line tool for quickly testing document parsing plugins
 without requiring the full backend environment.
 
 Usage:
+    # Using sample files from SampleData (recommended for AI development)
+    uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record
+    uv run python test/test_plugin_dev.py --sample indictment --doc-type indictment_opinion
+
+    # List available sample files
+    uv run python test/test_plugin_dev.py --list-samples
+
+    # Using custom PDF file
     uv run python test/test_plugin_dev.py <pdf_path> --doc-type <type> [--json] [--refresh]
 
 Examples:
-    # First run (calls OCR API, caches result)
-    uv run python test/test_plugin_dev.py benchmark/讯问笔录/陈明飞诈骗案/原始数据/讯问笔录_sample.pdf --doc-type interrogation_record
+    # Test with sample interrogation record (uses cache if available)
+    uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record
 
-    # Subsequent runs (uses cache)
-    uv run python test/test_plugin_dev.py benchmark/讯问笔录/陈明飞诈骗案/原始数据/讯问笔录_sample.pdf --doc-type interrogation_record
+    # Output as JSON for AI parsing
+    uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --json
 
-    # JSON output
-    uv run python test/test_plugin_dev.py <pdf_path> --doc-type <type> --json
-
-    # Force refresh cache
-    uv run python test/test_plugin_dev.py <pdf_path> --doc-type <type> --refresh
+    # Force refresh OCR cache
+    uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --refresh
 """
 
 import argparse
@@ -44,6 +49,13 @@ import os
 import sys
 from pathlib import Path
 from typing import Any, Optional
+
+# Default sample data paths
+SAMPLE_DATA_ROOT = Path("/home/you/cs/proj/Superyou/SampleData")
+SAMPLE_PATHS = {
+    "interrogation": SAMPLE_DATA_ROOT / "interrogation",
+    "indictment": SAMPLE_DATA_ROOT / "indictment",
+}
 
 # Add project root to path for imports
 project_root = Path(__file__).parent.parent
@@ -57,6 +69,35 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def list_available_samples() -> None:
+    """List all available sample files."""
+    print("Available sample files:\n")
+    for sample_type, sample_dir in SAMPLE_PATHS.items():
+        if sample_dir.exists():
+            pdf_files = sorted(sample_dir.glob("*.pdf"))
+            if pdf_files:
+                print(f"  {sample_type}:")
+                for pdf in pdf_files:
+                    cache_exists = (pdf.parent / f"{pdf.stem}.ocr.json").exists()
+                    cache_status = "[cached]" if cache_exists else ""
+                    print(f"    - {pdf.name} {cache_status}")
+            else:
+                print(f"  {sample_type}: (no PDF files)")
+        else:
+            print(f"  {sample_type}: (directory not found)")
+    print()
+
+
+def get_sample_pdf_path(sample_type: str) -> Optional[Path]:
+    """Get the first available PDF file for a sample type."""
+    sample_dir = SAMPLE_PATHS.get(sample_type)
+    if not sample_dir or not sample_dir.exists():
+        return None
+
+    pdf_files = sorted(sample_dir.glob("*.pdf"))
+    return pdf_files[0] if pdf_files else None
+
+
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
@@ -67,28 +108,51 @@ Supported document types:
   interrogation_record  - 讯问/询问笔录
   indictment_opinion    - 起诉意见书
 
+Available sample types:
+  interrogation         - 讯问笔录样本
+  indictment            - 起诉意见书样本
+
 Examples:
-  # Test interrogation record parsing
+  # Use sample file (recommended for AI development)
+  uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record
+
+  # List available samples
+  uv run python test/test_plugin_dev.py --list-samples
+
+  # Use custom PDF file
   uv run python test/test_plugin_dev.py sample.pdf --doc-type interrogation_record
 
   # Output as JSON for AI parsing
-  uv run python test/test_plugin_dev.py sample.pdf --doc-type interrogation_record --json
+  uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --json
 
   # Force refresh OCR cache
-  uv run python test/test_plugin_dev.py sample.pdf --doc-type interrogation_record --refresh
+  uv run python test/test_plugin_dev.py --sample interrogation --doc-type interrogation_record --refresh
 """
     )
 
     parser.add_argument(
         "pdf_path",
         type=str,
-        help="Path to the PDF file to test"
+        nargs="?",
+        help="Path to the PDF file to test (optional if --sample is used)"
+    )
+
+    parser.add_argument(
+        "--sample",
+        type=str,
+        choices=["interrogation", "indictment"],
+        help="Use sample file from SampleData directory"
+    )
+
+    parser.add_argument(
+        "--list-samples",
+        action="store_true",
+        help="List available sample files and exit"
     )
 
     parser.add_argument(
         "--doc-type",
         type=str,
-        required=True,
         help="Document type (e.g., interrogation_record, indictment_opinion)"
     )
 
@@ -312,11 +376,41 @@ def format_output_json(result: dict) -> str:
 def main():
     """Main entry point."""
     args = parse_args()
-    pdf_path = Path(args.pdf_path)
+
+    # Handle --list-samples
+    if args.list_samples:
+        list_available_samples()
+        return
+
+    # Determine PDF path
+    if args.sample:
+        pdf_path = get_sample_pdf_path(args.sample)
+        if not pdf_path:
+            print(f"Error: No sample files found for type '{args.sample}'", file=sys.stderr)
+            sys.exit(1)
+        # Auto-set doc-type based on sample type
+        if not args.doc_type:
+            doc_type_map = {
+                "interrogation": "interrogation_record",
+                "indictment": "indictment_opinion",
+            }
+            args.doc_type = doc_type_map.get(args.sample)
+        print(f"Using sample file: {pdf_path}", file=sys.stderr)
+    elif args.pdf_path:
+        pdf_path = Path(args.pdf_path)
+    else:
+        print("Error: Either --sample or pdf_path must be provided", file=sys.stderr)
+        print("Use --list-samples to see available sample files", file=sys.stderr)
+        sys.exit(1)
 
     # Validate PDF exists
     if not pdf_path.exists():
         print(f"Error: PDF file not found: {pdf_path}", file=sys.stderr)
+        sys.exit(1)
+
+    # Validate doc-type
+    if not args.doc_type:
+        print("Error: --doc-type is required", file=sys.stderr)
         sys.exit(1)
 
     # Step 1: Load or create OCR cache
@@ -324,6 +418,7 @@ def main():
         ocr_result, using_cache = load_or_create_ocr_cache(pdf_path, args.refresh)
     except Exception as e:
         print(f"Error: Failed to get OCR result: {e}", file=sys.stderr)
+        print("Hint: Set PADDLEOCR_API_URL environment variable or use --refresh with a cached file", file=sys.stderr)
         sys.exit(1)
 
     # Step 2: Run Layer A
