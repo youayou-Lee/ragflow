@@ -186,6 +186,60 @@ def load_or_create_ocr_cache(pdf_path: Path, refresh: bool = False) -> tuple[dic
     return result, False
 
 
+def run_layer_a(cached_result: dict, doc_type: Optional[str] = None) -> list:
+    """
+    Execute Layer A: Extract UniversalBlocks from cached OCR result.
+
+    Args:
+        cached_result: PaddleOCR API result dict
+        doc_type: Optional document type hint
+
+    Returns:
+        List of UniversalBlock objects
+    """
+    from deepdoc.parser.paddleocr_parser import PaddleOCRParser
+
+    logger.info("Running Layer A: Extracting universal blocks...")
+
+    # Create a temporary parser to use parse_from_cached_result
+    api_url = os.getenv("PADDLEOCR_API_URL", "")
+    parser = PaddleOCRParser(api_url=api_url)
+
+    # Get sections from cached result
+    sections, _ = parser.parse_from_cached_result(
+        cached_result,
+        parse_method="raw"
+    )
+
+    # Extract universal blocks
+    from rag.app.naive import extract_universal_blocks
+    blocks = extract_universal_blocks(sections, doc_type_hint=doc_type)
+
+    logger.info(f"Layer A complete: {len(blocks)} blocks extracted")
+    return blocks
+
+
+def run_layer_b(blocks: list, doc_type: str) -> list:
+    """
+    Execute Layer B: Route to plugin and generate chunks.
+
+    Args:
+        blocks: List of UniversalBlock objects
+        doc_type: Document type for plugin routing
+
+    Returns:
+        List of Chunk objects
+    """
+    from rag.app.criminal.router import route_to_plugin
+
+    logger.info(f"Running Layer B: Routing to plugin for doc_type={doc_type}...")
+
+    chunks = route_to_plugin(blocks, doc_type)
+
+    logger.info(f"Layer B complete: {len(chunks)} chunks generated")
+    return chunks
+
+
 def main():
     """Main entry point."""
     args = parse_args()
@@ -196,16 +250,26 @@ def main():
         print(f"Error: PDF file not found: {pdf_path}", file=sys.stderr)
         sys.exit(1)
 
-    # Lazy imports to avoid loading dependencies for --help
-    from deepdoc.parser.paddleocr_parser import PaddleOCRParser
-    from rag.app.naive import extract_universal_blocks
-    from rag.app.criminal.router import route_to_plugin
+    # Step 1: Load or create OCR cache
+    try:
+        ocr_result, using_cache = load_or_create_ocr_cache(pdf_path, args.refresh)
+    except Exception as e:
+        print(f"Error: Failed to get OCR result: {e}", file=sys.stderr)
+        sys.exit(1)
 
-    # TODO: Implement the rest of the flow
-    print(f"PDF: {pdf_path}")
-    print(f"Doc Type: {args.doc_type}")
-    print(f"JSON Output: {args.json}")
-    print(f"Refresh Cache: {args.refresh}")
+    # Step 2: Run Layer A
+    blocks = run_layer_a(ocr_result, doc_type=args.doc_type)
+
+    # Step 3: Run Layer B
+    chunks = run_layer_b(blocks, args.doc_type)
+
+    # Step 4: Format and output result
+    result = format_result(pdf_path, args.doc_type, chunks, using_cache)
+
+    if args.json:
+        print(format_output_json(result))
+    else:
+        print(format_output_human(result))
 
 
 if __name__ == "__main__":
