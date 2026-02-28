@@ -890,6 +890,20 @@ class Document(DataBaseModel):
         db_table = "document"
 
 
+class DocumentSubdoc(DataBaseModel):
+    id = CharField(max_length=32, primary_key=True)
+    doc_id = CharField(max_length=32, null=False, index=True)
+    start_page = IntegerField(default=0, index=True)
+    end_page = IntegerField(default=0, index=True)
+    doc_type_hint = CharField(max_length=64, null=True, default="", index=True)
+    confidence = FloatField(default=0, index=True)
+    title_hint = CharField(max_length=255, null=True, default="")
+    status = CharField(max_length=32, null=False, default="READY", index=True)
+
+    class Meta:
+        db_table = "document_subdoc"
+
+
 class File(DataBaseModel):
     id = CharField(max_length=32, primary_key=True)
     parent_id = CharField(max_length=32, null=False, help_text="parent folder id", index=True)

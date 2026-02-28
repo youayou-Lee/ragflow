@@ -17,12 +17,13 @@ import logging
 import os
 import random
 import xxhash
+from io import BytesIO
 from datetime import datetime
 
 from api.db.db_utils import bulk_insert_into_db
+from api.db.db_models import DB, File2Document, File, DocumentSubdoc
 from deepdoc.parser import PdfParser
 from peewee import JOIN
-from api.db.db_models import DB, File2Document, File
 from api.db import FileType
 from api.db.db_models import Task, Document, Knowledgebase, Tenant
 from api.db.services.common_service import CommonService
@@ -34,9 +35,35 @@ from deepdoc.parser.excel_parser import RAGFlowExcelParser
 from rag.utils.redis_conn import REDIS_CONN
 from common import settings
 from rag.nlp import search
+from rag.app.subdoc_splitter import split_pdf_into_subdocs
 
 CANVAS_DEBUG_DOC_ID = "dataflow_x"
 GRAPH_RAPTOR_FAKE_DOC_ID = "graph_raptor_x"
+SUBDOC_REVIEW_THRESHOLD = 0.7
+
+
+def _extract_pdf_page_texts(file_bin: bytes, max_pages: int = 30) -> list[str]:
+    try:
+        import pdfplumber
+
+        with pdfplumber.open(BytesIO(file_bin)) as pdf:
+            page_texts = []
+            for page in pdf.pages[:max_pages]:
+                page_texts.append(page.extract_text() or "")
+            return page_texts
+    except Exception:
+        logging.exception("_extract_pdf_page_texts")
+        return []
+
+
+def _build_fallback_subdocs(total_pages: int) -> list[dict]:
+    return [{
+        "start_page": 0,
+        "end_page": max(total_pages, 0),
+        "doc_type_hint": "unknown",
+        "confidence": 0.0,
+        "title_hint": "",
+    }]
 
 def trim_header_by_lines(text: str, max_length) -> str:
     # Trim header text to maximum length while preserving line breaks
@@ -389,6 +416,7 @@ def queue_tasks(doc: dict, bucket: str, name: str, priority: int):
         }
 
     parse_task_array = []
+    subdoc_rows = []
 
     if doc["type"] == FileType.PDF.value:
         file_bin = settings.STORAGE_IMPL.get(bucket, name)
@@ -396,21 +424,51 @@ def queue_tasks(doc: dict, bucket: str, name: str, priority: int):
         pages = PdfParser.total_page_number(doc["name"], file_bin)
         if pages is None:
             pages = 0
+        page_texts = _extract_pdf_page_texts(file_bin)
+        split_result = split_pdf_into_subdocs(page_texts, total_pages=pages)
+        if not split_result:
+            split_result = _build_fallback_subdocs(pages)
+
+        DocumentSubdoc.delete().where(DocumentSubdoc.doc_id == doc["id"]).execute()
+        for split in split_result:
+            confidence = float(split.get("confidence", 0) or 0)
+            subdoc_rows.append({
+                "id": get_uuid(),
+                "doc_id": doc["id"],
+                "start_page": max(0, int(split.get("start_page", 0) or 0)),
+                "end_page": max(0, int(split.get("end_page", 0) or 0)),
+                "doc_type_hint": split.get("doc_type_hint") or "unknown",
+                "confidence": confidence,
+                "title_hint": split.get("title_hint") or "",
+                "status": "READY" if confidence >= SUBDOC_REVIEW_THRESHOLD else "NEED_REVIEW",
+            })
+
+        if subdoc_rows:
+            bulk_insert_into_db(DocumentSubdoc, subdoc_rows, True)
+
+        subdoc_ranges = [(None, 0, pages)]
+        if subdoc_rows:
+            subdoc_ranges = [(row["id"], row["start_page"], row["end_page"]) for row in subdoc_rows]
+
         page_size = doc["parser_config"].get("task_page_size") or 12
         if doc["parser_id"] == "paper":
             page_size = doc["parser_config"].get("task_page_size") or 22
         if doc["parser_id"] in ["one", "knowledge_graph"] or do_layout != "DeepDOC" or doc["parser_config"].get("toc_extraction", False):
             page_size = 10 ** 9
         page_ranges = doc["parser_config"].get("pages") or [(1, 10 ** 5)]
-        for s, e in page_ranges:
-            s -= 1
-            s = max(0, s)
-            e = min(e - 1, pages)
-            for p in range(s, e, page_size):
-                task = new_task()
-                task["from_page"] = p
-                task["to_page"] = min(p + page_size, e)
-                parse_task_array.append(task)
+        for sub_doc_id, sub_start, sub_end in subdoc_ranges:
+            for s, e in page_ranges:
+                s -= 1
+                s = max(0, s, sub_start)
+                e = min(e - 1, pages, sub_end)
+                if e <= s:
+                    continue
+                for p in range(s, e, page_size):
+                    task = new_task()
+                    task["from_page"] = p
+                    task["to_page"] = min(p + page_size, e)
+                    task["sub_doc_id"] = sub_doc_id or ""
+                    parse_task_array.append(task)
 
     elif doc["parser_id"] == "table":
         file_bin = settings.STORAGE_IMPL.get(bucket, name)
@@ -419,9 +477,12 @@ def queue_tasks(doc: dict, bucket: str, name: str, priority: int):
             task = new_task()
             task["from_page"] = i
             task["to_page"] = min(i + 3000, rn)
+            task["sub_doc_id"] = ""
             parse_task_array.append(task)
     else:
-        parse_task_array.append(new_task())
+        task = new_task()
+        task["sub_doc_id"] = ""
+        parse_task_array.append(task)
 
     chunking_config = DocumentService.get_chunking_config(doc["id"])
     for task in parse_task_array:
@@ -454,7 +515,8 @@ def queue_tasks(doc: dict, bucket: str, name: str, priority: int):
                                          chunking_config["kb_id"])
     DocumentService.update_by_id(doc["id"], {"chunk_num": ck_num})
 
-    bulk_insert_into_db(Task, parse_task_array, True)
+    db_task_array = [{k: v for k, v in task.items() if k != "sub_doc_id"} for task in parse_task_array]
+    bulk_insert_into_db(Task, db_task_array, True)
     DocumentService.begin2parse(doc["id"])
 
     unfinished_task_array = [task for task in parse_task_array if task["progress"] < 1.0]
