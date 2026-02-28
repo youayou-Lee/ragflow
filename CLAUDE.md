@@ -128,3 +128,44 @@ docker build --platform linux/amd64 -f Dockerfile -t infiniflow/ragflow:nightly 
 - uv 包管理器（Python）
 - bun 包管理器（前端）
 - 16GB+ 内存，50GB+ 磁盘空间
+
+## 文书解析 Plugin 开发测试
+
+### 测试工具
+
+使用 `test/test_plugin_dev.py` 快速验证 Plugin 解析结果：
+
+```bash
+# 首次运行（调用 OCR API，自动缓存到 .ocr.json）
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type>
+
+# 后续运行（使用缓存，秒出结果）
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type>
+
+# JSON 输出（便于 AI 解析）
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type> --json
+
+# 强制刷新缓存
+uv run python test/test_plugin_dev.py <pdf_path> --doc-type <doc_type> --refresh
+```
+
+### 支持的文书类型
+
+| doc_type | 说明 | Plugin |
+|----------|------|--------|
+| `interrogation_record` | 讯问/询问笔录 | InterrogationPlugin |
+| `indictment_opinion` | 起诉意见书 | IndictmentPlugin |
+
+### OCR 缓存机制
+
+- 缓存文件：与 PDF 同目录，`<pdf_stem>.ocr.json`
+- 首次运行调用 PaddleOCR API 并保存缓存
+- 后续运行直接使用缓存，无需等待 API
+
+### 开发新 Plugin 流程
+
+1. 准备样本 PDF 文件
+2. 运行测试工具获取当前输出
+3. 修改 Plugin 代码
+4. 再次运行测试工具验证修改效果
+5. 重复 3-4 直到满意
