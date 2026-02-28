@@ -107,6 +107,85 @@ Examples:
     return parser.parse_args()
 
 
+def get_cache_path(pdf_path: Path) -> Path:
+    """Get the OCR cache file path for a PDF."""
+    return pdf_path.parent / f"{pdf_path.stem}.ocr.json"
+
+
+def load_ocr_cache(cache_path: Path) -> Optional[dict]:
+    """Load OCR result from cache file."""
+    if not cache_path.exists():
+        return None
+
+    try:
+        with open(cache_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        logger.info(f"Loaded OCR cache from: {cache_path}")
+        return data
+    except Exception as e:
+        logger.warning(f"Failed to load cache: {e}")
+        return None
+
+
+def save_ocr_cache(cache_path: Path, result: dict) -> None:
+    """Save OCR result to cache file."""
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+        logger.info(f"Saved OCR cache to: {cache_path}")
+    except Exception as e:
+        logger.warning(f"Failed to save cache: {e}")
+
+
+def call_ocr_api(pdf_path: Path) -> dict:
+    """Call PaddleOCR API and return the result."""
+    # Lazy import to avoid loading dependencies unnecessarily
+    from deepdoc.parser.paddleocr_parser import PaddleOCRParser
+
+    api_url = os.getenv("PADDLEOCR_API_URL", "")
+    if not api_url:
+        raise RuntimeError("PADDLEOCR_API_URL environment variable not set")
+
+    logger.info(f"Calling PaddleOCR API for: {pdf_path}")
+    parser = PaddleOCRParser(api_url=api_url)
+
+    # Parse PDF (this calls the API)
+    sections, tables = parser.parse_pdf(str(pdf_path))
+
+    # Get the raw API result for caching
+    result = parser.get_last_api_result()
+    if not result:
+        raise RuntimeError("Failed to get OCR result")
+
+    return result
+
+
+def load_or_create_ocr_cache(pdf_path: Path, refresh: bool = False) -> tuple[dict, bool]:
+    """
+    Load or create OCR cache.
+
+    Args:
+        pdf_path: Path to the PDF file
+        refresh: Force refresh the cache
+
+    Returns:
+        Tuple of (OCR result dict, using_cache bool)
+    """
+    cache_path = get_cache_path(pdf_path)
+
+    # Try to load from cache first
+    if not refresh:
+        cached = load_ocr_cache(cache_path)
+        if cached:
+            return cached, True
+
+    # Call API and cache result
+    result = call_ocr_api(pdf_path)
+    save_ocr_cache(cache_path, result)
+
+    return result, False
+
+
 def main():
     """Main entry point."""
     args = parse_args()
